@@ -1,0 +1,26 @@
+:root {
+  --primary-color: #4caf50;
+  --secondary-color: #ffffff;
+  --font-size: 16px;
+}
+
+.App {
+  text-align: center;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 5px 4px;
+  align-items: center;
+  white-space: nowrap;
+
+  color: rgb(0, 0, 0);
+}
+.tag {
+  background-color: #eaeaea;
+  padding: 3px 7px 3px 7px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  border: 1px solid grey;
+}

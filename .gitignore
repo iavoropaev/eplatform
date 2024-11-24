@@ -1,0 +1,13 @@
+node_modules
+.idea
+
+.venv
+.env
+djvenv
+
+
+schema.yml
+media
+uploads
+
+__pycache__/

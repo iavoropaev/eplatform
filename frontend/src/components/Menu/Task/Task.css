@@ -1,0 +1,167 @@
+div.task-container div {
+  background-color: #d9d9d9;
+}
+
+div.task-container {
+  margin: 50px 0px 50px 0px;
+}
+
+.task {
+  border-radius: 1dvh;
+  width: 70%;
+  text-align: left;
+  margin: auto;
+  border: 1px solid grey;
+  min-width: 300px;
+}
+
+.task-container .task-header {
+  display: flex;
+  justify-content: space-between;
+  /* flex-wrap: wrap; */
+  grid-gap: 5px 15px;
+
+  border-radius: 1dvh 1dvh 0dvh 0dvh;
+  padding: 10px;
+}
+
+.task-container .task-body {
+  padding: 10px;
+  background-color: white;
+  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
+}
+.task-container .task-footer {
+  border-radius: 0dvh 0dvh 1dvh 1dvh;
+  overflow: hidden;
+}
+.task-container .task-footer .floor {
+  border-top: 1px solid grey;
+}
+.floor .likes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.floor .like,
+.dislike {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 0.8rem;
+  color: grey;
+}
+.floor .like,
+.dislike:hover {
+  cursor: pointer;
+}
+
+.task-container .task-footer .answer {
+  border-radius: 0dvh 0dvh 1dvh 1dvh;
+  padding: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-container .task-footer .floor {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.task-container .task-footer .input-with-but {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 5px 15px;
+}
+
+.task-container .task-footer input {
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 1.1rem;
+  width: 150px;
+}
+.task-container .task-footer input::placeholder {
+  font-size: 0.8rem;
+}
+.task-container .task-footer input:focus {
+  outline: 0;
+  border: 1px solid rgb(56, 56, 56);
+}
+
+.task-container .task-footer button {
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  padding: 7px;
+
+  white-space: nowrap;
+}
+.task-container .task-footer button:hover {
+  cursor: pointer;
+  border: 1px solid grey;
+}
+.task-container .task-footer button:active {
+  cursor: pointer;
+  background-color: #d9d9d9;
+}
+
+.task-container .task-footer .author {
+  color: grey;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+.task-header .numberEGE {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+.task-header .tags {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 5px 4px;
+  align-items: center;
+  white-space: nowrap;
+
+  color: rgb(0, 0, 0);
+}
+.task-header .header-tag {
+  background-color: #eaeaea;
+  padding: 3px 7px 3px 7px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  border: 1px solid grey;
+}
+
+.stat {
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 5px 3px;
+  align-items: start;
+  align-content: flex-start;
+}
+
+/* Solve */
+.solved-ok .task-footer {
+  background-color: #c8ffd3;
+}
+.solved-ok .task-header {
+  background-color: #c8ffd3;
+}
+
+/* WA */
+.solved-wa .task-footer {
+  background-color: #ffb1b1;
+}
+.solved-wa .task-header {
+  background-color: #ffb1b1;
+}
+
+div.innerhtml div {
+  background-color: white;
+}
