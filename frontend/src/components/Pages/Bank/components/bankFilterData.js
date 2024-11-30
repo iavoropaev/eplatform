@@ -1,0 +1,73 @@
+export const EXAMS = ["ЕГЭ", "ОГЭ"];
+export const SUBJECTS = ["Информатика", "Руский язык", "Математика", "Физика"];
+export const SOURCES = ["ФИПИ", "PRO100 ЕГЭ", "К.Ю Поляков"];
+export const FILTERS = ["ЕГЭ", "ОГЭ"];
+
+export const NUMBERSEGE = [
+  "№ 1 Теория графов сааы  фып в п  п фып ыф",
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+];
+
+export const FILTERDATA = [
+  {
+    name: "ЕГЭ",
+    subjects: [
+      {
+        name: "Информатика",
+        sources: [
+          { name: "ФИПИ", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+          { name: "PRO100 ЕГЭ", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+          { name: "К.Ю Поляков", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+        ],
+      },
+      {
+        name: "Математика",
+        sources: [
+          { name: "ФИПИ", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+          { name: "Пифагор", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+        ],
+      },
+    ],
+  },
+  {
+    name: "ОГЭ",
+    subjects: [
+      {
+        name: "Информатика",
+        sources: [
+          { name: "ФИПИ", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+          { name: "PRO100 ЕГЭ", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+        ],
+      },
+      {
+        name: "Математика",
+        sources: [
+          { name: "ФИПИ", numbers: [{ name: "№ 1" }, { name: "№ 2" }] },
+        ],
+      },
+    ],
+  },
+];

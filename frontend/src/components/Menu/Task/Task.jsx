@@ -4,7 +4,6 @@ import TaskHeader from "./components/TaskHeader";
 import "./Task.css";
 
 const Task = ({ taskData }) => {
-  console.log(taskData);
   return (
     <div className="task-container">
       <div className={"task "}>

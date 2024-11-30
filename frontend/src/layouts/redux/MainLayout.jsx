@@ -1,11 +1,15 @@
 import { Outlet } from "react-router-dom";
 import Menu from "../../components/Menu/Menu";
+import "./MainLayout.css";
 
 const MainLayout = () => {
   return (
     <>
       <Menu />
-      <Outlet />
+
+      <div className="content">
+        <Outlet />
+      </div>
     </>
   );
 };

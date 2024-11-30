@@ -1,13 +1,21 @@
+.menu-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
 .menu-container a {
   padding-right: 20px;
   color: black;
+  color: rgb(231, 231, 231);
   text-decoration: None;
 }
 
 .menu-container .active {
   text-underline-offset: 5px;
   text-decoration: underline;
-  text-decoration-color: #747373;
+  text-decoration-color: rgb(231, 231, 231);
   text-decoration-thickness: 1px;
 }
 
@@ -16,5 +24,5 @@
 
 .menu-container * {
   padding: 7px;
-  background-color: #d9d9d9;
+  background-color: #393939;
 }

@@ -1,0 +1,101 @@
+.bank-filter {
+  border-radius: 1dvh;
+  width: 70%;
+  text-align: left;
+  margin: auto;
+  margin-top: 20px;
+  min-width: 300px;
+}
+
+.bank-filter .choise-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: start;
+  margin-top: 10px;
+}
+
+.bank-filter .source,
+.exam,
+.subject {
+  border-radius: 1dvh;
+  background-color: white;
+  border: 1px solid grey;
+  padding: 10px;
+
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.bank-filter .source,
+.subject {
+  flex: 1;
+  gap: 20px;
+}
+
+.bank-filter .filter-row {
+  border-radius: 1dvh;
+  background-color: white;
+  border: 1px solid grey;
+  padding: 10px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: start;
+  flex-wrap: wrap;
+}
+.bank-filter .filter-row span {
+  border-radius: 1dvh;
+  border: 1px solid grey;
+  padding: 2px 7px 2px 7px;
+  font-size: 1.5dvh;
+  color: grey;
+}
+
+.bank-filter .active {
+  text-decoration: underline;
+}
+
+.bank-filter span:hover {
+  cursor: pointer;
+}
+
+.bank-filter .tag {
+  border-radius: 0.5dvh;
+  padding: 0px;
+  margin-top: 6px;
+  overflow: hidden;
+  font-size: 1.5dvh;
+}
+
+.bank-filter .tag,
+.filter-option {
+  user-select: none;
+}
+.bank-filter .option {
+  text-align: center;
+  padding: 2px;
+}
+.bank-filter .tag .option:hover {
+  cursor: pointer;
+  background-color: rgb(134, 249, 161);
+}
+
+.bank-filter .option:nth-child(even) {
+  background-color: rgb(223, 223, 223);
+}
+
+.bank-filter .tag .option.select {
+  background-color: rgb(134, 249, 161);
+}
+
+.bank-filter .tag .option.clear {
+  background-color: rgb(255, 172, 172);
+}
+
+.button-row {
+  margin-top: 10px;
+  text-align: right;
+}
