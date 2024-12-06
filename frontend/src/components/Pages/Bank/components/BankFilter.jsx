@@ -1,24 +1,23 @@
-import { useState } from "react";
 import "./BankFilter.css";
-import { EXAMS, NUMBERSEGE, SOURCES, SUBJECTS } from "./bankFilterData";
+
 import Choice from "./Choice";
 import Option from "./Option";
 
-const BankFilter = ({ getSelectFromFilter, filterData, selectedFilters }) => {
-  const [selected, setSelected] = useState({ numberEGE: [] });
-  const [showOptions, setShowOptions] = useState([]);
-  console.log(showOptions);
-
+const BankFilter = ({
+  getSelectFromFilter,
+  filterData,
+  selectedFilters,
+  handleFindButtonClick,
+}) => {
   const activeExam = filterData[selectedFilters["exam"]];
   const activeSubject = activeExam["subjects"][selectedFilters["subject"]];
   const activeSource = activeSubject["sources"][selectedFilters["source"]];
 
-  console.log("!!!!!!", activeExam, activeSubject, activeSource);
-
   const subjects = activeExam["subjects"];
   const sources = activeSubject["sources"];
-  const numbers = activeSource["numbers"];
-
+  const numbers = activeSubject["numbers"];
+  const authors = activeSubject["authors"];
+  console.log(authors);
   return (
     <div className="bank-filter">
       <div className="choise-row">
@@ -56,19 +55,29 @@ const BankFilter = ({ getSelectFromFilter, filterData, selectedFilters }) => {
       </div>
 
       <div className="filter-row">
-        <Option
-          optionName={"numbers"}
-          nameForUsers={"Номер ЕГЭ"}
-          options={numbers}
-          selected={selectedFilters["numbers"]}
-          setSelect={getSelectFromFilter}
-        />
-        <span>Тема</span>
-        <span>Сложность</span>
-        <span>Автор</span>
+        {numbers && numbers.length > 0 && (
+          <Option
+            optionName={"numbers"}
+            nameForUsers={"Номер ЕГЭ"}
+            options={numbers}
+            selected={selectedFilters["numbers"]}
+            setSelect={getSelectFromFilter}
+          />
+        )}
+        {authors && authors.length > 0 && (
+          <Option
+            optionName={"authors"}
+            nameForUsers={"Автор"}
+            options={authors}
+            selected={selectedFilters["authors"]}
+            setSelect={getSelectFromFilter}
+          />
+        )}
       </div>
       <div className="button-row">
-        <button className="black-button">Найти задачи</button>
+        <button onClick={handleFindButtonClick} className="black-button">
+          Найти задачи
+        </button>
       </div>
     </div>
   );

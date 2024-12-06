@@ -24,11 +24,15 @@ from django.conf.urls.static import static
 
 from courses.views import CoursesViewSet
 from taskcollections.views import TaskCollectionViewSet, TaskCollectionSolveViewSet
-from tasks.views import TaskViewSet, upload_file, TaskInfoViewSet, TaskSolutionsViewSet
+from tasks.views import TaskViewSet, upload_file, TaskInfoViewSet, FilterForTaskViewSet, NumbersViewSet, \
+    TaskSolutionsViewSet
 
 router = routers.SimpleRouter()
 router.register(r'tasks', TaskViewSet)
+router.register(r'filter', FilterForTaskViewSet)
 router.register(r'tasks-info', TaskInfoViewSet, basename='task-info')
+router.register(r'task-numbers', NumbersViewSet, basename='task-numbers')
+
 router.register(r'tasks-solutions', TaskSolutionsViewSet)
 router.register(r'tasks-collections', TaskCollectionViewSet)
 router.register(r'tasks-collections-solve', TaskCollectionSolveViewSet)

@@ -2,18 +2,44 @@ import "./Bank.css";
 
 import Task from "../../Menu/Task/Task";
 import { useEffect, useState } from "react";
-import { getAllTasksFromServer } from "../../../server/bank";
-import { bankTasks } from "../../../server/data";
+import { getAllTasksFromServer, getFilterData } from "../../../server/bank";
+
 import BankFilter from "./components/BankFilter";
-import { FILTERDATA } from "./components/bankFilterData";
 
 const Bank = () => {
+  const [filterData, setFilterData] = useState([
+    {
+      name: "Загрузка",
+      subjects: [
+        {
+          name: "Загрузка",
+          sources: [
+            {
+              name: "Загрузка",
+              numbers: [],
+            },
+          ],
+        },
+      ],
+    },
+  ]);
   const [tasks, setTasks] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({
     exam: 0,
     subject: 0,
     source: 0,
     numbers: [],
+    authors: [],
+  });
+
+  const exam = filterData[selectedFilters["exam"]];
+  const subject = exam["subjects"][selectedFilters["subject"]];
+  const source = subject["sources"][selectedFilters["source"]];
+  const numbers = selectedFilters["numbers"].map((i) => {
+    return subject["numbers"][i]["id"];
+  });
+  const authors = selectedFilters["authors"].map((i) => {
+    return subject["authors"][i]["id"];
   });
 
   const getSelectFromFilter = (type, value) => {
@@ -38,25 +64,42 @@ const Bank = () => {
     setSelectedFilters(newData);
   };
 
+  // useEffect(() => {
+  //   console.log("DOWNLOAD", selectedFilters);
+  //   async function fetchData() {
+  //     const tasksFromServer = await getAllTasksFromServer(numbers);
+  //     setTasks(tasksFromServer["tasks"]);
+  //   }
+  //   fetchData();
+  // }, [selectedFilters]);
+
   useEffect(() => {
-    console.log("DOWNLOAD", selectedFilters);
     async function fetchData() {
-      //const tasksFromServer = await getAllTasksFromServer();
-      const tasksFromServer = bankTasks;
-      setTasks(tasksFromServer);
+      const data = await getFilterData();
+      setFilterData(data);
     }
     fetchData();
-  }, [selectedFilters]);
+  }, []);
+
+  const handleFindButtonClick = async () => {
+    const tasksFromServer = await getAllTasksFromServer({
+      numbers,
+      authors,
+      subject: subject.id,
+    });
+    setTasks(tasksFromServer["tasks"]);
+  };
 
   return (
     <div>
       <BankFilter
         selectedFilters={selectedFilters}
         getSelectFromFilter={getSelectFromFilter}
-        filterData={FILTERDATA}
+        filterData={filterData}
+        handleFindButtonClick={handleFindButtonClick}
       />
       <div className="tasks">
-        {tasks.map((task, i) => {
+        {tasks.map((task) => {
           return <Task taskData={task} key={task.id} />;
         })}
       </div>

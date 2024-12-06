@@ -10,4 +10,5 @@ schema.yml
 media
 uploads
 
+frontend/public/tinymce
 __pycache__/

@@ -1,12 +1,12 @@
 from django.db import models
 from educationplatform.settings import AUTH_USER_MODEL
 
-
+# exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False)
 class Task(models.Model):
     content = models.CharField(blank=False)
     answer = models.CharField(blank=False)
 
-    exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False)
+
     number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=False)
     author = models.ForeignKey('Author', on_delete=models.PROTECT, blank=False)
     source = models.ForeignKey('TaskSource', on_delete=models.PROTECT, blank=False)
@@ -49,16 +49,46 @@ class TaskTopic(models.Model):
         return self.name
 
 
-class TaskExam(models.Model):
+# class TaskExam(models.Model):
+#     name = models.CharField(max_length=100)
+#
+#     def __str__(self):
+#         return self.name
+
+
+class TaskNumberInExam(models.Model):
     name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=False, null=False)
+
+    subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='numbers')
+
+    def __str__(self):
+        return self.name
+
+class TaskBankAuthor(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100)
+
+    subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='sources')
+
+    def __str__(self):
+        return self.name
+
+class TaskSubject(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100)
+
+    exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False, related_name='subjects')
+    authors = models.ManyToManyField('Author', related_name='subjects')
+    difficulty_levels = models.ManyToManyField('DifficultyLevel', related_name='subjects')
 
     def __str__(self):
         return self.name
 
 
-class TaskNumberInExam(models.Model):
+class TaskExam(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100)
 
     def __str__(self):
         return self.name

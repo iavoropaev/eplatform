@@ -4,14 +4,16 @@ from django.db.models import Count
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse, inline_serializer
 
-from rest_framework import viewsets, serializers
+from rest_framework import viewsets, serializers, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from educationplatform.settings import DOMEN
-from .models import Task, UploadFiles, Author, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions
-from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer
+from .models import Task, UploadFiles, Author, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskNumberInExam, \
+    TaskExam
+from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
+    TaskNumberInExamSerializer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -25,24 +27,25 @@ class TaskViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
+            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
     @extend_schema(description='''Get tasks filtered by authors, sources, topics, create time. Ordering by create time. 
     Params: authors, sources, topics, d_levels, period(day, week, month).''')
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['post'])
     def filtered(self, request):
         tasks = Task.objects.all().filter(is_available_in_bank=True)
-        if 'exam' in request.data:
-            tasks = tasks.filter(exam_id__in=request.data['exam'])
-        if 'numbers_in_exam' in request.data:
+        if 'subject' in request.data:
+            tasks = tasks.filter(number_in_exam__subject__id=request.data['subject'])
+        if 'numbers_in_exam' in request.data and request.data['numbers_in_exam']:
             tasks = tasks.filter(number_in_exam_id__in=request.data['numbers_in_exam'])
-        if 'authors' in request.data:
+        if 'authors' in request.data and request.data['authors']:
             tasks = tasks.filter(author_id__in=request.data['authors'])
-        if 'sources' in request.data:
+        if 'sources' in request.data and request.data['sources']:
             tasks = tasks.filter(source_id__in=request.data['sources'])
-        if 'topics' in request.data:
+        if 'topics' in request.data and request.data['topics']:
             tasks = tasks.filter(topic_id__in=request.data['topics'])
-        if 'd_levels' in request.data:
+        if 'd_levels' in request.data and request.data['d_levels']:
             tasks = tasks.filter(difficulty_level_id__in=request.data['d_levels'])
 
         if 'period' in request.data:
@@ -65,7 +68,6 @@ class TaskViewSet(viewsets.ModelViewSet):
                 tasks = tasks.order_by('time_create')
             else:
                 return Response({'Error': 'Неверно указан критерий сортировки.'}, status=406)
-
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
         return Response({'count': len(data), 'tasks': data})
@@ -96,6 +98,35 @@ class TaskViewSet(viewsets.ModelViewSet):
         except:
             return Response({'Error': 'Не удалось загрузить задачи.'}, status=406)
 
+    @action(detail=False, methods=['post'])
+    def upload_tasks(self, request):
+        """
+        Upload multiple tasks at once.
+        """
+        tasks_data = request.data.get('tasks', [])
+        if not isinstance(tasks_data, list):
+            return Response(
+                {"error": "Expected a list of tasks."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = self.get_serializer(data=tasks_data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": f"{len(tasks_data)} tasks have been created."},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'])
+    def delete_all(self, request, *args, **kwargs):
+        # Удаляем все объекты модели
+        Task.objects.all().delete()
+        return Response(
+            {"message": "All objects have been deleted."},
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 class TaskInfoViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -246,6 +277,29 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             return Response({
                 'Error': 'Не удалось получить процент.'
             }, status=406)
+
+class FilterForTaskViewSet(viewsets.ModelViewSet):
+    queryset = TaskExam.objects.all()
+    serializer_class = FilterSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve', 'filtered', 'new_tasks']:
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+class NumbersViewSet(viewsets.ModelViewSet):
+    queryset = TaskNumberInExam.objects.all()
+    serializer_class = TaskNumberInExamSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
 
 @extend_schema(description='Uploading a file to the server.')

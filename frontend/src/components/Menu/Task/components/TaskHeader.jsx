@@ -6,9 +6,9 @@ const TaskHeader = ({ taskData }) => {
       </span>
       <span className="tags">
         <span className="header-tag">{taskData.difficulty_level.name}</span>
-        <span className="header-tag">{taskData.actuallity.name}</span>
+        {/* <span className="header-tag">{taskData.actuallity.name}</span> */}
         <span className="header-tag">{taskData.difficulty_level.name}</span>
-        <span className="header-tag">{taskData.actuallity.name}</span>
+        {/* <span className="header-tag">{taskData.actuallity.name}</span> */}
       </span>
       <span className="stat">
         <span className="header-tag">{"Решило 125 чел."}</span>
