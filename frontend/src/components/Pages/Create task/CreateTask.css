@@ -1,0 +1,16 @@
+.container {
+  padding: 20px;
+}
+
+.editor {
+  max-width: 80%;
+  margin-top: 20px;
+}
+
+.tags {
+  gap: 10px;
+}
+
+.answer {
+  text-align: left;
+}

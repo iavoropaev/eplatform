@@ -17,7 +17,7 @@ const BankFilter = ({
   const sources = activeSubject["sources"];
   const numbers = activeSubject["numbers"];
   const authors = activeSubject["authors"];
-  console.log(authors);
+
   return (
     <div className="bank-filter">
       <div className="choise-row">

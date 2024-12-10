@@ -6,13 +6,15 @@ class Task(models.Model):
     content = models.CharField(blank=False)
     answer = models.CharField(blank=False)
 
-
     number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=False)
-    author = models.ForeignKey('Author', on_delete=models.PROTECT, blank=False)
-    source = models.ForeignKey('TaskSource', on_delete=models.PROTECT, blank=False)
-    topic = models.ForeignKey('TaskTopic', on_delete=models.PROTECT, blank=False)
-    difficulty_level = models.ForeignKey('DifficultyLevel', on_delete=models.PROTECT, blank=False)
-    is_available_in_bank = models.BooleanField(blank=False, default=True)
+    author = models.ForeignKey('Author', on_delete=models.PROTECT, blank=True, null=True)
+    source = models.ForeignKey('TaskSource', on_delete=models.PROTECT, blank=True, null=True)
+    topic = models.ForeignKey('TaskTopic', on_delete=models.PROTECT, blank=True, null=True)
+    difficulty_level = models.ForeignKey('DifficultyLevel', on_delete=models.PROTECT, blank=True, null=True)
+
+    bank_authors = models.ManyToManyField('TaskBankAuthor', related_name='tasks', blank=True)
+
+    #is_available_in_bank = models.BooleanField(blank=False, default=True)
 
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -70,6 +72,7 @@ class TaskBankAuthor(models.Model):
     slug = models.SlugField(max_length=100)
 
     subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='sources')
+
 
     def __str__(self):
         return self.name

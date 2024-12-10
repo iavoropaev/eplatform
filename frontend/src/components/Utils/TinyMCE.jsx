@@ -15,7 +15,7 @@ const TinyMCE = ({ editorContent, setEditorContent }) => {
   };
 
   return (
-    <>
+    <div className="editor">
       <Editor
         tinymceScriptSrc="/tinymce/tinymce.min.js"
         licenseKey="gpl"
@@ -66,7 +66,7 @@ const TinyMCE = ({ editorContent, setEditorContent }) => {
       >
         Поменять
       </button>
-    </>
+    </div>
   );
 };
 

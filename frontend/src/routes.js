@@ -5,11 +5,13 @@ import Bank from "./components/Pages/Bank/Bank";
 import CreateTask from "./components/Pages/Create task/CreateTask";
 
 export const publicRoutes = [
-  { path: "create-task", Component: CreateTask },
+  { path: "edit-task/:taskId/", Component: CreateTask },
+  { path: "create-task/:taskId/", Component: CreateTask },
+  { path: "create-task/", Component: CreateTask },
   { path: "bank", Component: Bank },
   { path: "test", Component: Test },
-  { path: "*", Component: NotFound },
   { path: "variants", Component: Variants },
+  { path: "*", Component: NotFound },
 ];
 
 export const authRoutes = [];

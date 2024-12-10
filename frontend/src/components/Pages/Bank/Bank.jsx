@@ -2,7 +2,11 @@ import "./Bank.css";
 
 import Task from "../../Menu/Task/Task";
 import { useEffect, useState } from "react";
-import { getAllTasksFromServer, getFilterData } from "../../../server/bank";
+import {
+  createTaskOnServer,
+  getAllTasksFromServer,
+  getFilterData,
+} from "../../../server/bank";
 
 import BankFilter from "./components/BankFilter";
 
@@ -86,6 +90,7 @@ const Bank = () => {
       numbers,
       authors,
       subject: subject.id,
+      bankAuthors: [source.id],
     });
     setTasks(tasksFromServer["tasks"]);
   };

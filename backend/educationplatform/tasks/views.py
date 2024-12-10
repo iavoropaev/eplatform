@@ -13,7 +13,7 @@ from educationplatform.settings import DOMEN
 from .models import Task, UploadFiles, Author, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskNumberInExam, \
     TaskExam
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
-    TaskNumberInExamSerializer
+    TaskNumberInExamSerializer, TaskSerializerForCreate
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -21,6 +21,11 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+    def get_serializer_class(self):
+        if self.action in ['retrieve']:
+            return TaskSerializerForCreate
+        return TaskSerializer
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'filtered', 'new_tasks']:
@@ -34,9 +39,12 @@ class TaskViewSet(viewsets.ModelViewSet):
     Params: authors, sources, topics, d_levels, period(day, week, month).''')
     @action(detail=False, methods=['post'])
     def filtered(self, request):
-        tasks = Task.objects.all().filter(is_available_in_bank=True)
+        tasks = Task.objects.all()
         if 'subject' in request.data:
             tasks = tasks.filter(number_in_exam__subject__id=request.data['subject'])
+
+        if 'bank_authors' in request.data and request.data['bank_authors']:
+            tasks = tasks.filter(bank_authors__id__in=request.data['bank_authors'])
         if 'numbers_in_exam' in request.data and request.data['numbers_in_exam']:
             tasks = tasks.filter(number_in_exam_id__in=request.data['numbers_in_exam'])
         if 'authors' in request.data and request.data['authors']:
@@ -120,13 +128,38 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'])
+    def upload_task(self, request):
+        tasks_data = request.data
+
+        serializer = self.get_serializer(data=tasks_data, many=False)
+        if serializer.is_valid():
+            saved_task = serializer.save()
+            response_ser = TaskSerializerForCreate(saved_task)
+            return Response(
+                response_ser.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, *args, **kwargs):
+        task = self.get_object()
+
+        update_serializer = TaskSerializer(task, data=request.data, partial=True)
+        if update_serializer.is_valid():
+            updated_instance = update_serializer.save()
+            response_serializer = TaskSerializerForCreate(updated_instance)
+            return Response(response_serializer.data, status=status.HTTP_200_OK)
+
+        # Вернуть ошибки валидации
+        return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=False, methods=['post'])
     def delete_all(self, request, *args, **kwargs):
-        # Удаляем все объекты модели
         Task.objects.all().delete()
         return Response(
             {"message": "All objects have been deleted."},
             status=status.HTTP_204_NO_CONTENT
         )
+
 
 class TaskInfoViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -283,11 +316,34 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
     serializer_class = FilterSerializer
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'filtered', 'new_tasks']:
+        if self.action in ['list', 'retrieve', 'filtered', 'new_tasks', 'get_numbers']:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
+            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
+
+    @action(detail=False, methods=['post'])
+    def get_numbers(self, request):
+        try:
+            if ('subjectSlug' not in request.data) or ('examSlug' not in request.data):
+                return Response({
+                    'Error': 'Не указан экзамен или предмет.'
+                }, status=406)
+
+            cur_subject_slug = request.data['subjectSlug']
+            cur_exam_slug = request.data['examSlug']
+            numbers = TaskNumberInExam.objects.all().filter(subject__slug=cur_subject_slug).filter(subject__exam__slug=cur_exam_slug)
+            serializer = TaskNumberInExamSerializer(numbers, many=True)
+
+            data = serializer.data
+            return Response({
+                'numbers': data
+            })
+        except:
+            return Response({
+                'Error': 'error'
+            }, status=406)
 
 class NumbersViewSet(viewsets.ModelViewSet):
     queryset = TaskNumberInExam.objects.all()
