@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import TaskTags from "./components/TaskTags";
 import "./CreateTask.css";
-import Answer from "./components/Answer";
 import Buttons from "./components/Buttons";
 import {
   createTaskOnServer,
@@ -16,72 +15,55 @@ import {
   getNumbers,
   getTaskById,
 } from "../../../server/bank";
-import TaskSlugTags from "./components/TaskSlugTags";
+
 import { getPrepareFilterData } from "../../Utils/FilterUtils";
+import { CheckBoxes } from "../../Utils/CheckBoxes";
+import Answer from "../../Utils/Answer/Answer";
+import { CustomSelect } from "../../Utils/CustomSelect";
 
 const CreateTask = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { taskId } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  //const [searchParams, setSearchParams] = useSearchParams();
   const [countSave, setCountSave] = useState(0);
-  const [loadedId, setLoadedId] = useState(-1);
+  const [loadStatus, setLoadStatus] = useState(0); // 0 - loading; 1 - ok, -1- error.
   //console.log(location);
   //const exam = searchParams.get("exam");
   //const subject = searchParams.get("subject");
 
   const [editorContent, setEditorContent] = useState("Начальный");
   const [answer, setAnswer] = useState("");
+  const [answerType, setAnswerType] = useState("text");
   const [selectedExam, setSelectedExam] = useState(-1);
   const [selectedSubject, setSelectedSubject] = useState(-1);
   const [selectedNumber, setSelectedNumber] = useState(-1);
+  const [selectedBanks, setSelectedBanks] = useState([]);
 
   //const [numbers, setNumbers] = useState([]);
   const [filterData, setFilterData] = useState([]);
 
-  // const searchExamSlug =
-  //   searchParams.get("exam") === null ? "" : searchParams.get("exam");
-  // const searchSubjectSlug =
-  //   searchParams.get("subject") === null ? "" : searchParams.get("subject");
+  const {
+    exams,
+    subjects,
+    numbers,
+    activeExam,
+    activeSubject,
+    activeNumber,
+    bankAuthors,
+  } = getPrepareFilterData({
+    filterData,
+    selectedExam,
+    selectedSubject,
+    selectedNumber,
+  });
 
-  // const activeSubject = activeExam["subjects"][selectedSubject];
-  // const exams = filterData.map((exam) => {
-  //   return { id: exam.id, name: exam.name };
-  // });
-  // const activeExam = filterData[selectedExam];
-
-  // const subjects =
-  //   activeExam?.subjects !== undefined
-  //     ? activeExam["subjects"].map((exam) => {
-  //         return { id: exam.id, name: exam.name };
-  //       })
-  //     : [];
-  // const activeSubject = subjects[selectedSubject];
-  // const numbers =
-  //   activeSubject?.numbers !== undefined
-  //     ? activeExam["numbers"].map((exam) => {
-  //         return { id: exam.id, name: exam.name };
-  //       })
-  //     : [];
-  const { exams, subjects, numbers, activeExam, activeSubject, activeNumber } =
-    getPrepareFilterData({
-      filterData,
-      selectedExam,
-      selectedSubject,
-      selectedNumber,
-    });
-  // console.log("fd", filterData);
-  // console.log(exams, subjects, numbers);
-  // console.log("sub", activeSubject);
-  console.log("an", activeNumber);
-  // const sources = activeSubject["sources"];
-  // const numbers = activeSubject["numbers"];
-  // const authors = activeSubject["authors"];
-  // console.log(subjects, numbers);
+  console.log("BA", bankAuthors);
 
   const setDefault = () => {
     setEditorContent("Начальный");
     setAnswer("");
+    setAnswerType("text");
     setSelectedNumber(-1);
     setSelectedExam(-1);
     setSelectedSubject(-1);
@@ -105,25 +87,26 @@ const CreateTask = () => {
   useEffect(() => {
     async function fetchData() {
       const data = await getTaskById(taskId);
-      console.log(data);
-      setEditorContent(data.content);
-      setAnswer(data.answer);
-      const numberId = data.number_in_exam.id;
-      const subjectId = data.number_in_exam.subject.id;
-      const examId = data.number_in_exam.subject.exam.id;
-
-      // const examIndex = exams.findIndex((element) => element.id === examId);
-      // const subjectIndex = subjects.findIndex(
-      //   (element) => element.id === subjectId
-      // );
-      // const numberIndex = numbers.findIndex(
-      //   (element) => element.id === numberId
-      // );
-      //console.log(filterData, exams, subjects, numbers);
-      setSelectedExam(examId);
-      setSelectedSubject(subjectId);
-      setSelectedNumber(numberId);
-      setLoadedId(taskId);
+      if (data !== undefined && filterData.length > 0) {
+        setEditorContent(data.content);
+        setAnswer(data.answer);
+        setAnswerType(data.answer_type);
+        const numberId = data.number_in_exam.id;
+        const subjectId = data.number_in_exam.subject.id;
+        const examId = data.number_in_exam.subject.exam.id;
+        const bankAuthors = data.bank_authors.map((el) => el.id);
+        setSelectedExam(examId);
+        setSelectedSubject(subjectId);
+        setSelectedNumber(numberId);
+        setSelectedBanks(bankAuthors);
+        setLoadStatus(1);
+      } else {
+        if (filterData.length > 0) {
+          setLoadStatus(-1);
+        } else {
+          setLoadStatus(0);
+        }
+      }
     }
 
     if (taskId) {
@@ -132,28 +115,46 @@ const CreateTask = () => {
     } else {
       setDefault();
     }
-  }, [taskId]);
+  }, [taskId, filterData, countSave]);
 
   const saveTaskOnServer = async () => {
     const newTask = await createTaskOnServer({
       content: editorContent,
-      answer: answer,
+      answer: JSON.stringify(answer),
+      answer_type: answerType,
       number_in_exam: activeNumber.id,
       taskId: taskId,
+      bank_authors: selectedBanks,
     });
     if (newTask !== undefined) {
       setCountSave(countSave + 1);
-      navigate(`../edit-task/${newTask.id}`);
+      navigate(`../edit-task/${newTask.id}/`);
     }
   };
 
   const goToPrevTask = () => {
-    navigate(`../edit-task/${Number(taskId) - 1}`);
+    navigate(`../edit-task/${Number(taskId) - 1}/`);
   };
   const goToNextTask = () => {
-    navigate(`../edit-task/${Number(taskId) + 1}`);
+    navigate(`../edit-task/${Number(taskId) + 1}/`);
   };
 
+  const handleAnswerTypeSelect = (e) => {
+    const type = e.target.value;
+    setAnswerType(type);
+    if (type === "text") {
+      setAnswer("");
+    }
+    if (type === "table") {
+      setAnswer([["", ""]]);
+    }
+  };
+  if (taskId && loadStatus === -1) {
+    return <h2>Задача не найдена</h2>;
+  }
+  if (taskId && loadStatus === 0) {
+    return <h2>Загрузка...</h2>;
+  }
   return (
     <div className="container">
       <div className="tags">
@@ -177,11 +178,24 @@ const CreateTask = () => {
         />
       </div>
 
+      <CheckBoxes
+        selectedBanks={selectedBanks}
+        bankAuthors={bankAuthors}
+        setSelectedBanks={setSelectedBanks}
+      />
+
       <TinyMCE
         editorContent={editorContent}
         setEditorContent={setEditorContent}
       />
-      <Answer answer={answer} setAnswer={setAnswer} />
+      <CustomSelect
+        options={["text", "table"]}
+        selected={answerType}
+        handleSelect={handleAnswerTypeSelect}
+      />
+
+      <Answer type={answerType} answer={answer} setAnswer={setAnswer} />
+
       <Buttons
         save={saveTaskOnServer}
         goToPrevTask={goToPrevTask}

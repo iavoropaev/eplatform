@@ -1,6 +1,4 @@
-import { useState } from "react";
-
-const Answer = ({ answer, setAnswer }) => {
+const TextAnswer = ({ answer, setAnswer }) => {
   return (
     <div className="answer">
       <p>Ответ</p>
@@ -13,4 +11,4 @@ const Answer = ({ answer, setAnswer }) => {
     </div>
   );
 };
-export default Answer;
+export default TextAnswer;

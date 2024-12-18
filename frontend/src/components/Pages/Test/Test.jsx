@@ -1,10 +1,11 @@
-import TinyMCE from "../../Utils/TinyMCE";
+import TableAnswer from "../../Utils/Answer/TableAnswer";
 
 const Test = () => {
   return (
     <>
       <h1>Тест</h1>
-      <TinyMCE />
+      <TableAnswer />
+      {/* <TinyMCE /> */}
     </>
   );
 };

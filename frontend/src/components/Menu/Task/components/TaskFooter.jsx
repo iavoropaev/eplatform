@@ -1,14 +1,34 @@
 import { BiDislike, BiLike } from "react-icons/bi";
+import Answer from "../../../Utils/Answer/Answer";
+import { useState } from "react";
+import { SendButton } from "../../../Utils/Answer/SendButton";
 
-const TaskFooter = ({ taskData }) => {
+const TaskFooter = ({ taskData, sendAnswerToServer }) => {
+  let defaultAnswer = "";
+  if (taskData.answer_type === "table") {
+    defaultAnswer = [["", ""]];
+  }
+
+  const [answer, setAnswer] = useState(defaultAnswer);
+  const handleSendAnswer = () => {
+    sendAnswerToServer({
+      taskId: taskData.id,
+      answer: answer,
+      type: taskData.answer_type,
+    });
+  };
   return (
     <div className="task-footer">
       <div className="answer">
         <span className="input-with-but">
-          <input placeholder="Введите ответ.."></input>
-          <button>Проверить ответ</button>
+          <Answer
+            type={taskData.answer_type}
+            answer={answer}
+            setAnswer={setAnswer}
+          />
+          <SendButton handle={handleSendAnswer} />
         </span>
-        <span className="author">{taskData.author.name}</span>
+        <span className="author">{taskData?.author?.name}</span>
       </div>
 
       <div className="floor">

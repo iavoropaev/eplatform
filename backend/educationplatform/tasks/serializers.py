@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 
 from .models import Task, TaskSolutions, TaskNumberInExam, TaskExam, TaskSubject, TaskSource, Author, DifficultyLevel, \
@@ -19,9 +21,12 @@ class TaskSerializerForUser(serializers.ModelSerializer):
         model = Task
         fields = ('id', 'content', 'author', 'source', 'answer', 'topic', 'time_create', 'difficulty_level',
                   'time_update')
-        fields = ('id', 'content', 'author', 'exam', 'number_in_exam')
+        fields = ('answer_type', 'id')
         fields = '__all__'
         depth = 2
+
+
+
 
 class TaskSerializerForCreate(serializers.ModelSerializer):
     class Meta:

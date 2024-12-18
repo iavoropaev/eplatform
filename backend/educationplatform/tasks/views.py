@@ -1,6 +1,8 @@
 import datetime
+import json
+
 import pytz
-from django.db.models import Count
+from django.db.models import Count, Q
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse, inline_serializer
 
@@ -14,6 +16,7 @@ from .models import Task, UploadFiles, Author, TaskSource, DifficultyLevel, Task
     TaskExam
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
     TaskNumberInExamSerializer, TaskSerializerForCreate
+from .utils import check_answer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -152,6 +155,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
         # Вернуть ошибки валидации
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=False, methods=['post'])
     def delete_all(self, request, *args, **kwargs):
         Task.objects.all().delete()
@@ -205,10 +209,12 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
-                           'percent_ok_solves_by_task_id']:
+                           'percent_ok_solves_by_task_id', 'send_solution']:
             permission_classes = [IsAuthenticated]
+            permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
+            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
     @extend_schema(description='Send solution for task.')
@@ -219,11 +225,17 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             cur_task_id = request.data['task_id']
             user_answer = request.data['answer']
 
-            ok_answer = Task.objects.all().filter(id=cur_task_id)[0].answer
+            task = Task.objects.all().filter(id=cur_task_id)[0]
+            ok_answer_data = json.loads(task.answer)
+            ok_answer_type = task.answer_type
+            ok_answer = {'type': ok_answer_type}
+            ok_answer[ok_answer_type] = ok_answer_data
+
+            print(cur_task_id, user_answer, ok_answer)
             solution = TaskSolutions(task_id=cur_task_id,
                                      user_id=cur_user_id,
                                      answer=user_answer,
-                                     is_ok_solution=(str(ok_answer) == str(user_answer)))
+                                     is_ok_solution=check_answer(user_answer, ok_answer))
 
             solution.save()
             serializer = TaskSolutionsSerializer(solution, many=False)
@@ -232,7 +244,8 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             return Response({
                 'solution': data,
             })
-        except:
+        except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось обработать решение.',
             })
@@ -278,6 +291,32 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 'Error': 'Не удалось получить решения.'
             }, status=406)
 
+    @action(detail=False, methods=['post'])
+    def get_statuses(self, request):
+        try:
+            cur_user_id = request.user.id
+            task_ids = request.data['task_ids']
+            print([task_ids])
+            tasks = Task.objects.filter(id__in=task_ids)
+            tasks_with_counts = tasks.annotate(
+                correct_solutions=Count('tasksolutions',
+                                        filter=Q(tasksolutions__user_id=cur_user_id,
+                                                 tasksolutions__is_ok_solution=True)),
+                incorrect_solutions=Count('tasksolutions',
+                                          filter=Q(tasksolutions__user_id=cur_user_id,
+                                                   tasksolutions__is_ok_solution=False)))
+            id_status = {}
+            for task in tasks_with_counts:
+                if task.correct_solutions > 0:
+                    id_status[task.id] = 'ok'
+                elif task.incorrect_solutions > 0:
+                    id_status[task.id] = 'wa'
+            return Response(id_status)
+        except:
+            return Response({
+                'Error': 'Не удалось получить статусы.'
+            }, status=406)
+
     @extend_schema(description='Get count users, who solved task.')
     @action(detail=False, methods=['get'], url_path='count-ok-by-task-id')
     def count_users_who_solved_task(self, request):
@@ -311,6 +350,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 'Error': 'Не удалось получить процент.'
             }, status=406)
 
+
 class FilterForTaskViewSet(viewsets.ModelViewSet):
     queryset = TaskExam.objects.all()
     serializer_class = FilterSerializer
@@ -333,7 +373,8 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
 
             cur_subject_slug = request.data['subjectSlug']
             cur_exam_slug = request.data['examSlug']
-            numbers = TaskNumberInExam.objects.all().filter(subject__slug=cur_subject_slug).filter(subject__exam__slug=cur_exam_slug)
+            numbers = TaskNumberInExam.objects.all().filter(subject__slug=cur_subject_slug).filter(
+                subject__exam__slug=cur_exam_slug)
             serializer = TaskNumberInExamSerializer(numbers, many=True)
 
             data = serializer.data
@@ -344,6 +385,7 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
             return Response({
                 'Error': 'error'
             }, status=406)
+
 
 class NumbersViewSet(viewsets.ModelViewSet):
     queryset = TaskNumberInExam.objects.all()

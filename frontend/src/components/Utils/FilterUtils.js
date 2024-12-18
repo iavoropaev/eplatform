@@ -16,5 +16,17 @@ export const getPrepareFilterData = ({
   numbers = numbers ? numbers : [];
   const activeNumber = numbers.find((item) => item.id === selectedNumber);
 
-  return { exams, subjects, numbers, activeExam, activeSubject, activeNumber };
+  let bankAuthors = activeSubject?.sources;
+  bankAuthors = bankAuthors ? bankAuthors : [];
+  //const activeBankAuthors = numbers.find((item) => item.id === selectedNumber);
+
+  return {
+    exams,
+    subjects,
+    numbers,
+    activeExam,
+    activeSubject,
+    activeNumber,
+    bankAuthors,
+  };
 };

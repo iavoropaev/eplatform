@@ -1,0 +1,3 @@
+Solution
+{type, data}
+type: text, table, choose, sort

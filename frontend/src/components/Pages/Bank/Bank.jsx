@@ -6,11 +6,15 @@ import {
   createTaskOnServer,
   getAllTasksFromServer,
   getFilterData,
+  getSolveStatuses,
+  sendSolution,
 } from "../../../server/bank";
 
 import BankFilter from "./components/BankFilter";
 
 const Bank = () => {
+  const jwt = localStorage.getItem("jwt_a");
+
   const [filterData, setFilterData] = useState([
     {
       name: "Загрузка",
@@ -35,6 +39,7 @@ const Bank = () => {
     numbers: [],
     authors: [],
   });
+  const [solvedStatuses, setSolvedStatuses] = useState({});
 
   const exam = filterData[selectedFilters["exam"]];
   const subject = exam["subjects"][selectedFilters["subject"]];
@@ -68,15 +73,6 @@ const Bank = () => {
     setSelectedFilters(newData);
   };
 
-  // useEffect(() => {
-  //   console.log("DOWNLOAD", selectedFilters);
-  //   async function fetchData() {
-  //     const tasksFromServer = await getAllTasksFromServer(numbers);
-  //     setTasks(tasksFromServer["tasks"]);
-  //   }
-  //   fetchData();
-  // }, [selectedFilters]);
-
   useEffect(() => {
     async function fetchData() {
       const data = await getFilterData();
@@ -90,9 +86,24 @@ const Bank = () => {
       numbers,
       authors,
       subject: subject.id,
-      bankAuthors: [source.id],
+      bankAuthors: [source?.id],
     });
+
+    if (jwt) {
+      const taskIds = tasksFromServer["tasks"].map((task) => task.id);
+      const idSolvedStatuses = await getSolveStatuses({ taskIds: taskIds });
+      setSolvedStatuses(idSolvedStatuses);
+    }
     setTasks(tasksFromServer["tasks"]);
+  };
+
+  const sendAnswerToServer = async ({ taskId, answer, type }) => {
+    const readyAnswer = {};
+    readyAnswer["type"] = type;
+    readyAnswer[type] = answer;
+    const res = await sendSolution({ taskId, answer: readyAnswer });
+    console.log("SEND", taskId, answer);
+    console.log(res);
   };
 
   return (
@@ -105,7 +116,14 @@ const Bank = () => {
       />
       <div className="tasks">
         {tasks.map((task) => {
-          return <Task taskData={task} key={task.id} />;
+          return (
+            <Task
+              taskData={task}
+              key={task.id}
+              sendAnswerToServer={sendAnswerToServer}
+              status={solvedStatuses[task.id]}
+            />
+          );
         })}
       </div>
     </div>

@@ -15,6 +15,11 @@ div.task-container {
   min-width: 300px;
 }
 
+.task p:not(:last-child) {
+  margin: 0px;
+  padding-bottom: 10px;
+}
+
 .task-container .task-header {
   display: flex;
   justify-content: space-between;
@@ -26,10 +31,21 @@ div.task-container {
 }
 
 .task-container .task-body {
-  padding: 10px;
+  padding: 15px;
+  /* padding-top: 0px; */
   background-color: white;
   border-bottom: 1px solid grey;
   border-top: 1px solid grey;
+  overflow: auto;
+}
+.task-container .task-body table {
+  width: 90%; /* Таблица занимает всю доступную ширину */
+  border-collapse: collapse; /* Убираем лишние пробелы между ячейками */
+}
+.task-container .task-body img {
+  max-width: 90%; /* Изображение не будет превышать размер блока */
+  height: auto; /* Сохранить пропорции */
+  display: block; /* Избежать лишних отступов */
 }
 .task-container .task-footer {
   border-radius: 0dvh 0dvh 1dvh 1dvh;

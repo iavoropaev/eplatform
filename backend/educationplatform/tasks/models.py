@@ -1,9 +1,11 @@
 from django.db import models
 from educationplatform.settings import AUTH_USER_MODEL
 
+
 # exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False)
 class Task(models.Model):
     content = models.CharField(blank=False)
+    answer_type = models.CharField(choices=[('text', 'text'), ('table', 'table')])
     answer = models.CharField(blank=False)
 
     number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=False)
@@ -14,7 +16,7 @@ class Task(models.Model):
 
     bank_authors = models.ManyToManyField('TaskBankAuthor', related_name='tasks', blank=True)
 
-    #is_available_in_bank = models.BooleanField(blank=False, default=True)
+    # is_available_in_bank = models.BooleanField(blank=False, default=True)
 
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -67,15 +69,16 @@ class TaskNumberInExam(models.Model):
     def __str__(self):
         return self.name
 
+
 class TaskBankAuthor(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100)
 
     subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='sources')
 
-
     def __str__(self):
         return self.name
+
 
 class TaskSubject(models.Model):
     name = models.CharField(max_length=100)

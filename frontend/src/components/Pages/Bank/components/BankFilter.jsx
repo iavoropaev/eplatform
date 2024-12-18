@@ -30,29 +30,31 @@ const BankFilter = ({
           />
         </div>
         <div className="subject">
-          {
+          {subjects.length > 0 && (
             <Choice
               selectedId={selectedFilters["subject"]}
               data={subjects}
               name={"subject"}
               setSelect={getSelectFromFilter}
             />
-          }
+          )}
         </div>
       </div>
 
-      <div className="choise-row">
-        <div className="source">
-          {
-            <Choice
-              selectedId={selectedFilters["source"]}
-              data={sources}
-              name={"source"}
-              setSelect={getSelectFromFilter}
-            />
-          }
+      {sources.length > 0 && (
+        <div className="choise-row">
+          <div className="source">
+            {
+              <Choice
+                selectedId={selectedFilters["source"]}
+                data={sources}
+                name={"source"}
+                setSelect={getSelectFromFilter}
+              />
+            }
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="filter-row">
         {numbers && numbers.length > 0 && (
