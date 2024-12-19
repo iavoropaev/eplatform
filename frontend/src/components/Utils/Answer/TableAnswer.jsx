@@ -5,6 +5,19 @@ const TableAnswer = ({ answer, setAnswer }) => {
     setAnswer(updatedTable);
   };
 
+  const addRow = () => {
+    const length = answer[answer.length - 1].length;
+    const newRow = Array(length).fill("");
+    setAnswer([...answer, newRow]);
+  };
+  const delRow = () => {
+    if (answer.length > 1) {
+      const newAns = [...answer];
+      newAns.pop();
+      setAnswer(newAns);
+    }
+  };
+
   const f = (e) => {
     e.preventDefault();
     console.log(e.clipboardData.getData("Text"));
@@ -34,6 +47,8 @@ const TableAnswer = ({ answer, setAnswer }) => {
           ))}
         </tbody>
       </table>
+      <button onClick={addRow}>+</button>
+      <button onClick={delRow}>-</button>
     </div>
   );
 };

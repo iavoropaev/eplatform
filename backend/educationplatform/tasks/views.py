@@ -228,21 +228,22 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             task = Task.objects.all().filter(id=cur_task_id)[0]
             ok_answer_data = json.loads(task.answer)
             ok_answer_type = task.answer_type
-            ok_answer = {'type': ok_answer_type}
-            ok_answer[ok_answer_type] = ok_answer_data
+            ok_answer = {'type': ok_answer_type, ok_answer_type: ok_answer_data}
 
-            print(cur_task_id, user_answer, ok_answer)
-            solution = TaskSolutions(task_id=cur_task_id,
-                                     user_id=cur_user_id,
-                                     answer=user_answer,
-                                     is_ok_solution=check_answer(user_answer, ok_answer))
+            if cur_user_id:
+                solution = TaskSolutions(task_id=cur_task_id,
+                                         user_id=cur_user_id,
+                                         answer=user_answer,
+                                         is_ok_solution=check_answer(user_answer, ok_answer))
 
-            solution.save()
-            serializer = TaskSolutionsSerializer(solution, many=False)
-            data = serializer.data
-
+                solution.save()
+                serializer = TaskSolutionsSerializer(solution, many=False)
+                data = serializer.data
+                sol_status = 'ok' if data['is_ok_solution'] else 'wa'
+            else:
+                sol_status = 'ok' if check_answer(user_answer, ok_answer) else 'wa'
             return Response({
-                'solution': data,
+                'status': sol_status
             })
         except Exception as e:
             print(e)

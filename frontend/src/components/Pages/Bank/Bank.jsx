@@ -98,12 +98,9 @@ const Bank = () => {
   };
 
   const sendAnswerToServer = async ({ taskId, answer, type }) => {
-    const readyAnswer = {};
-    readyAnswer["type"] = type;
-    readyAnswer[type] = answer;
+    const readyAnswer = { type: type, [type]: answer };
     const res = await sendSolution({ taskId, answer: readyAnswer });
-    console.log("SEND", taskId, answer);
-    console.log(res);
+    setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
   };
 
   return (

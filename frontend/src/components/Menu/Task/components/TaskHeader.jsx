@@ -3,9 +3,7 @@ import { NavLink } from "react-router-dom";
 const TaskHeader = ({ taskData }) => {
   return (
     <div className="task-header">
-      <span className="numberEGE">
-        {"№ " + taskData.number_in_exam.name + " ЕГЭ"}
-      </span>
+      <span className="numberEGE">{taskData.number_in_exam.name}</span>
       <span className="tags">
         {/* <span className="header-tag">{taskData.difficulty_level.name}</span> */}
         {/* <span className="header-tag">{taskData.actuallity.name}</span> */}

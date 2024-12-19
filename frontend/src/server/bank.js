@@ -114,7 +114,6 @@ export const sendSolution = async ({ taskId, answer }) => {
       data: { task_id: taskId, answer },
       headers,
     });
-    console.log(res);
     if (res.status === 200) {
       return res.data;
     }
