@@ -1,4 +1,4 @@
-export const getPrepareFilterData = ({
+export const getPreparedFilterData = ({
   filterData,
   selectedExam,
   selectedSubject,

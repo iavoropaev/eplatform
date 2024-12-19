@@ -83,7 +83,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                 serializer.save()
                 response['tasks'] = updated_tasks
             else:
-                print('Error', serializer.errors)
                 TaskCollectionTask.objects.bulk_create([TaskCollectionTask(**data) for data in tasks_to_delete])
             return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:

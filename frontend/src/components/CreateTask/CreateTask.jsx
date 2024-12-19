@@ -1,36 +1,19 @@
 import { useEffect, useState } from "react";
-import TinyMCE from "../../Utils/TinyMCE";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
 import TaskTags from "./components/TaskTags";
-import "./CreateTask.css";
-import Buttons from "./components/Buttons";
+import Answer from "../Utils/Answer/Answer";
+import { CustomSelect } from "../Utils/CustomSelect";
+import TinyMCE from "../Utils/TinyMCE";
+import { CheckBoxes } from "../Utils/CheckBoxes";
 import {
   createTaskOnServer,
   getFilterData,
-  getNumbers,
   getTaskById,
-} from "../../../server/bank";
+} from "../../server/bank";
+import { getPreparedFilterData } from "../Utils/FilterUtils";
 
-import { getPrepareFilterData } from "../../Utils/FilterUtils";
-import { CheckBoxes } from "../../Utils/CheckBoxes";
-import Answer from "../../Utils/Answer/Answer";
-import { CustomSelect } from "../../Utils/CustomSelect";
-
-const CreateTask = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { taskId } = useParams();
-  //const [searchParams, setSearchParams] = useSearchParams();
+const CreateTask = ({ taskId, afterSave }) => {
   const [countSave, setCountSave] = useState(0);
   const [loadStatus, setLoadStatus] = useState(0); // 0 - loading; 1 - ok, -1- error.
-  //console.log(location);
-  //const exam = searchParams.get("exam");
-  //const subject = searchParams.get("subject");
 
   const [editorContent, setEditorContent] = useState("Начальный");
   const [answer, setAnswer] = useState("");
@@ -40,7 +23,6 @@ const CreateTask = () => {
   const [selectedNumber, setSelectedNumber] = useState(-1);
   const [selectedBanks, setSelectedBanks] = useState([]);
 
-  //const [numbers, setNumbers] = useState([]);
   const [filterData, setFilterData] = useState([]);
 
   const {
@@ -51,14 +33,12 @@ const CreateTask = () => {
     activeSubject,
     activeNumber,
     bankAuthors,
-  } = getPrepareFilterData({
+  } = getPreparedFilterData({
     filterData,
     selectedExam,
     selectedSubject,
     selectedNumber,
   });
-
-  console.log("BA", bankAuthors);
 
   const setDefault = () => {
     setEditorContent("Начальный");
@@ -76,13 +56,6 @@ const CreateTask = () => {
     }
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log("USE EFFECT", location.pathname.includes("create-task"));
-    if (location.pathname.includes("create-task")) {
-      setDefault();
-    }
-  }, [location]);
 
   useEffect(() => {
     async function fetchData() {
@@ -128,15 +101,9 @@ const CreateTask = () => {
     });
     if (newTask !== undefined) {
       setCountSave(countSave + 1);
-      navigate(`../edit-task/${newTask.id}/`);
+      afterSave(newTask.id);
+      //navigate(`../edit-task/${newTask.id}/`);
     }
-  };
-
-  const goToPrevTask = () => {
-    navigate(`../edit-task/${Number(taskId) - 1}/`);
-  };
-  const goToNextTask = () => {
-    navigate(`../edit-task/${Number(taskId) + 1}/`);
   };
 
   const handleAnswerTypeSelect = (e) => {
@@ -149,6 +116,7 @@ const CreateTask = () => {
       setAnswer([["", ""]]);
     }
   };
+
   if (taskId && loadStatus === -1) {
     return <h2>Задача не найдена</h2>;
   }
@@ -156,7 +124,7 @@ const CreateTask = () => {
     return <h2>Загрузка...</h2>;
   }
   return (
-    <div className="container">
+    <>
       <div className="tags">
         <TaskTags
           name={"Экзамен"}
@@ -170,6 +138,7 @@ const CreateTask = () => {
           selectedOption={selectedSubject}
           setSelectedOption={setSelectedSubject}
         />
+
         <TaskTags
           name={"Номер"}
           options={numbers}
@@ -195,13 +164,9 @@ const CreateTask = () => {
       />
 
       <Answer type={answerType} answer={answer} setAnswer={setAnswer} />
-
-      <Buttons
-        save={saveTaskOnServer}
-        goToPrevTask={goToPrevTask}
-        goToNextTask={goToNextTask}
-      />
-    </div>
+      <button onClick={saveTaskOnServer}>Сохранить</button>
+    </>
   );
 };
+
 export default CreateTask;

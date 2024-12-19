@@ -3,9 +3,9 @@ import { useState } from "react";
 const Buttons = ({ save, goToPrevTask, goToNextTask }) => {
   return (
     <div>
-      <div>
+      {/* <div>
         <button onClick={save}>Сохранить</button>
-      </div>
+      </div> */}
 
       <span>
         <button onClick={goToPrevTask}>Предыдущая</button>
