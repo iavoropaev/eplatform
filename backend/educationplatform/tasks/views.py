@@ -13,7 +13,7 @@ from rest_framework.response import Response
 
 from educationplatform.settings import DOMEN
 from .models import Task, UploadFiles, Author, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskNumberInExam, \
-    TaskExam
+    TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
     TaskNumberInExamSerializer, TaskSerializerForCreate
 from .utils import check_answer
@@ -56,8 +56,10 @@ class TaskViewSet(viewsets.ModelViewSet):
             tasks = tasks.filter(source_id__in=request.data['sources'])
         if 'topics' in request.data and request.data['topics']:
             tasks = tasks.filter(topic_id__in=request.data['topics'])
-        if 'd_levels' in request.data and request.data['d_levels']:
-            tasks = tasks.filter(difficulty_level_id__in=request.data['d_levels'])
+        if 'dif_levels' in request.data and request.data['dif_levels']:
+            tasks = tasks.filter(difficulty_level_id__in=request.data['dif_levels'])
+        if 'actualities' in request.data and request.data['actualities']:
+            tasks = tasks.filter(actuality_id__in=request.data['actualities'])
 
         if 'period' in request.data:
             period = request.data['period']
@@ -363,6 +365,12 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
             permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
+
+    def list(self, request, *args, **kwargs):
+        task_exams = TaskExam.objects.all()
+        actualities = [{'id': item.id, 'name': item.name} for item in Actuality.objects.all()]
+        serializer = FilterSerializer(task_exams, many=True)
+        return Response({'exams': serializer.data, 'actualities': actualities})
 
     @action(detail=False, methods=['post'])
     def get_numbers(self, request):

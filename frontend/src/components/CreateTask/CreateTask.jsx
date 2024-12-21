@@ -155,7 +155,11 @@ const CreateTask = ({ taskId, afterSave }) => {
 
       <TinyMCE
         editorContent={editorContent}
-        setEditorContent={setEditorContent}
+        // setEditorContent={setEditorContent}
+        setEditorContent={(c) => {
+          console.log(c);
+          setEditorContent(c);
+        }}
       />
       <CustomSelect
         options={["text", "table"]}

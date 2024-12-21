@@ -9,7 +9,7 @@ const BankFilter = ({
   selectedFilters,
   handleFindButtonClick,
 }) => {
-  const activeExam = filterData[selectedFilters["exam"]];
+  const activeExam = filterData["exams"][selectedFilters["exam"]];
   const activeSubject = activeExam["subjects"][selectedFilters["subject"]];
   const activeSource = activeSubject["sources"][selectedFilters["source"]];
 
@@ -17,6 +17,8 @@ const BankFilter = ({
   const sources = activeSubject["sources"];
   const numbers = activeSubject["numbers"];
   const authors = activeSubject["authors"];
+  const difficulty_levels = activeExam["dif_levels"];
+  const actualities = filterData["actualities"];
 
   return (
     <div className="bank-filter">
@@ -24,7 +26,7 @@ const BankFilter = ({
         <div className="exam">
           <Choice
             selectedId={selectedFilters["exam"]}
-            data={filterData}
+            data={filterData["exams"]}
             name={"exam"}
             setSelect={getSelectFromFilter}
           />
@@ -72,6 +74,25 @@ const BankFilter = ({
             nameForUsers={"Автор"}
             options={authors}
             selected={selectedFilters["authors"]}
+            setSelect={getSelectFromFilter}
+          />
+        )}
+        {difficulty_levels && difficulty_levels.length > 0 && (
+          <Option
+            optionName={"dif_levels"}
+            nameForUsers={"Сложность"}
+            options={difficulty_levels}
+            selected={selectedFilters["dif_levels"]}
+            setSelect={getSelectFromFilter}
+          />
+        )}
+
+        {actualities && actualities.length > 0 && (
+          <Option
+            optionName={"actualities"}
+            nameForUsers={"Актуальность"}
+            options={actualities}
+            selected={selectedFilters["actualities"]}
             setSelect={getSelectFromFilter}
           />
         )}

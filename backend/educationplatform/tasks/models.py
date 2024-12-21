@@ -4,19 +4,22 @@ from educationplatform.settings import AUTH_USER_MODEL
 
 # exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False)
 class Task(models.Model):
+    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False)
     content = models.CharField(blank=False)
+
     answer_type = models.CharField(choices=[('text', 'text'), ('table', 'table')])
     answer = models.CharField(blank=False)
 
-    number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=False)
+    number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=True)
+
     author = models.ForeignKey('Author', on_delete=models.PROTECT, blank=True, null=True)
     source = models.ForeignKey('TaskSource', on_delete=models.PROTECT, blank=True, null=True)
-    topic = models.ForeignKey('TaskTopic', on_delete=models.PROTECT, blank=True, null=True)
     difficulty_level = models.ForeignKey('DifficultyLevel', on_delete=models.PROTECT, blank=True, null=True)
+    actuality = models.ForeignKey('Actuality', on_delete=models.PROTECT, blank=True, null=True)
 
     bank_authors = models.ManyToManyField('TaskBankAuthor', related_name='tasks', blank=True)
 
-    # is_available_in_bank = models.BooleanField(blank=False, default=True)
+    is_public = models.BooleanField(blank=False, default=True)
 
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -31,6 +34,11 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+class Actuality(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class TaskSource(models.Model):
     name = models.CharField(max_length=100)
@@ -41,7 +49,7 @@ class TaskSource(models.Model):
 
 class DifficultyLevel(models.Model):
     name = models.CharField(max_length=100)
-
+    exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False, related_name='dif_levels')
     def __str__(self):
         return self.name
 

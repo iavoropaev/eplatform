@@ -34,6 +34,8 @@ export const getAllTasksFromServer = async ({
   authors,
   subject,
   bankAuthors,
+  dif_levels,
+  actualities,
 }) => {
   try {
     const data = {
@@ -41,6 +43,8 @@ export const getAllTasksFromServer = async ({
       authors,
       subject,
       bank_authors: bankAuthors,
+      dif_levels,
+      actualities,
     };
     console.log(data);
     const res = await axios.post(

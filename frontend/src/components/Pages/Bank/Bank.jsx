@@ -15,22 +15,25 @@ import BankFilter from "./components/BankFilter";
 const Bank = () => {
   const jwt = localStorage.getItem("jwt_a");
 
-  const [filterData, setFilterData] = useState([
-    {
-      name: "Загрузка",
-      subjects: [
-        {
-          name: "Загрузка",
-          sources: [
-            {
-              name: "Загрузка",
-              numbers: [],
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+  const [filterData, setFilterData] = useState({
+    exams: [
+      {
+        name: "Загрузка",
+        subjects: [
+          {
+            name: "Загрузка",
+            sources: [
+              {
+                name: "Загрузка",
+                numbers: [],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    actualities: [],
+  });
   const [tasks, setTasks] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({
     exam: 0,
@@ -38,10 +41,12 @@ const Bank = () => {
     source: 0,
     numbers: [],
     authors: [],
+    dif_levels: [],
+    actualities: [],
   });
   const [solvedStatuses, setSolvedStatuses] = useState({});
 
-  const exam = filterData[selectedFilters["exam"]];
+  const exam = filterData["exams"][selectedFilters["exam"]];
   const subject = exam["subjects"][selectedFilters["subject"]];
   const source = subject["sources"][selectedFilters["source"]];
   const numbers = selectedFilters["numbers"].map((i) => {
@@ -50,6 +55,14 @@ const Bank = () => {
   const authors = selectedFilters["authors"].map((i) => {
     return subject["authors"][i]["id"];
   });
+  const dif_levels = selectedFilters["dif_levels"].map((i) => {
+    return exam["dif_levels"][i]["id"];
+  });
+  const actualities = selectedFilters["actualities"].map((i) => {
+    return filterData["actualities"][i]["id"];
+  });
+
+  console.log("AC", actualities);
 
   const getSelectFromFilter = (type, value) => {
     const newData = { ...selectedFilters };
@@ -87,6 +100,8 @@ const Bank = () => {
       authors,
       subject: subject.id,
       bankAuthors: [source?.id],
+      dif_levels,
+      actualities,
     });
 
     if (jwt) {
@@ -111,6 +126,7 @@ const Bank = () => {
         filterData={filterData}
         handleFindButtonClick={handleFindButtonClick}
       />
+      <p>{`Найдено ${tasks.length} задач.`}</p>
       <div className="tasks">
         {tasks.map((task) => {
           return (

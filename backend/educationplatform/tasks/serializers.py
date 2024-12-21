@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Task, TaskSolutions, TaskNumberInExam, TaskExam, TaskSubject, TaskSource, Author, DifficultyLevel, \
-    TaskBankAuthor
+    TaskBankAuthor, Actuality
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -10,20 +10,7 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ('id', 'content', 'author', 'source', 'answer', 'topic', 'time_create', 'difficulty_level',
                   'time_update')
         fields = '__all__'
-        #depth = 2
-
-
-
-class TaskSerializerForUser(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = ('id', 'content', 'author', 'source', 'answer', 'topic', 'time_create', 'difficulty_level',
-                  'time_update')
-        fields = ('answer_type', 'id')
-        fields = '__all__'
-        depth = 2
-
-
+        # depth = 2
 
 
 class TaskSerializerForCreate(serializers.ModelSerializer):
@@ -44,21 +31,24 @@ class TaskDifficultyLevelSerializer(serializers.ModelSerializer):
         model = DifficultyLevel
         fields = ['id', 'name']
 
+
 class TaskAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ['id', 'name']
 
+
 class TaskSourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskSource
-        fields = ['name', 'slug']
+        fields = ['name']
 
-###
+
 class TaskBankAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskBankAuthor
         fields = '__all__'
+
 
 class TaskNumberInExamSerializer(serializers.ModelSerializer):
     class Meta:
@@ -70,14 +60,31 @@ class TaskSubjectSerializer(serializers.ModelSerializer):
     numbers = TaskNumberInExamSerializer(many=True, read_only=True)
     sources = TaskBankAuthorSerializer(many=True, read_only=True)
     authors = TaskAuthorSerializer(many=True, read_only=True)
-    difficulty_levels = TaskAuthorSerializer(many=True, read_only=True)
-    class Meta:
-        model = TaskSubject
-        fields = ['id','name', 'slug', 'numbers', 'sources', 'authors', 'difficulty_levels']
-  
-class FilterSerializer(serializers.ModelSerializer):
-    subjects = TaskSubjectSerializer(many=True, read_only=True)
+
 
     class Meta:
+        model = TaskSubject
+        fields = ['id', 'name', 'slug', 'numbers', 'sources', 'authors']
+
+
+class FilterSerializer(serializers.ModelSerializer):
+    subjects = TaskSubjectSerializer(many=True, read_only=True)
+    dif_levels = TaskDifficultyLevelSerializer(many=True, read_only=True)
+    actualities = serializers.SerializerMethodField()
+    class Meta:
         model = TaskExam
-        fields = ('id', 'name', 'slug', 'subjects')
+        fields = ('id', 'name', 'slug', 'subjects', 'dif_levels', 'actualities')
+
+    def get_actualities(self, obj):
+        related_data = Actuality.objects.all()
+        return [{'id':item.id, 'name':item.name} for item in related_data]
+
+class TaskSerializerForUser(serializers.ModelSerializer):
+    author = TaskAuthorSerializer()
+    number_in_exam = TaskNumberInExamSerializer()
+    source = TaskSourceSerializer()
+
+    class Meta:
+        model = Task
+        fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer', 'difficulty_level',
+                  'time_update', 'time_create')
