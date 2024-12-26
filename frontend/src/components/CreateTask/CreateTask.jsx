@@ -1,174 +1,94 @@
-import { useEffect, useState } from "react";
 import TaskTags from "./components/TaskTags";
 import Answer from "../Utils/Answer/Answer";
 import { CustomSelect } from "../Utils/CustomSelect";
 import TinyMCE from "../Utils/TinyMCE";
 import { CheckBoxes } from "../Utils/CheckBoxes";
-import {
-  createTaskOnServer,
-  getFilterData,
-  getTaskById,
-} from "../../server/bank";
-import { getPreparedFilterData } from "../Utils/FilterUtils";
 
-const CreateTask = ({ taskId, afterSave }) => {
-  const [countSave, setCountSave] = useState(0);
-  const [loadStatus, setLoadStatus] = useState(0); // 0 - loading; 1 - ok, -1- error.
-
-  const [editorContent, setEditorContent] = useState("Начальный");
-  const [answer, setAnswer] = useState("");
-  const [answerType, setAnswerType] = useState("text");
-  const [selectedExam, setSelectedExam] = useState(-1);
-  const [selectedSubject, setSelectedSubject] = useState(-1);
-  const [selectedNumber, setSelectedNumber] = useState(-1);
-  const [selectedBanks, setSelectedBanks] = useState([]);
-
-  const [filterData, setFilterData] = useState([]);
-
-  const {
-    exams,
-    subjects,
-    numbers,
-    activeExam,
-    activeSubject,
-    activeNumber,
-    bankAuthors,
-  } = getPreparedFilterData({
-    filterData,
-    selectedExam,
-    selectedSubject,
-    selectedNumber,
-  });
-
-  const setDefault = () => {
-    setEditorContent("Начальный");
-    setAnswer("");
-    setAnswerType("text");
-    setSelectedNumber(-1);
-    setSelectedExam(-1);
-    setSelectedSubject(-1);
-  };
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getFilterData();
-      setFilterData(data);
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getTaskById(taskId);
-      if (data !== undefined && filterData.length > 0) {
-        setEditorContent(data.content);
-        setAnswer(data.answer);
-        setAnswerType(data.answer_type);
-        const numberId = data.number_in_exam.id;
-        const subjectId = data.number_in_exam.subject.id;
-        const examId = data.number_in_exam.subject.exam.id;
-        const bankAuthors = data.bank_authors.map((el) => el.id);
-        setSelectedExam(examId);
-        setSelectedSubject(subjectId);
-        setSelectedNumber(numberId);
-        setSelectedBanks(bankAuthors);
-        setLoadStatus(1);
-      } else {
-        if (filterData.length > 0) {
-          setLoadStatus(-1);
-        } else {
-          setLoadStatus(0);
-        }
-      }
-    }
-
-    if (taskId) {
-      fetchData();
-      console.log("Download task");
-    } else {
-      setDefault();
-    }
-  }, [taskId, filterData, countSave]);
-
-  const saveTaskOnServer = async () => {
-    const newTask = await createTaskOnServer({
-      content: editorContent,
-      answer: JSON.stringify(answer),
-      answer_type: answerType,
-      number_in_exam: activeNumber.id,
-      taskId: taskId,
-      bank_authors: selectedBanks,
-    });
-    if (newTask !== undefined) {
-      setCountSave(countSave + 1);
-      afterSave(newTask.id);
-      //navigate(`../edit-task/${newTask.id}/`);
-    }
-  };
-
+const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
   const handleAnswerTypeSelect = (e) => {
     const type = e.target.value;
-    setAnswerType(type);
+    taskData.setAnswerType(type);
+
     if (type === "text") {
-      setAnswer("");
+      taskData.setAnswer("");
     }
     if (type === "table") {
-      setAnswer([["", ""]]);
+      taskData.setAnswer([["", ""]]);
     }
   };
 
-  if (taskId && loadStatus === -1) {
+  if (taskData.taskId && loadStatus === -1) {
     return <h2>Задача не найдена</h2>;
   }
-  if (taskId && loadStatus === 0) {
+  if (taskData.taskId && loadStatus === 0) {
     return <h2>Загрузка...</h2>;
   }
+  console.log(taskData);
   return (
     <>
       <div className="tags">
         <TaskTags
           name={"Экзамен"}
-          options={exams}
-          selectedOption={selectedExam}
-          setSelectedOption={setSelectedExam}
+          options={taskData.exams}
+          selectedOption={taskData.selectedExam}
+          setSelectedOption={taskData.setSelectedExam}
         />
-        <TaskTags
-          name={"Предмет"}
-          options={subjects}
-          selectedOption={selectedSubject}
-          setSelectedOption={setSelectedSubject}
-        />
-
-        <TaskTags
-          name={"Номер"}
-          options={numbers}
-          selectedOption={selectedNumber}
-          setSelectedOption={setSelectedNumber}
-        />
+        {taskData.subjects.length > 0 && (
+          <TaskTags
+            name={"Предмет"}
+            options={taskData.subjects}
+            selectedOption={taskData.selectedSubject}
+            setSelectedOption={taskData.setSelectedSubject}
+          />
+        )}
+        {taskData.numbers.length > 0 && (
+          <TaskTags
+            name={"Номер"}
+            options={taskData.numbers}
+            selectedOption={taskData.selectedNumber}
+            setSelectedOption={taskData.setSelectedNumber}
+          />
+        )}
       </div>
+      <TaskTags
+        name={"Сложность"}
+        options={taskData.difficulty_levels}
+        selectedOption={taskData.selectedDifLevel}
+        setSelectedOption={taskData.setSelectedDifLevel}
+      />
+      <TaskTags
+        name={"Актуальность"}
+        options={taskData.actualities}
+        selectedOption={taskData.selectedActuality}
+        setSelectedOption={taskData.setSelectedActuality}
+      />
 
       <CheckBoxes
-        selectedBanks={selectedBanks}
-        bankAuthors={bankAuthors}
-        setSelectedBanks={setSelectedBanks}
+        selectedBanks={taskData.selectedBanks}
+        bankAuthors={taskData.bankAuthors}
+        setSelectedBanks={taskData.setSelectedBanks}
       />
 
       <TinyMCE
-        editorContent={editorContent}
-        // setEditorContent={setEditorContent}
+        editorContent={taskData.editorContent}
         setEditorContent={(c) => {
-          console.log(c);
-          setEditorContent(c);
+          taskData.setEditorContent(c);
         }}
       />
       <CustomSelect
         options={["text", "table"]}
-        selected={answerType}
+        selected={taskData.answerType}
         handleSelect={handleAnswerTypeSelect}
       />
 
-      <Answer type={answerType} answer={answer} setAnswer={setAnswer} />
-      <button onClick={saveTaskOnServer}>Сохранить</button>
+      <Answer
+        type={taskData.answerType}
+        answer={taskData.answer}
+        setAnswer={(ans) => {
+          taskData.setAnswer(ans);
+        }}
+      />
+      <button onClick={handleSaveButton}>Сохранить</button>
     </>
   );
 };

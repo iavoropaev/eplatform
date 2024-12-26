@@ -4,7 +4,7 @@ export const getPreparedFilterData = ({
   selectedSubject,
   selectedNumber,
 }) => {
-  let exams = filterData;
+  let exams = filterData["exams"];
   exams = exams ? exams : [];
   const activeExam = exams.find((item) => item.id === selectedExam);
 
@@ -18,7 +18,12 @@ export const getPreparedFilterData = ({
 
   let bankAuthors = activeSubject?.sources;
   bankAuthors = bankAuthors ? bankAuthors : [];
-  //const activeBankAuthors = numbers.find((item) => item.id === selectedNumber);
+
+  let difficulty_levels = activeExam?.dif_levels;
+  difficulty_levels = difficulty_levels ? difficulty_levels : [];
+
+  let actualities = filterData?.actualities;
+  actualities = actualities ? actualities : [];
 
   return {
     exams,
@@ -28,5 +33,7 @@ export const getPreparedFilterData = ({
     activeSubject,
     activeNumber,
     bankAuthors,
+    actualities,
+    difficulty_levels,
   };
 };

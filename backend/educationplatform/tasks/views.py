@@ -34,8 +34,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         if self.action in ['list', 'retrieve', 'filtered', 'new_tasks']:
             permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAdminUser]
-            permission_classes = [AllowAny]
+            permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     @extend_schema(description='''Get tasks filtered by authors, sources, topics, create time. Ordering by create time. 
@@ -135,7 +134,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def upload_task(self, request):
         tasks_data = request.data
-
+        tasks_data['created_by'] = request.user.id
         serializer = self.get_serializer(data=tasks_data, many=False)
         if serializer.is_valid():
             saved_task = serializer.save()

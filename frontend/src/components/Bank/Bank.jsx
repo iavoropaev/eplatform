@@ -1,6 +1,6 @@
 import "./Bank.css";
 
-import Task from "../../Menu/Task/Task";
+import Task from "../Menu/Task/Task";
 import { useEffect, useState } from "react";
 import {
   createTaskOnServer,
@@ -8,7 +8,7 @@ import {
   getFilterData,
   getSolveStatuses,
   sendSolution,
-} from "../../../server/bank";
+} from "../../server/bank";
 
 import BankFilter from "./components/BankFilter";
 
@@ -119,7 +119,7 @@ const Bank = () => {
   };
 
   return (
-    <div>
+    <div className="bank">
       <BankFilter
         selectedFilters={selectedFilters}
         getSelectFromFilter={getSelectFromFilter}

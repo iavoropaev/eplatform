@@ -70,14 +70,11 @@ class TaskSubjectSerializer(serializers.ModelSerializer):
 class FilterSerializer(serializers.ModelSerializer):
     subjects = TaskSubjectSerializer(many=True, read_only=True)
     dif_levels = TaskDifficultyLevelSerializer(many=True, read_only=True)
-    actualities = serializers.SerializerMethodField()
+
     class Meta:
         model = TaskExam
-        fields = ('id', 'name', 'slug', 'subjects', 'dif_levels', 'actualities')
+        fields = ('id', 'name', 'slug', 'subjects', 'dif_levels')
 
-    def get_actualities(self, obj):
-        related_data = Actuality.objects.all()
-        return [{'id':item.id, 'name':item.name} for item in related_data]
 
 class TaskSerializerForUser(serializers.ModelSerializer):
     author = TaskAuthorSerializer()

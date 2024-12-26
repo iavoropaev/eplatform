@@ -4,10 +4,8 @@ const TaskTags = ({ options, selectedOption, setSelectedOption, name }) => {
   const handleChange = (event) => {
     setSelectedOption(Number(event.target.value));
   };
-  console.log(options.length, selectedOption);
 
   useEffect(() => {
-    console.log(options, selectedOption);
     if (!options.some((item) => item.id === selectedOption)) {
       setSelectedOption(-1);
     }

@@ -8,7 +8,6 @@ if (jwt_a) {
 }
 
 export const getTaskById = async (id) => {
-  console.log(headers);
   try {
     const res = await axios.get(
       "http://127.0.0.1:8000/api/v1/tasks/" + id + "/",
@@ -46,7 +45,7 @@ export const getAllTasksFromServer = async ({
       dif_levels,
       actualities,
     };
-    console.log(data);
+
     const res = await axios.post(
       "http://127.0.0.1:8000/api/v1/tasks/filtered/",
       data,
