@@ -1,6 +1,6 @@
 import "./Bank.css";
 
-import Task from "../Menu/Task/Task";
+import Task from "../Task/Task";
 import { useEffect, useState } from "react";
 import {
   createTaskOnServer,

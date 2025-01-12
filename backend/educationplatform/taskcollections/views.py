@@ -6,7 +6,8 @@ from urllib3 import request
 
 from taskcollections.models import TaskCollection, TaskCollectionSolve, TaskCollectionTask
 from taskcollections.serializers import TaskCollectionSerializer, TaskCollectionSolveSerializer, \
-    TaskCollectionCreateSerializer, TaskCollectionTaskSerializer
+    TaskCollectionCreateSerializer, TaskCollectionTaskSerializer, TaskCollectionTaskForUserSerializer, \
+    TaskCollectionGetSerializer
 from rest_framework.response import Response
 
 from tasks.models import Task
@@ -16,13 +17,22 @@ from tasks.serializers import TaskSerializer, TaskSerializerForUser
 class TaskCollectionViewSet(viewsets.ModelViewSet):
     queryset = TaskCollection.objects.all()
     serializer_class = TaskCollectionSerializer
+    lookup_field = 'slug'
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return TaskCollectionGetSerializer
+        return TaskCollectionSerializer
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['list', 'retrieve', 'post']:
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
     @action(detail=False, methods=['post'])
     def create_collection(self, request):
@@ -40,14 +50,29 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                 'Error': 'Не удалось создать подборку.',
             })
 
+    @action(detail=False, methods=['get'])
+    def get_collections(self, request):
+        # Получение всех объектов из queryset
+        queryset = TaskCollection.objects.all().filter(is_public=True)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=['post'])
     def update_collection(self, request):
         try:
             cur_user_id = request.user.id
 
-            collection = TaskCollection.objects.get(id=request.data['id'])
+            if 'id' in request.data:
+                collection = TaskCollection.objects.get(id=request.data['id'])
+            elif 'slug' in request.data:
+                collection = TaskCollection.objects.get(slug=request.data['slug'])
+            else:
+                return Response({"detail": "Подборка не найдена."},
+                                status=status.HTTP_404_NOT_FOUND)
+
             if cur_user_id != collection.created_by.id:
-                Response({"detail": "У вас нет прав на редактирование этой задачи."}, status=status.HTTP_403_FORBIDDEN)
+                return Response({"detail": "У вас нет прав на редактирование этой подборки."}, status=status.HTTP_403_FORBIDDEN)
 
             # Update collection info
             serializer = TaskCollectionCreateSerializer(collection, data=request.data, partial=True)
@@ -61,10 +86,17 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             updated_tasks = []
             for task in request.data['tasks']:
                 task_obj = Task.objects.get(id=task['id'])
-                task_serializer = TaskSerializer(task_obj, data=task['info'], partial=True)
-                if task_serializer.is_valid():
-                    task_serializer.save()
-                    updated_tasks.append(task_serializer.data)
+                if task['info']:
+                    task_serializer = TaskSerializer(task_obj, data=task['info'], partial=True)
+                    if task_serializer.is_valid():
+                        task_serializer.save()
+                        task_user_serializer = TaskSerializerForUser(task_obj)
+                        updated_tasks.append(task_user_serializer.data)
+                else:
+                    task_user_serializer = TaskSerializerForUser(task_obj)
+                    updated_tasks.append(task_user_serializer.data)
+
+
 
             # Update task ids in collection
             tasks_to_delete = list(TaskCollectionTask.objects.filter(task_collection=collection).values())
@@ -77,7 +109,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             for i, task in enumerate(request.data['tasks']):
                 task_id = task['id']
                 data.append({'task_collection': collection.id, 'task':task_id, 'order':i})
-                print({'task_collection': collection.id, 'task':task_id, 'order':i})
             serializer = TaskCollectionTaskSerializer(data=data, many=True)
             if serializer.is_valid():
                 serializer.save()

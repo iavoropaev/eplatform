@@ -1,7 +1,7 @@
 import { BiDislike, BiLike } from "react-icons/bi";
-import Answer from "../../../Utils/Answer/Answer";
+import Answer from "../../Utils/Answer/Answer";
 import { useState } from "react";
-import { SendButton } from "../../../Utils/Answer/SendButton";
+import { SendButton } from "../../Utils/Answer/SendButton";
 
 const TaskFooter = ({ taskData, sendAnswerToServer }) => {
   let defaultAnswer = "";
