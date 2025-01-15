@@ -32,8 +32,13 @@ class TaskCollectionSolve(models.Model):
     task_collection = models.ForeignKey('TaskCollection', on_delete=models.PROTECT, blank=False)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False)
 
-    answers = models.CharField(blank=False)
+    answers = models.JSONField(blank=False)
     score = models.IntegerField(blank=False)
     duration = models.IntegerField(blank=False)
 
     time_create = models.DateTimeField(auto_now_add=True)
+    # answers -> [{task_id:1, score:2, status:'ok',
+    # user_answer:{type:'text', data:'1234'},
+    # ok_answer: {type: 'text', data: '1234'},
+    # }]
+    # All answers. Include empty.

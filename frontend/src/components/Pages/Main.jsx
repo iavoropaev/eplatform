@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Auth from "../Utils/Auth";
 import { useEffect } from "react";
 import queryString from "query-string";
@@ -38,6 +38,27 @@ const Main = () => {
     <>
       <h1>Главная</h1>
       <Auth />
+      <div className="menu">
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <NavLink to="/" end>
+            Главная
+          </NavLink>
+          <NavLink to="/bank/">Банк задач</NavLink>
+          <NavLink to="/create-task/">Добавить задачу</NavLink>
+          {/* <NavLink to="/test/">Тест</NavLink> */}
+          <NavLink to="/create-collection/">Создать подборку</NavLink>
+          <NavLink to="/update-collection/1/">Обновить подборку</NavLink>
+          <NavLink to="/collections/1/">Подборка</NavLink>
+          <NavLink end to="/collections/">
+            Подборки
+          </NavLink>
+          <NavLink end to="/variant/1/">
+            Вариант
+          </NavLink>
+
+          <NavLink></NavLink>
+        </div>
+      </div>
     </>
   );
 };

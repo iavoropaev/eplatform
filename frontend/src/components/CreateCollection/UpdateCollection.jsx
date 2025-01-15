@@ -140,6 +140,7 @@ const UpdateCollection = () => {
               taskData={task}
               sendAnswerToServer={() => {}}
               status=""
+              hideAnswerBlock={true}
             />
           </div>
         );

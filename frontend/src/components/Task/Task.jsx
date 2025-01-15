@@ -3,7 +3,15 @@ import TaskFooter from "./components/TaskFooter";
 import TaskHeader from "./components/TaskHeader";
 import "./Task.css";
 
-const Task = ({ taskData, sendAnswerToServer, status }) => {
+const Task = ({
+  taskData,
+  taskAnswer,
+  handleSaveButton,
+  status,
+  showCancelBut,
+  handleCancelButton,
+  hideAnswerBlock,
+}) => {
   return (
     <div className="task-container">
       <div className={"task "}>
@@ -11,7 +19,11 @@ const Task = ({ taskData, sendAnswerToServer, status }) => {
         <TaskBody taskData={taskData} />
         <TaskFooter
           taskData={taskData}
-          sendAnswerToServer={sendAnswerToServer}
+          taskAnswer={taskAnswer}
+          handleSaveButton={handleSaveButton}
+          showCancelBut={showCancelBut}
+          handleCancelButton={handleCancelButton}
+          hideAnswerBlock={hideAnswerBlock}
         />
         <p>{status}</p>
       </div>

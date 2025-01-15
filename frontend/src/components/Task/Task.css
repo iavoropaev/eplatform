@@ -116,6 +116,7 @@ div.task-container {
 
   white-space: nowrap;
 }
+
 .task-container .task-footer button:hover {
   cursor: pointer;
   border: 1px solid grey;
@@ -123,6 +124,12 @@ div.task-container {
 .task-container .task-footer button:active {
   cursor: pointer;
   background-color: #d9d9d9;
+}
+
+.task-container .task-footer button:disabled {
+  background-color: white;
+  border: 1px solid grey;
+  cursor: initial; /* курсор для disabled */
 }
 
 .task-container .task-footer .author {

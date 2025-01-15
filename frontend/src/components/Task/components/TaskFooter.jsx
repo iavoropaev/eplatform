@@ -1,33 +1,69 @@
 import { BiDislike, BiLike } from "react-icons/bi";
 import Answer from "../../Utils/Answer/Answer";
 import { useState } from "react";
-import { SendButton } from "../../Utils/Answer/SendButton";
 
-const TaskFooter = ({ taskData, sendAnswerToServer }) => {
+const TaskFooter = ({
+  taskData,
+  taskAnswer,
+  handleSaveButton,
+  handleCancelButton,
+  hideAnswerBlock,
+}) => {
   let defaultAnswer = "";
   if (taskData.answer_type === "table") {
     defaultAnswer = [["", ""]];
   }
 
   const [answer, setAnswer] = useState(defaultAnswer);
+  const [isAnswerSave, setAnswerSave] = useState(false);
+
   const handleSendAnswer = () => {
-    sendAnswerToServer({
+    handleSaveButton({
       taskId: taskData.id,
       answer: answer,
       type: taskData.answer_type,
     });
   };
+
+  const isAnswerSaveReady = (taskAnswer ? true : false) | isAnswerSave;
+  const curAnswerData = taskAnswer ? taskAnswer[taskAnswer.type] : answer;
+
   return (
     <div className="task-footer">
       <div className="answer">
-        <span className="input-with-but">
-          <Answer
-            type={taskData.answer_type}
-            answer={answer}
-            setAnswer={setAnswer}
-          />
-          <SendButton handle={handleSendAnswer} />
-        </span>
+        {!hideAnswerBlock && (
+          <span className="input-with-but">
+            <Answer
+              type={taskData.answer_type}
+              answer={curAnswerData}
+              setAnswer={setAnswer}
+              disabled={isAnswerSaveReady}
+            />
+
+            <button
+              disabled={isAnswerSaveReady}
+              onClick={() => {
+                handleSendAnswer();
+                setAnswerSave(true);
+              }}
+            >
+              Проверить ответ
+            </button>
+
+            <button
+              onClick={() => {
+                if (handleCancelButton) {
+                  handleCancelButton();
+                }
+                setAnswer(defaultAnswer);
+                setAnswerSave(false);
+              }}
+            >
+              Отчистить
+            </button>
+          </span>
+        )}
+
         <span className="author">{taskData?.author?.name}</span>
       </div>
 

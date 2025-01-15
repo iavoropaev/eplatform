@@ -1,8 +1,9 @@
+import json
+
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from urllib3 import request
 
 from taskcollections.models import TaskCollection, TaskCollectionSolve, TaskCollectionTask
 from taskcollections.serializers import TaskCollectionSerializer, TaskCollectionSolveSerializer, \
@@ -12,6 +13,7 @@ from rest_framework.response import Response
 
 from tasks.models import Task
 from tasks.serializers import TaskSerializer, TaskSerializerForUser
+from tasks.utils import check_answer
 
 
 class TaskCollectionViewSet(viewsets.ModelViewSet):
@@ -52,9 +54,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def get_collections(self, request):
-        # Получение всех объектов из queryset
         queryset = TaskCollection.objects.all().filter(is_public=True)
-
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -72,7 +72,8 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                                 status=status.HTTP_404_NOT_FOUND)
 
             if cur_user_id != collection.created_by.id:
-                return Response({"detail": "У вас нет прав на редактирование этой подборки."}, status=status.HTTP_403_FORBIDDEN)
+                return Response({"detail": "У вас нет прав на редактирование этой подборки."},
+                                status=status.HTTP_403_FORBIDDEN)
 
             # Update collection info
             serializer = TaskCollectionCreateSerializer(collection, data=request.data, partial=True)
@@ -96,8 +97,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                     task_user_serializer = TaskSerializerForUser(task_obj)
                     updated_tasks.append(task_user_serializer.data)
 
-
-
             # Update task ids in collection
             tasks_to_delete = list(TaskCollectionTask.objects.filter(task_collection=collection).values())
             TaskCollectionTask.objects.filter(task_collection=collection).delete()
@@ -108,7 +107,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             data = []
             for i, task in enumerate(request.data['tasks']):
                 task_id = task['id']
-                data.append({'task_collection': collection.id, 'task':task_id, 'order':i})
+                data.append({'task_collection': collection.id, 'task': task_id, 'order': i})
             serializer = TaskCollectionTaskSerializer(data=data, many=True)
             if serializer.is_valid():
                 serializer.save()
@@ -123,7 +122,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             })
 
 
-###################
 class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     queryset = TaskCollectionSolve.objects.all()
     serializer_class = TaskCollectionSolveSerializer
@@ -140,22 +138,40 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     def send_solution(self, request):
         try:
             cur_user_id = request.user.id
-
-            cur_col_id = request.data['col_id']
+            cur_col_slug = request.data['col_slug']
             user_answers = request.data['answers']
             duration = request.data['duration']
+            print(user_answers)
+            collection = TaskCollection.objects.all().filter(slug=cur_col_slug).first()
 
-            # Count ok answers
-            score = 0
-            for task in TaskCollection.objects.filter(id=1)[0].tasks.all():
-                if str(task.id) in user_answers:
-                    if str(task.answer) == str(user_answers[str(task.id)]):
-                        score += 1
+            answers_summary = []
+            total_score = 0
+            for task in collection.tasks.all().values('id', 'answer', 'answer_type'):
+                task_id = task['id']
+                ok_answer_type = task['answer_type']
+                ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task['answer'])}
+                score = 0
+                if str(task_id) in user_answers:
+                    user_answer = user_answers[str(task_id)]
+                    print(user_answer, ok_answer)
+                    if check_answer(user_answer, ok_answer):
+                        score = 1
+                        status = 'OK'
+                    else:
+                        status = 'WA'
+                    total_score += score
+                else:
+                    status = 'NA'
+                    user_answer = {}
+                answers_summary.append({"user_answer": user_answer,
+                                        "ok_answer": ok_answer,
+                                        "score": score,
+                                        'status': status})
 
             solve = TaskCollectionSolve(
-                task_collection_id=cur_col_id,
+                task_collection_id=collection.id,
                 user_id=cur_user_id,
-                answers=user_answers,
+                answers=answers_summary,
                 score=score,
                 duration=duration
             )
@@ -165,8 +181,34 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             data = serializer.data
             return Response({
                 'solution': data,
+                'col_slug': cur_col_slug,
+                'answers': answers_summary
             })
-        except:
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось обработать запрос.',
+            })
+
+
+
+
+    @action(detail=False, methods=['get'], url_path='get-solution')
+    def get_solution(self, request):
+        try:
+            user_id = request.user.id
+            col_slug = request.query_params.get('col_slug', None)
+            sol_type = request.query_params.get('sol_type', None)
+            solve = TaskCollectionSolve.objects.all().filter(user__id=user_id, task_collection__slug=col_slug).order_by('time_create').last()
+            print(solve)
+            print(col_slug, sol_type)
+            serializer = TaskCollectionSolveSerializer(solve, many=False)
+            data = serializer.data
+            return Response({
+                'solution': data
+            })
+        except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             })

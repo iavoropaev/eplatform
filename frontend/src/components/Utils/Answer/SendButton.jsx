@@ -1,7 +1,9 @@
-export const SendButton = ({ handle }) => {
+export const SendButton = ({ handle, disabled }) => {
   return (
     <>
-      <button onClick={handle}>Проверить ответ</button>
+      <button disabled={disabled} onClick={handle}>
+        Проверить ответ
+      </button>
     </>
   );
 };

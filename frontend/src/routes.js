@@ -7,6 +7,8 @@ import CreateCollectionPage from "./components/Pages/Create collection/CreateCol
 import CollectionPage from "./components/Pages/Collection/CollectionPage";
 import CollectionCatalogPage from "./components/Pages/Collections catalog/CollectionCatalogPage";
 import CreateCollection from "./components/CreateCollection/CreateCollection";
+import ExamPage from "./components/Pages/Exam/ExamPage";
+import ExamResultsPage from "./components/Pages/Exam results/ExamResultsPage";
 
 export const publicRoutes = [
   { path: "edit-task/:taskId/", Component: CreateTaskPage },
@@ -19,6 +21,8 @@ export const publicRoutes = [
   { path: "create-collection/", Component: CreateCollection },
   { path: "collections/:slug/", Component: CollectionPage },
   { path: "collections/", Component: CollectionCatalogPage },
+  { path: "variant/:slug/", Component: ExamPage },
+  { path: "variant/:slug/results/", Component: ExamResultsPage },
 
   { path: "*", Component: NotFound },
 ];

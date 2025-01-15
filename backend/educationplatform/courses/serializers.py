@@ -19,7 +19,7 @@ class TheorySectionSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('id', 'content', 'author', 'source', 'topic', 'difficulty_level')
+        fields = ('id', 'content', 'author', 'source',  'difficulty_level')
 
 
 class SectionSerializer(serializers.ModelSerializer):

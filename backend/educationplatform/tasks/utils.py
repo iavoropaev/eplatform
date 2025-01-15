@@ -1,6 +1,5 @@
 def check_answer(user_answer, true_answer):
     is_ok = True
-    print([user_answer, true_answer])
     if true_answer['type'] == 'text':
         return str(user_answer['text']).strip() == str(true_answer['text']).strip()
     if true_answer['type'] == 'table':

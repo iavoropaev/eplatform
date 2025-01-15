@@ -133,7 +133,7 @@ const Bank = () => {
             <Task
               taskData={task}
               key={task.id}
-              sendAnswerToServer={sendAnswerToServer}
+              handleSaveButton={sendAnswerToServer}
               status={solvedStatuses[task.id]}
             />
           );

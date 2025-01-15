@@ -1,4 +1,4 @@
-const TableAnswer = ({ answer, setAnswer }) => {
+const TableAnswer = ({ answer, setAnswer, disabled }) => {
   const handleInputChange = (rowIndex, colIndex, value) => {
     const updatedTable = [...answer];
     updatedTable[rowIndex][colIndex] = value;
@@ -34,6 +34,7 @@ const TableAnswer = ({ answer, setAnswer }) => {
               {row.map((cell, colIndex) => (
                 <td key={colIndex}>
                   <input
+                    disabled={disabled}
                     type="text"
                     value={cell}
                     onPaste={f}
