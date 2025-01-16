@@ -14,16 +14,20 @@ export const publicRoutes = [
   { path: "edit-task/:taskId/", Component: CreateTaskPage },
   { path: "create-task/:taskId/", Component: CreateTaskPage },
   { path: "create-task/", Component: CreateTaskPage },
+
   { path: "bank", Component: BankPage },
-  { path: "test", Component: Test },
   { path: "variants", Component: Variants },
+
   { path: "update-collection/:slug/", Component: CreateCollectionPage },
   { path: "create-collection/", Component: CreateCollection },
   { path: "collections/:slug/", Component: CollectionPage },
   { path: "collections/", Component: CollectionCatalogPage },
+
   { path: "variant/:slug/", Component: ExamPage },
+  { path: "variant/:slug/results/:solveType/", Component: ExamResultsPage },
   { path: "variant/:slug/results/", Component: ExamResultsPage },
 
+  { path: "test", Component: Test },
   { path: "*", Component: NotFound },
 ];
 

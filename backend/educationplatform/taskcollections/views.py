@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from taskcollections.models import TaskCollection, TaskCollectionSolve, TaskCollectionTask
 from taskcollections.serializers import TaskCollectionSerializer, TaskCollectionSolveSerializer, \
     TaskCollectionCreateSerializer, TaskCollectionTaskSerializer, TaskCollectionTaskForUserSerializer, \
-    TaskCollectionGetSerializer
+    TaskCollectionGetSerializer, TaskCollectionSolveForUserSerializer
 from rest_framework.response import Response
 
 from tasks.models import Task
@@ -146,7 +146,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             answers_summary = []
             total_score = 0
-            for task in collection.tasks.all().values('id', 'answer', 'answer_type'):
+            for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name'):
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
                 ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task['answer'])}
@@ -163,7 +163,9 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 else:
                     status = 'NA'
                     user_answer = {}
-                answers_summary.append({"user_answer": user_answer,
+                answers_summary.append({"task_id": task_id,
+                                        "number_in_exam": task['number_in_exam__name'],
+                                        "user_answer": user_answer,
                                         "ok_answer": ok_answer,
                                         "score": score,
                                         'status': status})
@@ -172,7 +174,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 task_collection_id=collection.id,
                 user_id=cur_user_id,
                 answers=answers_summary,
-                score=score,
+                score=total_score,
                 duration=duration
             )
             solve.save()
@@ -190,25 +192,27 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 'Error': 'Не удалось обработать запрос.',
             })
 
-
-
-
     @action(detail=False, methods=['get'], url_path='get-solution')
     def get_solution(self, request):
         try:
             user_id = request.user.id
             col_slug = request.query_params.get('col_slug', None)
             sol_type = request.query_params.get('sol_type', None)
-            solve = TaskCollectionSolve.objects.all().filter(user__id=user_id, task_collection__slug=col_slug).order_by('time_create').last()
-            print(solve)
-            print(col_slug, sol_type)
-            serializer = TaskCollectionSolveSerializer(solve, many=False)
+
+            solve = TaskCollectionSolve.objects.all().filter(user__id=user_id, task_collection__slug=col_slug)
+            if sol_type == 'last':
+                solve = solve.order_by('time_create').last()
+            elif sol_type == 'first':
+                solve = solve.order_by('time_create').first()
+            elif sol_type == 'best':
+                solve = solve.order_by('-score', '-time_create').first()
+            else:
+                solve = solve.first()
+
+            serializer = TaskCollectionSolveForUserSerializer(solve, many=False)
             data = serializer.data
-            return Response({
-                'solution': data
-            })
+            return Response(data)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             })
