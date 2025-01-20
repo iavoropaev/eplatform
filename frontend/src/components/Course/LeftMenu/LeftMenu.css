@@ -1,0 +1,17 @@
+.course-container .left-menu {
+  width: 200px;
+  background-color: bisque;
+  overflow: auto;
+}
+
+.course-container .left-menu .module-title {
+  background-color: azure;
+}
+
+.course-container .left-menu .active-lesson {
+  background-color: rgb(161, 255, 161);
+}
+
+.course-container .left-menu .lesson {
+  cursor: pointer;
+}

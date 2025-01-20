@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from courses.models import Course, Module, Lesson, Section, LessonSection, TheorySection, SectionSolve
+from courses.models import Course, Module, Lesson, Section, LessonSection,  SectionSolve
 from tasks.models import Task
 
 
@@ -9,11 +9,6 @@ class SectionSolveSerializer(serializers.ModelSerializer):
         model = SectionSolve
         fields = ('id', 'section', 'user', 'score', 'solve_status')
 
-
-class TheorySectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TheorySection
-        fields = ('id', 'name', 'slug', 'description', 'content')
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -24,12 +19,11 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
     task = TaskSerializer(read_only=True, many=False)
-    theory_section = TheorySectionSerializer(read_only=True, many=False)
 
     class Meta:
         model = Section
-        fields = ('id', 'name', 'task', 'theory_section')
-        depth = 1
+        fields = ('id', 'name', 'task', 'content', 'video')
+
 
 
 class LessonSectionSerializer(serializers.ModelSerializer):
@@ -42,25 +36,39 @@ class LessonSectionSerializer(serializers.ModelSerializer):
 
 
 class LessonSerializer(serializers.ModelSerializer):
-    lessonsection_set = LessonSectionSerializer(read_only=True, many=True)
+    sections = serializers.SerializerMethodField()
 
     class Meta:
         model = Lesson
-        fields = ('id', 'name', 'lessonsection_set')
+        fields = ('id', 'name', 'sections')
+
+    def get_sections(self, lesson):
+        lesson_sections = lesson.lessonsections.order_by('order')
+        section = [ls.section for ls in lesson_sections]
+        return SectionSerializer(section, many=True).data
 
 
 class ModuleSerializer(serializers.ModelSerializer):
-    lessons = LessonSerializer(read_only=True, many=True)
-
+    lessons = serializers.SerializerMethodField()
     class Meta:
         model = Module
         fields = ('id', 'name', 'lessons')
+        ordering = ['order']
+
+    def get_lessons(self, module):
+        module_lessons = module.modulelessons.order_by('order')
+        lessons = [ml.lesson for ml in module_lessons]
+        return LessonSerializer(lessons, many=True).data
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    modules = ModuleSerializer(read_only=True, many=True)
-
+    modules = serializers.SerializerMethodField()
     class Meta:
         model = Course
         fields = ('id', 'name', 'slug', 'description', 'modules')
-        # depth = 3
+
+    def get_modules(self, course):
+        course_module = course.coursemodules.order_by('order')
+        modules = [cm.module for cm in course_module]
+        return ModuleSerializer(modules, many=True).data
+

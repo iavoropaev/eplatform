@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import createCollectionReducer from "./slices/createCollectionSlice";
+import createCollectionSliceReducer from "./slices/createCollectionSlice";
 import examSliceReducer from "./slices/examSlice";
+import courseSliceReducer from "./slices/courseSlice";
 
 const store = configureStore({
   reducer: {
-    createCollection: createCollectionReducer,
+    createCollection: createCollectionSliceReducer,
     exam: examSliceReducer,
+    course: courseSliceReducer,
   },
 });
 

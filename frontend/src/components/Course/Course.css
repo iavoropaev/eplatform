@@ -1,0 +1,6 @@
+.course-container {
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  flex: 1;
+}

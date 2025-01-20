@@ -8,7 +8,7 @@ class Course(models.Model):
     description = models.CharField(blank=True)
 
     users = models.ManyToManyField(AUTH_USER_MODEL, blank=True)
-    modules = models.ManyToManyField('Module', blank=True, related_name='courses')
+    modules = models.ManyToManyField('Module', through='CourseModule', blank=True, related_name='courses')
 
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -22,7 +22,7 @@ class Module(models.Model):
     slug = models.CharField(max_length=100, blank=False, unique=True)
     description = models.CharField(blank=True)
 
-    lessons = models.ManyToManyField('Lesson', blank=True)
+    lessons = models.ManyToManyField('courses.Lesson', through='ModuleLesson', related_name='modules', blank=True)
 
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -33,7 +33,6 @@ class Module(models.Model):
 
 class Lesson(models.Model):
     name = models.CharField(max_length=100, blank=False)
-    slug = models.CharField(max_length=100, blank=False, unique=True)
     description = models.CharField(blank=True)
 
     section = models.ManyToManyField('Section', blank=True, through='LessonSection', related_name='lessons')
@@ -45,36 +44,13 @@ class Lesson(models.Model):
         return self.name
 
 
-class LessonSection(models.Model):
-    lesson = models.ForeignKey('Lesson', on_delete=models.PROTECT)
-    section = models.ForeignKey('Section', on_delete=models.PROTECT)
-
-    position = models.IntegerField(blank=False, null=False)
-
-
 class Section(models.Model):
     name = models.CharField(max_length=100, blank=False)
-    slug = models.CharField(max_length=100, blank=False, unique=True)
-    description = models.CharField(blank=True)
+    type = models.CharField(choices=[('task', 'task'), ('text', 'text')])
 
-    type = models.IntegerField(blank=False)
     task = models.ForeignKey('tasks.Task', on_delete=models.PROTECT, blank=True, null=True)
-    theory_section = models.ForeignKey('TheorySection', on_delete=models.PROTECT, blank=True, null=True)
-    video = models.CharField(blank=True)
-
-    time_create = models.DateTimeField(auto_now_add=True)
-    time_update = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-class TheorySection(models.Model):
-    name = models.CharField(max_length=100, blank=False)
-    slug = models.CharField(max_length=100, blank=False, unique=True)
-    description = models.CharField(blank=True)
-
-    content = models.CharField()
+    content = models.CharField(blank=True)
+    video = models.CharField(blank=True, max_length=1000)
 
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
@@ -89,3 +65,44 @@ class SectionSolve(models.Model):
 
     score = models.IntegerField(blank=False, null=False)
     solve_status = models.IntegerField(blank=False, null=False)
+
+
+# Connections
+class LessonSection(models.Model):
+    lesson = models.ForeignKey('Lesson', on_delete=models.PROTECT, related_name='lessonsections')
+    section = models.ForeignKey('Section', on_delete=models.PROTECT, related_name='lessonsections')
+
+    order = models.IntegerField(blank=False, null=False)
+
+    class Meta:
+        unique_together = ('lesson', 'section')
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.lesson.name} - {self.section.name} (Order: {self.order})"
+
+
+class CourseModule(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='coursemodules')
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='coursemodules')
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('course', 'module')
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.course.name} - {self.module.name} (Order: {self.order})"
+
+
+class ModuleLesson(models.Model):
+    module = models.ForeignKey('courses.Module', on_delete=models.CASCADE, related_name='modulelessons')
+    lesson = models.ForeignKey('courses.Lesson', on_delete=models.CASCADE, related_name='modulelessons')
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ('module', 'lesson')
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.module.name} - {self.lesson.name} (Order: {self.order})"

@@ -1,0 +1,20 @@
+.course-container .lesson .lesson-menu {
+  display: flex;
+  gap: 5px;
+}
+
+.course-container .lesson .menu-el,
+.course-container .lesson .menu-active-el {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  width: 35px;
+  border-radius: 5px;
+  background-color: grey;
+  cursor: pointer;
+}
+
+.course-container .lesson .menu-active-el {
+  background-color: rgb(163, 255, 169);
+}

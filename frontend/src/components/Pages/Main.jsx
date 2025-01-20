@@ -55,6 +55,9 @@ const Main = () => {
           <NavLink end to="/variant/1/">
             Вариант
           </NavLink>
+          <NavLink end to="/course/1/lesson/1">
+            курс
+          </NavLink>
 
           <NavLink></NavLink>
         </div>
