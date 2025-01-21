@@ -10,7 +10,7 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ('id', 'content', 'author', 'source', 'answer', 'topic', 'time_create', 'difficulty_level',
                   'time_update')
         fields = '__all__'
-        # depth = 2
+
 
 
 class TaskSerializerForCreate(serializers.ModelSerializer):

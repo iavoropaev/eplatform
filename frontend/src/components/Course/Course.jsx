@@ -5,6 +5,7 @@ import "./Course.css";
 import {
   getCourseFromServerById,
   getLessonFromServerById,
+  sendSectionSolution,
 } from "../../server/course";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,7 +14,7 @@ import {
 } from "../../redux/slices/courseSlice";
 import Lesson from "./Lesson/Lesson";
 const Course = () => {
-  const { courseId, lessonId } = useParams();
+  const { courseId, lessonId, sectionIndex } = useParams();
 
   const dispatch = useDispatch();
   const courseData = useSelector((state) => state.course.courseData);
@@ -35,6 +36,7 @@ const Course = () => {
       const lessonData = await getLessonFromServerById(lessonId);
       if (lessonData) {
         dispatch(setCurrentLesson(lessonData));
+        console.log(lessonData);
       }
     }
     fetchData();
@@ -43,7 +45,7 @@ const Course = () => {
   return (
     <div className="course-container">
       <LeftMenu modules={modules} activeLessonId={lessonId} />
-      <Lesson lesson={currentLesson} />
+      <Lesson lesson={currentLesson} sectionIndex={sectionIndex - 1} />
     </div>
   );
 };

@@ -21,7 +21,7 @@ const LeftMenu = ({ modules, activeLessonId }) => {
                     }
                     key={lesson.id}
                     onClick={() => {
-                      navigate(`./../${lesson.id}/`);
+                      navigate(`./../../../${lesson.id}/s/1/`);
                     }}
                   >
                     {lesson.name}

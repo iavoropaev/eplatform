@@ -28,7 +28,10 @@ export const publicRoutes = [
   { path: "variant/:slug/results/:solveType/", Component: ExamResultsPage },
   { path: "variant/:slug/results/", Component: ExamResultsPage },
 
-  { path: "course/:courseId/lesson/:lessonId/", Component: CoursePage },
+  {
+    path: "course/:courseId/lesson/:lessonId/s/:sectionIndex/",
+    Component: CoursePage,
+  },
 
   { path: "test", Component: Test },
   { path: "*", Component: NotFound },

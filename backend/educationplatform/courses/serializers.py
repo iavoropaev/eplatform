@@ -1,24 +1,17 @@
 from rest_framework import serializers
 
 from courses.models import Course, Module, Lesson, Section, LessonSection,  SectionSolve
-from tasks.models import Task
+from tasks.serializers import  TaskSerializerForUser
 
 
 class SectionSolveSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectionSolve
-        fields = ('id', 'section', 'user', 'score', 'solve_status')
-
-
-
-class TaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = ('id', 'content', 'author', 'source',  'difficulty_level')
+        fields = ('id', 'section', 'user', 'score', 'solve_status', 'answer')
 
 
 class SectionSerializer(serializers.ModelSerializer):
-    task = TaskSerializer(read_only=True, many=False)
+    task = TaskSerializerForUser(read_only=True, many=False)
 
     class Meta:
         model = Section
@@ -31,7 +24,7 @@ class LessonSectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LessonSection
-        fields = ('id', 'section', 'position')
+        fields = ('id', 'section', 'order')
         depth = 2
 
 

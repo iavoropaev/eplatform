@@ -63,8 +63,12 @@ class SectionSolve(models.Model):
     section = models.ForeignKey('Section', on_delete=models.PROTECT, blank=False, null=False)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False)
 
+    answer = models.JSONField()
     score = models.IntegerField(blank=False, null=False)
     solve_status = models.IntegerField(blank=False, null=False)
+
+    time_create = models.DateTimeField(auto_now_add=True)
+    time_update = models.DateTimeField(auto_now=True)
 
 
 # Connections

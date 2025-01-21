@@ -23,6 +23,7 @@ export const getCourseFromServerById = async (courseId) => {
     return undefined;
   }
 };
+
 export const getLessonFromServerById = async (lessonId) => {
   try {
     const params = { lesson_id: lessonId };
@@ -30,6 +31,25 @@ export const getLessonFromServerById = async (lessonId) => {
       `http://127.0.0.1:8000/api/v1/courses/get-lesson/`,
       {
         params: params,
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const sendSectionSolution = async (data) => {
+  try {
+    const res = await axios.post(
+      `http://127.0.0.1:8000/api/v1/courses/send-solution/`,
+      data,
+      {
         headers: headers,
       }
     );
