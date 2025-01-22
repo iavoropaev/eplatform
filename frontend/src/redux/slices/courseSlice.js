@@ -15,10 +15,24 @@ const courseSlice = createSlice({
     setCurrentLesson: (state, action) => {
       return { ...state, currentLesson: action.payload };
     },
+    updateSolveStatus: (state, action) => {
+      const id = action.payload.id;
+      const updatedSections = state.currentLesson.sections.map((item) =>
+        item.id === id ? { ...item, solve: action.payload.solve } : item
+      );
+      return {
+        ...state,
+        currentLesson: {
+          ...state.currentLesson,
+          sections: updatedSections,
+        },
+      };
+    },
   },
 });
 
 export const setCourseData = courseSlice.actions.setCourseData;
 export const setCurrentLesson = courseSlice.actions.setCurrentLesson;
+export const updateSolveStatus = courseSlice.actions.updateSolveStatus;
 
 export default courseSlice.reducer;

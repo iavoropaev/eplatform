@@ -69,7 +69,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
             section_ids = [section['id'] for section in lesson_serializer.data['sections']]
 
             solves = (SectionSolve.objects.all().filter(user=cur_user_id, section__in=section_ids)
-                      .order_by('section', '-time_create').distinct('section'))
+                      .order_by('section', '-score', '-time_create').distinct('section'))
             solve_serializer = SectionSolveSerializer(solves, many=True)
 
             lesson_data = lesson_serializer.data
@@ -101,14 +101,12 @@ class CoursesViewSet(viewsets.ModelViewSet):
                 solve_status = 1
                 score = 1
             else:
-                print('start')
                 ok_answer = {"type": section.task.answer_type, section.task.answer_type: json.loads(section.task.answer)}
                 if check_answer(user_answer, ok_answer):
                     solve_status = 1
                     score = 1
                 else:
                     solve_status = -1
-                print('end')
 
             solve = SectionSolve(user_id=cur_user_id, section_id=cur_section_id,
                                  score=score, solve_status=solve_status, answer=user_answer)
