@@ -39,28 +39,29 @@ const TaskFooter = ({
               setAnswer={setAnswer}
               disabled={isAnswerSaveReady}
             />
+            <div className="buttons">
+              <button
+                disabled={isAnswerSaveReady}
+                onClick={() => {
+                  handleSendAnswer();
+                  setAnswerSave(true);
+                }}
+              >
+                Проверить ответ
+              </button>
 
-            <button
-              disabled={isAnswerSaveReady}
-              onClick={() => {
-                handleSendAnswer();
-                setAnswerSave(true);
-              }}
-            >
-              Проверить ответ
-            </button>
-
-            <button
-              onClick={() => {
-                if (handleCancelButton) {
-                  handleCancelButton();
-                }
-                setAnswer(defaultAnswer);
-                setAnswerSave(false);
-              }}
-            >
-              Отчистить
-            </button>
+              <button
+                onClick={() => {
+                  if (handleCancelButton) {
+                    handleCancelButton();
+                  }
+                  setAnswer(defaultAnswer);
+                  setAnswerSave(false);
+                }}
+              >
+                Отчистить
+              </button>
+            </div>
           </span>
         )}
 

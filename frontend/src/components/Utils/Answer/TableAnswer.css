@@ -1,0 +1,8 @@
+.answer-table table {
+  border-collapse: collapse;
+  border: none;
+}
+
+.answer-table table td {
+  border: none;
+}

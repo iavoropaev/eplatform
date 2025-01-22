@@ -14,7 +14,7 @@ const Task = ({
 }) => {
   return (
     <div className="task-container">
-      <div className={"task "}>
+      <div className={"task " + status}>
         <TaskHeader taskData={taskData} />
         <TaskBody taskData={taskData} />
         <TaskFooter
@@ -25,7 +25,6 @@ const Task = ({
           handleCancelButton={handleCancelButton}
           hideAnswerBlock={hideAnswerBlock}
         />
-        <p>{status}</p>
       </div>
     </div>
   );

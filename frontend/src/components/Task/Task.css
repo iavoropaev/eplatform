@@ -1,4 +1,4 @@
-div.task-container div {
+div.task-container > .task {
   background-color: #d9d9d9;
 }
 
@@ -13,6 +13,7 @@ div.task-container {
   margin: auto;
   border: 1px solid grey;
   min-width: 300px;
+  overflow: hidden;
 }
 
 .task p:not(:last-child) {
@@ -26,7 +27,7 @@ div.task-container {
   /* flex-wrap: wrap; */
   grid-gap: 5px 15px;
 
-  border-radius: 1dvh 1dvh 0dvh 0dvh;
+  /* border-radius: 1dvh 1dvh 0dvh 0dvh; */
   padding: 10px;
 }
 
@@ -48,8 +49,8 @@ div.task-container {
   display: block; /* Избежать лишних отступов */
 }
 .task-container .task-footer {
-  border-radius: 0dvh 0dvh 1dvh 1dvh;
-  overflow: hidden;
+  /* border-radius: 0dvh 0dvh 1dvh 1dvh; */
+  /* overflow: hidden; */
 }
 .task-container .task-footer .floor {
   border-top: 1px solid grey;
@@ -72,64 +73,18 @@ div.task-container {
   cursor: pointer;
 }
 
-.task-container .task-footer .answer {
-  border-radius: 0dvh 0dvh 1dvh 1dvh;
-  padding: 10px;
+.task-container .task-footer > .answer {
+  padding: 20px;
 
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: ce;
 }
 
 .task-container .task-footer .floor {
   display: flex;
   justify-content: space-between;
   padding: 10px;
-}
-
-.task-container .task-footer .input-with-but {
-  display: flex;
-  flex-wrap: wrap;
-  grid-gap: 5px 15px;
-}
-
-.task-container .task-footer input {
-  border: 1px solid grey;
-  border-radius: 5px;
-  padding: 5px;
-  font-size: 1.1rem;
-  width: 150px;
-}
-.task-container .task-footer input::placeholder {
-  font-size: 0.8rem;
-}
-.task-container .task-footer input:focus {
-  outline: 0;
-  border: 1px solid rgb(56, 56, 56);
-}
-
-.task-container .task-footer button {
-  background-color: white;
-  border: 1px solid #d9d9d9;
-  border-radius: 5px;
-  padding: 7px;
-
-  white-space: nowrap;
-}
-
-.task-container .task-footer button:hover {
-  cursor: pointer;
-  border: 1px solid grey;
-}
-.task-container .task-footer button:active {
-  cursor: pointer;
-  background-color: #d9d9d9;
-}
-
-.task-container .task-footer button:disabled {
-  background-color: white;
-  border: 1px solid grey;
-  cursor: initial; /* курсор для disabled */
 }
 
 .task-container .task-footer .author {
@@ -187,4 +142,87 @@ div.task-container {
 
 div.innerhtml div {
   background-color: white;
+}
+
+/* Status */
+div.task-container > .ok > .task-header {
+  background-color: #9ced99;
+}
+div.task-container > .ok .answer {
+  background-color: #9ced99;
+}
+
+div.task-container > .wa > .task-header {
+  background-color: #ff7f7f;
+}
+div.task-container > .wa .answer {
+  background-color: #ff7f7f;
+}
+
+.task-container .task-footer .input-with-but {
+  display: flex;
+  /* flex-direction: column; */
+  align-items: start;
+  flex-wrap: wrap;
+  grid-gap: 20px 15px;
+}
+
+.task-container .task-footer input {
+  border: 1px solid grey;
+  padding: 5px;
+  font-size: 1.1rem;
+  width: 150px;
+}
+
+.task-container .task-footer input::placeholder {
+  font-size: 0.8rem;
+}
+
+.task-container .task-footer input:focus {
+  background-color: rgb(255, 247, 234);
+  outline: 0;
+  border: 1px solid rgb(56, 56, 56);
+}
+
+.task-container .task-footer .answer-buttons {
+  display: flex;
+  margin-top: 10px;
+  gap: 3px;
+}
+
+.task-container .task-footer .answer-but {
+  font-size: 16px;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+
+  width: 25px;
+  height: 25px;
+
+  text-align: center;
+  white-space: nowrap;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-container .task-footer .answer-but:hover {
+  cursor: pointer;
+  border: 1px solid grey;
+}
+.task-container .task-footer .answer-but:active {
+  cursor: pointer;
+  background-color: #d9d9d9;
+}
+
+.task-container .task-footer .answer-but:disabled {
+  background-color: white;
+  border: 1px solid grey;
+  cursor: initial; /* курсор для disabled */
+}
+
+.task-container .task-footer .buttons {
+  display: flex;
+  gap: 5px;
 }

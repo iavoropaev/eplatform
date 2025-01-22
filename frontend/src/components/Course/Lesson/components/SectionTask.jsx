@@ -18,6 +18,7 @@ const SectionTask = ({ taskData, sendSolution, solveFromServer }) => {
         taskAnswer={answer}
         handleSaveButton={sendSolution}
         handleCancelButton={handleCancelButton}
+        status={solveFromServer?.solve_status === 1 ? "ok" : ""}
       />
     </div>
   );

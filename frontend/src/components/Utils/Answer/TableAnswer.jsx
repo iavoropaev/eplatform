@@ -1,3 +1,4 @@
+import "./TableAnswer.css";
 const TableAnswer = ({ answer, setAnswer, disabled }) => {
   const handleInputChange = (rowIndex, colIndex, value) => {
     const updatedTable = [...answer];
@@ -24,16 +25,17 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
   };
 
   return (
-    <div>
+    <div className="answer-table">
       <table border="1">
         <thead></thead>
         <tbody>
           {answer.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              <td>{rowIndex + 1}</td>
+              {/* <td>{rowIndex + 1}</td> */}
               {row.map((cell, colIndex) => (
                 <td key={colIndex}>
                   <input
+                    className="table-input"
                     disabled={disabled}
                     type="text"
                     value={cell}
@@ -48,8 +50,14 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
           ))}
         </tbody>
       </table>
-      <button onClick={addRow}>+</button>
-      <button onClick={delRow}>-</button>
+      <div className="answer-buttons">
+        <button className="answer-but" onClick={addRow}>
+          +
+        </button>
+        <button className="answer-but" onClick={delRow}>
+          -
+        </button>
+      </div>
     </div>
   );
 };

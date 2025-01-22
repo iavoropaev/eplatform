@@ -15,6 +15,13 @@
   cursor: pointer;
 }
 
+.course-container .lesson-menu > .ok {
+  background-color: rgb(138, 255, 140);
+}
+.course-container .lesson-menu > .wa {
+  background-color: rgb(255, 105, 105);
+}
+
 .course-container .lesson .menu-active-el {
-  background-color: rgb(163, 255, 169);
+  background-color: rgb(155, 178, 255);
 }
