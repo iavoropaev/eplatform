@@ -11,8 +11,10 @@
   height: 35px;
   width: 35px;
   border-radius: 5px;
-  background-color: grey;
+  background-color: rgb(217, 217, 217);
+
   cursor: pointer;
+  border: 1px solid grey;
 }
 
 .course-container .lesson-menu > .ok {

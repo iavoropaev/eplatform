@@ -78,7 +78,6 @@ div.task-container {
 
   display: flex;
   justify-content: space-between;
-  align-items: ce;
 }
 
 .task-container .task-footer .floor {
@@ -124,44 +123,26 @@ div.task-container {
   align-content: flex-start;
 }
 
-/* Solve */
-.solved-ok .task-footer {
-  background-color: #c8ffd3;
-}
-.solved-ok .task-header {
-  background-color: #c8ffd3;
-}
-
-/* WA */
-.solved-wa .task-footer {
-  background-color: #ffb1b1;
-}
-.solved-wa .task-header {
-  background-color: #ffb1b1;
-}
-
-div.innerhtml div {
-  background-color: white;
-}
-
 /* Status */
-div.task-container > .ok > .task-header {
+
+/* div.task-container > .ok > .task-header {
   background-color: #9ced99;
-}
+} */
+
 div.task-container > .ok .answer {
   background-color: #9ced99;
 }
 
-div.task-container > .wa > .task-header {
+/* div.task-container > .wa > .task-header {
   background-color: #ff7f7f;
-}
+} */
 div.task-container > .wa .answer {
   background-color: #ff7f7f;
 }
 
 .task-container .task-footer .input-with-but {
   display: flex;
-  /* flex-direction: column; */
+
   align-items: start;
   flex-wrap: wrap;
   grid-gap: 20px 15px;
@@ -207,19 +188,18 @@ div.task-container > .wa .answer {
   justify-content: center;
 }
 
-.task-container .task-footer .answer-but:hover {
-  cursor: pointer;
+.task-container .task-footer .buttons > button {
   border: 1px solid grey;
-}
-.task-container .task-footer .answer-but:active {
-  cursor: pointer;
-  background-color: #d9d9d9;
+  padding: 7.6px;
 }
 
-.task-container .task-footer .answer-but:disabled {
+.task-container .task-footer .buttons > button:active {
+  background-color: rgb(200, 200, 200);
+}
+
+.task-container .task-footer .buttons > button:disabled {
   background-color: white;
   border: 1px solid grey;
-  cursor: initial; /* курсор для disabled */
 }
 
 .task-container .task-footer .buttons {

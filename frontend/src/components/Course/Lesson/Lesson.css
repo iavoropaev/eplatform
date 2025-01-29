@@ -1,6 +1,19 @@
-.course-container > .lesson {
+.course-container > .lesson-container {
   box-sizing: border-box;
-  padding: 30px;
+  padding-top: 30px;
   flex: 1;
   overflow: auto;
+}
+
+.course-container > .lesson-container .lesson-name {
+  text-align: right;
+  color: grey;
+}
+
+.course-container > .lesson-container .lesson {
+  display: flex;
+  flex-direction: column;
+
+  width: 80%;
+  margin: auto;
 }

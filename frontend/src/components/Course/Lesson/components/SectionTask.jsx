@@ -1,24 +1,37 @@
 import { useState } from "react";
 import { sendSectionSolution } from "../../../../server/course";
 import Task from "../../../Task/Task";
+import { useDispatch } from "react-redux";
+import { clearExamAnswer } from "../../../../redux/slices/examSlice";
+import { deleteSolveStatus } from "../../../../redux/slices/courseSlice";
+
+import "./SectionTask.css";
 
 const SectionTask = ({ taskData, sendSolution, solveFromServer }) => {
   const [skipServerAnswer, setSkipServerAnswer] = useState(0);
   const answer = skipServerAnswer ? null : solveFromServer?.answer;
+  const dispatch = useDispatch();
 
   const handleCancelButton = () => {
     setSkipServerAnswer(true);
+    dispatch(deleteSolveStatus(solveFromServer.section));
   };
 
+  let tasksStatus = "";
+  if (solveFromServer?.solve_status === 1) {
+    tasksStatus = "ok";
+  } else if (solveFromServer?.solve_status === -1) {
+    tasksStatus = "wa";
+  }
+
   return (
-    <div className="lesson">
-      <p>Задача</p>
+    <div className="task-in-lesson">
       <Task
         taskData={taskData}
         taskAnswer={answer}
         handleSaveButton={sendSolution}
         handleCancelButton={handleCancelButton}
-        status={solveFromServer?.solve_status === 1 ? "ok" : ""}
+        status={tasksStatus}
       />
     </div>
   );

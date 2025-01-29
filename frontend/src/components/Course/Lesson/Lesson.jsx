@@ -44,22 +44,24 @@ const Lesson = ({ lesson, sectionIndex }) => {
   };
 
   return (
-    <div className="lesson">
-      <p>{"Урок " + lesson.name}</p>
-      <SectionMenu
-        menuStatuses={menuStatuses}
-        indexActive={sectionIndex}
-        setActiveSectionIndex={setActiveSectionIndex}
-      />
-      <p>Урок {currentSectionData?.name}</p>
-      <SectionContent content={content} />
-      {taskData && (
-        <SectionTask
-          taskData={taskData}
-          sendSolution={sendSolution}
-          solveFromServer={solveFromServer}
+    <div className="lesson-container">
+      <div className="lesson">
+        <p className="lesson-name">{lesson.name}</p>
+        <SectionMenu
+          menuStatuses={menuStatuses}
+          indexActive={sectionIndex}
+          setActiveSectionIndex={setActiveSectionIndex}
         />
-      )}
+        {content && <SectionContent content={content} />}
+
+        {taskData && (
+          <SectionTask
+            taskData={taskData}
+            sendSolution={sendSolution}
+            solveFromServer={solveFromServer}
+          />
+        )}
+      </div>
     </div>
   );
 };

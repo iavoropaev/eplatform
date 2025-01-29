@@ -28,11 +28,25 @@ const courseSlice = createSlice({
         },
       };
     },
+    deleteSolveStatus: (state, action) => {
+      const sectionId = action.payload;
+      const updatedSections = state.currentLesson.sections.map((item) =>
+        item.id === sectionId ? { ...item, solve: {} } : item
+      );
+      return {
+        ...state,
+        currentLesson: {
+          ...state.currentLesson,
+          sections: updatedSections,
+        },
+      };
+    },
   },
 });
 
 export const setCourseData = courseSlice.actions.setCourseData;
 export const setCurrentLesson = courseSlice.actions.setCurrentLesson;
 export const updateSolveStatus = courseSlice.actions.updateSolveStatus;
+export const deleteSolveStatus = courseSlice.actions.deleteSolveStatus;
 
 export default courseSlice.reducer;

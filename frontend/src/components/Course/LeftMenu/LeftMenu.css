@@ -1,17 +1,32 @@
 .course-container .left-menu {
   width: 200px;
-  background-color: bisque;
+  background-color: white;
   overflow: auto;
+  text-align: left;
+  border-right: 1px solid grey;
+}
+
+.course-container .left-menu .course-info {
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid grey;
 }
 
 .course-container .left-menu .module-title {
-  background-color: azure;
+  background-color: #e2e2e2;
+  padding: 5px;
+  padding-left: 10px;
 }
 
 .course-container .left-menu .active-lesson {
+  padding: 5px;
+  padding-left: 30px;
   background-color: rgb(155, 178, 255);
 }
 
 .course-container .left-menu .lesson {
   cursor: pointer;
+  padding: 5px;
+  padding-left: 30px;
 }

@@ -5,7 +5,6 @@ import "./Course.css";
 import {
   getCourseFromServerById,
   getLessonFromServerById,
-  sendSectionSolution,
 } from "../../server/course";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,6 +12,7 @@ import {
   setCurrentLesson,
 } from "../../redux/slices/courseSlice";
 import Lesson from "./Lesson/Lesson";
+
 const Course = () => {
   const { courseId, lessonId, sectionIndex } = useParams();
 
@@ -36,7 +36,6 @@ const Course = () => {
       const lessonData = await getLessonFromServerById(lessonId);
       if (lessonData) {
         dispatch(setCurrentLesson(lessonData));
-        console.log(lessonData);
       }
     }
     fetchData();
