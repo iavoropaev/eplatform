@@ -1,5 +1,7 @@
 .create-task {
   padding: 30px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   text-align: left;
 }
 
@@ -38,8 +40,13 @@
 .create-task .answer {
   margin-bottom: 30px;
 }
+.create-task select {
+  margin-bottom: 5px;
+}
 .create-task .answer input {
-  /* margin-top: 5px; */
   padding: 5px;
   font-size: 18px;
+}
+.create-task .save-button {
+  text-align: center;
 }

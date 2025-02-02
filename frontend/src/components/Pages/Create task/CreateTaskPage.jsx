@@ -70,9 +70,9 @@ const CreateTaskPage = () => {
         setEditorContent(data.content);
         setAnswer(data.answer);
         setAnswerType(data.answer_type);
-        const numberId = data.number_in_exam.id;
-        const subjectId = data.number_in_exam.subject.id;
-        const examId = data.number_in_exam.subject.exam.id;
+        const numberId = data.number_in_exam?.id;
+        const subjectId = data.number_in_exam?.subject?.id;
+        const examId = data.number_in_exam?.subject?.exam?.id;
         const bankAuthors = data.bank_authors.map((el) => el.id);
         setSelectedExam(examId);
         setSelectedSubject(subjectId);
@@ -131,7 +131,7 @@ const CreateTaskPage = () => {
       content: editorContent,
       answer: JSON.stringify(answer),
       answer_type: answerType,
-      number_in_exam: activeNumber.id,
+      number_in_exam: activeNumber?.id,
       taskId: taskId,
       bank_authors: selectedBanks,
       difficulty_level: selectedDifLevel !== -1 ? selectedDifLevel : null,
@@ -153,6 +153,9 @@ const CreateTaskPage = () => {
   };
   const goToNextTask = () => {
     navigate(`../edit-task/${Number(taskId) + 1}/`);
+  };
+  const goToNewTask = () => {
+    navigate(`../create-task/`);
   };
 
   const taskData = {
@@ -188,6 +191,15 @@ const CreateTaskPage = () => {
 
   return (
     <>
+      <div className="container">
+        {taskId && (
+          <div>
+            <button onClick={goToPrevTask}>Предыдущая</button>
+            <button onClick={goToNewTask}>Новая</button>
+            <button onClick={goToNextTask}>Следующая</button>
+          </div>
+        )}
+      </div>
       <CreateTask
         taskId={taskId}
         taskData={taskData}
@@ -200,6 +212,7 @@ const CreateTaskPage = () => {
         {taskId && (
           <div>
             <button onClick={goToPrevTask}>Предыдущая</button>
+            <button onClick={goToNewTask}>Новая</button>
             <button onClick={goToNextTask}>Следующая</button>
           </div>
         )}

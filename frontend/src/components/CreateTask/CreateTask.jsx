@@ -104,10 +104,11 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
           }}
         />
       </div>
-
-      <button onClick={handleSaveButton} className="black-button">
-        Сохранить
-      </button>
+      <div className="save-button">
+        <button onClick={handleSaveButton} className="black-button">
+          Сохранить
+        </button>
+      </div>
     </div>
   );
 };

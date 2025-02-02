@@ -1,6 +1,13 @@
 .container {
   padding: 20px;
 }
+.container button {
+  border: 1px solid grey;
+  margin-right: 10px;
+}
+/* .container button:active {
+  background-color: white;
+} */
 
 .editor {
   max-width: 80%;

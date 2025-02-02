@@ -10,7 +10,7 @@ class Task(models.Model):
     answer_type = models.CharField(choices=[('text', 'text'), ('table', 'table')])
     answer = models.CharField(blank=False)
 
-    number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=True)
+    number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=True, null=True)
 
     author = models.ForeignKey('Author', on_delete=models.PROTECT, blank=True, null=True)
     source = models.ForeignKey('TaskSource', on_delete=models.PROTECT, blank=True, null=True)
