@@ -55,6 +55,10 @@ class TaskNumberInExamSerializer(serializers.ModelSerializer):
         model = TaskNumberInExam
         fields = '__all__'
 
+class TaskActualitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actuality
+        fields = '__all__'
 
 class TaskSubjectSerializer(serializers.ModelSerializer):
     numbers = TaskNumberInExamSerializer(many=True, read_only=True)
@@ -80,8 +84,10 @@ class TaskSerializerForUser(serializers.ModelSerializer):
     author = TaskAuthorSerializer()
     number_in_exam = TaskNumberInExamSerializer()
     source = TaskSourceSerializer()
+    actuality = TaskActualitySerializer()
+    difficulty_level = TaskDifficultyLevelSerializer()
 
     class Meta:
         model = Task
-        fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer', 'difficulty_level',
+        fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer', 'difficulty_level', 'actuality',
                   'time_update', 'time_create')

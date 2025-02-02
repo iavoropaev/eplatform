@@ -20,6 +20,8 @@ const Lesson = ({ lesson, sectionIndex }) => {
   const taskData = currentSectionData?.task;
   const content = currentSectionData?.content;
   const solveFromServer = currentSectionData?.solve;
+  const textForBut =
+    solveFromServer === null ? "Отметить выполененным" : "Выполнено";
 
   const menuStatuses = lesson?.sections?.map((section) => {
     return section.solve?.solve_status;
@@ -39,7 +41,6 @@ const Lesson = ({ lesson, sectionIndex }) => {
       section_id: currentSectionData.id,
       user_answer: answer,
     });
-    console.log(res);
     dispatch(updateSolveStatus({ id: res.section, solve: res }));
   };
 
@@ -60,6 +61,18 @@ const Lesson = ({ lesson, sectionIndex }) => {
             sendSolution={sendSolution}
             solveFromServer={solveFromServer}
           />
+        )}
+
+        {!taskData && (
+          <div className="save-text-section">
+            <button
+              className="black-button"
+              onClick={sendSolution}
+              disabled={solveFromServer !== null}
+            >
+              {textForBut}
+            </button>
+          </div>
         )}
       </div>
     </div>
