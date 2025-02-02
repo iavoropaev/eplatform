@@ -1,9 +1,69 @@
+.create-collection {
+  text-align: left;
+  margin: 0px;
+  padding: 30px;
+}
+.create-collection > * {
+  padding-bottom: 10px;
+}
+.create-collection .discr {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  max-width: 90%;
+}
+.create-collection button {
+  padding: 6px;
+}
+
+.create-collection .tasks-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 30px 0px 30px 0px;
+}
 .cc-task {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 50%;
+  min-width: 300px;
 }
-.cc-task .task-container,
-.cc-task .task {
-  padding: 0px;
+
+.create-collection .add-by-id {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.create-collection .add-by-id input {
+  width: 100px;
+  font-size: 16px;
+  margin-right: 5px;
+}
+
+.create-collection .task-container {
   margin: 0px;
-  margin-bottom: 10px;
+  width: 100%;
+}
+.create-collection .task {
+  margin: 0px;
+  width: 100%;
+}
+
+.create-collection .arrow,
+.create-collection .del {
+  font-size: 30px;
+  cursor: pointer;
+  padding: 1px;
+  user-select: none;
+}
+.create-collection .del {
+  padding-right: 5px;
+}
+.create-collection .arrow:active,
+.create-collection .del:active {
+  color: red;
 }

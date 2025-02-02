@@ -26,7 +26,7 @@ const CreateCollection = () => {
   return (
     <div className="create-collection">
       <div>
-        {"Название коллекции"}
+        <span>Название подборки </span>
         <input
           value={colName}
           onChange={(e) => {
@@ -40,8 +40,8 @@ const CreateCollection = () => {
           }}
         ></input>
       </div>
-      <div>
-        {"Описание коллекции"}
+      <div className="discr">
+        <span>Описание подборки </span>
         <textarea
           wrap="hard"
           rows="5"
@@ -51,10 +51,9 @@ const CreateCollection = () => {
             setColDescription(e.target.value);
           }}
         ></textarea>
-        <pre>{colDescription}</pre>
       </div>
       <div>
-        {"Слаг"}
+        <span>Слаг </span>
         <input
           value={colSlug}
           onChange={(e) => {
@@ -62,8 +61,11 @@ const CreateCollection = () => {
           }}
         ></input>
       </div>
-
-      <button onClick={saveCollection}>Сохранить</button>
+      <div>
+        <button onClick={saveCollection} className="black-button">
+          Сохранить
+        </button>
+      </div>
     </div>
   );
 };

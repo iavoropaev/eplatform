@@ -20,8 +20,8 @@
 }
 
 button {
-  border: 1px;
-  padding: 7px;
+  border: 1px solid grey;
+  padding: 6px;
   border-radius: 1dvh;
 }
 button:hover {
@@ -49,4 +49,8 @@ button:active {
   color: grey;
   border-color: grey;
   background-color: transparent;
+}
+
+input {
+  padding: 3px;
 }

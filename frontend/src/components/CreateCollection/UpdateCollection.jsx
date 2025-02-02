@@ -15,6 +15,8 @@ import {
   getCollectionBySlug,
   updateCollection,
 } from "../../server/collections";
+import "./CreateCollection.css";
+import TasksList from "./components/TasksList";
 
 const UpdateCollection = () => {
   const { slug } = useParams();
@@ -66,6 +68,14 @@ const UpdateCollection = () => {
     }
   };
 
+  const delTaskByIndex = (i) => {
+    if (i >= 0 && i < tasks.length) {
+      const newTasks = [...tasks];
+      newTasks.splice(i, 1);
+      dispatch(setTasks(newTasks));
+    }
+  };
+
   const saveCollection = async () => {
     const tasksForServer = tasks.map((task) => {
       return { id: task.id, info: {} };
@@ -87,14 +97,33 @@ const UpdateCollection = () => {
     }
   };
 
+  const addTaskById = (
+    <div className="add-by-id">
+      <span>Добавить задачу по ID </span>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleAddTaskByIdBut();
+        }}
+      >
+        <input
+          value={newTaskId}
+          onChange={(e) => {
+            setNewTaskId(e.target.value);
+          }}
+        ></input>
+        <button type="submit">Добавить</button>
+      </form>
+    </div>
+  );
+
   if (isError) {
     return <h2>Подборка не найдена.</h2>;
   }
   return (
     <div className="create-collection">
-      <div>{tasks.length}</div>
       <div>
-        {"Название коллекции"}
+        <span>Название коллекции </span>
         <input
           value={colName}
           onChange={(e) => {
@@ -102,8 +131,8 @@ const UpdateCollection = () => {
           }}
         ></input>
       </div>
-      <div>
-        {"Описание коллекции"}
+      <div className="discr">
+        <span>Описание коллекции </span>
         <textarea
           wrap="hard"
           rows="5"
@@ -113,49 +142,22 @@ const UpdateCollection = () => {
             dispatch(setDescription(e.target.value));
           }}
         ></textarea>
-        <pre>{colDescription}</pre>
       </div>
+      {addTaskById}
 
-      {tasks.map((task, i) => {
-        return (
-          <div className="cc-task" key={task.id}>
-            <div>
-              <span
-                onClick={() => {
-                  swap(i, i - 1);
-                }}
-              >
-                Up
-              </span>
-              <span
-                onClick={() => {
-                  swap(i, i + 1);
-                }}
-              >
-                Down
-              </span>
-            </div>
-            <Task
-              key={task.id}
-              taskData={task}
-              sendAnswerToServer={() => {}}
-              status=""
-              hideAnswerBlock={true}
-            />
-          </div>
-        );
-      })}
-      <div>
-        {"Добавить задачу по ID"}
-        <input
-          value={newTaskId}
-          onChange={(e) => {
-            setNewTaskId(e.target.value);
-          }}
-        ></input>
-        <button onClick={handleAddTaskByIdBut}>Кнопка</button>
-      </div>
-      <button onClick={saveCollection}>Сохранить</button>
+      <div>{`Всего задач ${tasks.length}.`}</div>
+      <button onClick={saveCollection} className="black-button">
+        Сохранить
+      </button>
+
+      <TasksList tasks={tasks} swap={swap} delTaskByIndex={delTaskByIndex} />
+
+      {tasks.length > 0 && addTaskById}
+      {tasks.length > 0 && (
+        <button onClick={saveCollection} className="black-button">
+          Сохранить
+        </button>
+      )}
     </div>
   );
 };
