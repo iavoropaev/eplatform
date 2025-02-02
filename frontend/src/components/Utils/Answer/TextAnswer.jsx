@@ -7,7 +7,7 @@ const TextAnswer = ({ answer, setAnswer, disabled }) => {
           setAnswer(e.target.value);
         }}
         value={answer}
-        placeholder="Введите ответ"
+        placeholder="Введите ответ..."
       ></input>
     </div>
   );

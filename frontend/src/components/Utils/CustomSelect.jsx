@@ -3,8 +3,8 @@ export const CustomSelect = ({ selected, options, handleSelect }) => {
     <select value={selected} onChange={handleSelect}>
       {options.map((opt, i) => {
         return (
-          <option key={i} value={opt}>
-            {opt}
+          <option key={i} value={opt[0]}>
+            {opt[1]}
           </option>
         );
       })}

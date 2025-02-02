@@ -1,0 +1,8 @@
+.exam-results {
+}
+
+.exam-results select {
+  padding: 3px;
+  border-radius: 5px;
+  outline: none;
+}

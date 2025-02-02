@@ -58,14 +58,14 @@ const TinyMCE = ({ editorContent, setEditorContent }) => {
           //   },
         }}
       />
-      <button onClick={log}>Log editor content</button>
+      {/* <button onClick={log}>Log editor content</button>
       <button
         onClick={() => {
           setEditorContent("Тык");
         }}
       >
         Поменять
-      </button>
+      </button> */}
     </div>
   );
 };

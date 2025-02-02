@@ -70,10 +70,10 @@ const TaskFooter = ({
 
       <div className="floor">
         <span className="tags">
-          <span className="tag">Комментарии</span>
-          <span className="tag">Решения</span>
+          {/* <span className="tag">Комментарии</span> */}
+          <span className="tag show-solution">Решение</span>
         </span>
-        <span className="tag likes">
+        {/* <span className="tag likes">
           <span className="like">
             <span>120</span>
             <BiLike />
@@ -82,7 +82,7 @@ const TaskFooter = ({
             <BiDislike />
             <span>20</span>
           </span>
-        </span>
+        </span> */}
       </div>
     </div>
   );

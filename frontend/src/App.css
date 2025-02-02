@@ -39,7 +39,13 @@ button:disabled {
   border-color: black;
   border-color: rgb(57, 57, 57);
 }
-.black-button:active {
+
+.black-button:not(:disabled):active {
   color: rgb(0, 0, 0);
   background-color: #f5f5f5;
+}
+.black-button:disabled {
+  color: grey;
+  border-color: grey;
+  background-color: transparent;
 }

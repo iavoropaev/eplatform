@@ -6,6 +6,7 @@ import Option from "./Option";
 const BankFilter = ({
   getSelectFromFilter,
   filterData,
+  countFind,
   selectedFilters,
   handleFindButtonClick,
 }) => {
@@ -98,6 +99,10 @@ const BankFilter = ({
         )}
       </div>
       <div className="button-row">
+        {countFind !== undefined && (
+          <p className="count-find">{`Найдено ${countFind} задач.`}</p>
+        )}
+
         <button onClick={handleFindButtonClick} className="black-button">
           Найти задачи
         </button>

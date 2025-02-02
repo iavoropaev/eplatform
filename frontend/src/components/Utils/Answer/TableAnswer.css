@@ -1,8 +1,77 @@
-.answer-table table {
+/* .answer-table table {
   border-collapse: collapse;
   border: none;
 }
 
 .answer-table table td {
   border: none;
+}
+
+.answer-table table {
+  border-collapse: collapse;
+}
+.answer-table td {
+  border: 1px solid grey;
+}
+
+.answer-table input {
+  border: 0px;
+  max-width: 100px;
+}
+.answer-table input:focus {
+  border: 0px;
+} */
+
+.answer-table .input-with-but {
+  display: flex;
+
+  align-items: start;
+  flex-wrap: wrap;
+  grid-gap: 20px 15px;
+}
+
+.answer-table input {
+  border: 1px solid grey;
+
+  padding: 5px;
+  font-size: 1.1rem;
+  width: 150px;
+}
+
+.answer-table .answer-buttons {
+  display: flex;
+  margin-top: 5px;
+  gap: 3px;
+}
+
+.answer-table .answer-but {
+  font-size: 16px;
+  background-color: white;
+  border: 1px solid #9c9c9c;
+  border-radius: 2px;
+
+  width: 25px;
+  height: 25px;
+
+  text-align: center;
+  white-space: nowrap;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.answer-table table {
+  border-collapse: collapse;
+}
+.answer-table td {
+  border: 1px solid grey;
+}
+
+.answer-table input {
+  border: 0px;
+  max-width: 100px;
+}
+.answer-table input:focus {
+  border: 0px;
 }

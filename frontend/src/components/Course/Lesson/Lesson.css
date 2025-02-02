@@ -1,6 +1,7 @@
 .course-container > .lesson-container {
   box-sizing: border-box;
   padding-top: 30px;
+  padding-bottom: 30px;
   flex: 1;
   overflow: auto;
 }
@@ -16,4 +17,9 @@
 
   width: 80%;
   margin: auto;
+}
+
+.course-container > .lesson-container .save-text-section {
+  padding-top: 15px;
+  text-align: left;
 }

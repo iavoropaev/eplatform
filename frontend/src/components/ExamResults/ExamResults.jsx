@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getExamSolution } from "../../server/exam";
 import ExamSolutionTable from "./components/ExamSolutionTable";
+import "./ExamResults.css";
 
 const ExamResults = () => {
   const { slug, solveType } = useParams();
+  const navigate = useNavigate();
   console.log(solveType);
   //const [solveType, setSolveType] = useState("last");
 
@@ -29,14 +31,27 @@ const ExamResults = () => {
     fetchData();
   }, [slug, solveType]);
 
+  const handleResTypeChange = (event) => {
+    if (solveType !== undefined) {
+      navigate(`./../${event.target.value}/`);
+    } else {
+      navigate(`./${event.target.value}/`);
+    }
+  };
   return (
-    <>
-      <p>Результаты экзамена</p>
+    <div className="exam-results">
       <h2>{colName}</h2>
+      <div>
+        <select value={solveType} onChange={handleResTypeChange}>
+          <option value="last">Последний результат</option>
+          <option value="first">Первый результат</option>
+          <option value="best">Лучший результат</option>
+        </select>
+      </div>
       <p>Баллы {score}</p>
       <p>Времени потрачено {duration}</p>
       <ExamSolutionTable answers={answers} />
-    </>
+    </div>
   );
 };
 

@@ -45,6 +45,7 @@ const Bank = () => {
     actualities: [],
   });
   const [solvedStatuses, setSolvedStatuses] = useState({});
+  const [isFind, setFind] = useState(false);
 
   const exam = filterData["exams"][selectedFilters["exam"]];
   const subject = exam["subjects"][selectedFilters["subject"]];
@@ -61,8 +62,6 @@ const Bank = () => {
   const actualities = selectedFilters["actualities"].map((i) => {
     return filterData["actualities"][i]["id"];
   });
-
-  console.log("AC", actualities);
 
   const getSelectFromFilter = (type, value) => {
     const newData = { ...selectedFilters };
@@ -95,6 +94,7 @@ const Bank = () => {
   }, []);
 
   const handleFindButtonClick = async () => {
+    setFind(true);
     const tasksFromServer = await getAllTasksFromServer({
       numbers,
       authors,
@@ -117,16 +117,17 @@ const Bank = () => {
     const res = await sendSolution({ taskId, answer: readyAnswer });
     setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
   };
-
+  console.log(tasks);
   return (
     <div className="bank">
       <BankFilter
         selectedFilters={selectedFilters}
         getSelectFromFilter={getSelectFromFilter}
         filterData={filterData}
+        countFind={isFind ? tasks.length : undefined}
         handleFindButtonClick={handleFindButtonClick}
       />
-      <p>{`Найдено ${tasks.length} задач.`}</p>
+
       <div className="tasks">
         {tasks.map((task) => {
           return (

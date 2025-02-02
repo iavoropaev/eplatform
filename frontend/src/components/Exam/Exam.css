@@ -1,0 +1,24 @@
+.exam-container {
+  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.exam-container .exam-title {
+  text-align: center;
+}
+
+.exam-container .finish-exam {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.exam-container .finish-exam button {
+  font-size: 18px;
+  padding: 8px;
+}
+.exam-container .count-answers {
+  font-size: 20px;
+}

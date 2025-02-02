@@ -38,20 +38,24 @@ div.task-container {
   border-bottom: 1px solid grey;
   border-top: 1px solid grey;
   overflow: auto;
+  text-align: justify;
 }
+
+.task-container .task-body ol {
+  padding: 10px;
+  padding-left: 25px;
+}
+
 .task-container .task-body table {
-  width: 90%; /* Таблица занимает всю доступную ширину */
-  border-collapse: collapse; /* Убираем лишние пробелы между ячейками */
+  width: 90%;
+  border-collapse: collapse;
 }
 .task-container .task-body img {
-  max-width: 90%; /* Изображение не будет превышать размер блока */
-  height: auto; /* Сохранить пропорции */
-  display: block; /* Избежать лишних отступов */
+  max-width: 90%;
+  height: auto;
+  display: block;
 }
-.task-container .task-footer {
-  /* border-radius: 0dvh 0dvh 1dvh 1dvh; */
-  /* overflow: hidden; */
-}
+
 .task-container .task-footer .floor {
   border-top: 1px solid grey;
 }
@@ -77,7 +81,10 @@ div.task-container {
   padding: 20px;
 
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 10px 20px;
+  flex-wrap: wrap;
 }
 
 .task-container .task-footer .floor {
@@ -90,7 +97,6 @@ div.task-container {
   color: grey;
   font-size: 0.8rem;
   white-space: nowrap;
-  padding-left: 10px;
 }
 
 .task-header .numberEGE {
@@ -124,68 +130,12 @@ div.task-container {
 }
 
 /* Status */
-
-/* div.task-container > .ok > .task-header {
-  background-color: #9ced99;
-} */
-
 div.task-container > .ok .answer {
   background-color: #9ced99;
 }
 
-/* div.task-container > .wa > .task-header {
-  background-color: #ff7f7f;
-} */
 div.task-container > .wa .answer {
   background-color: #ff7f7f;
-}
-
-.task-container .task-footer .input-with-but {
-  display: flex;
-
-  align-items: start;
-  flex-wrap: wrap;
-  grid-gap: 20px 15px;
-}
-
-.task-container .task-footer input {
-  border: 1px solid grey;
-  padding: 5px;
-  font-size: 1.1rem;
-  width: 150px;
-}
-
-.task-container .task-footer input::placeholder {
-  font-size: 0.8rem;
-}
-
-.task-container .task-footer input:focus {
-  background-color: rgb(255, 247, 234);
-  outline: 0;
-  border: 1px solid rgb(56, 56, 56);
-}
-
-.task-container .task-footer .answer-buttons {
-  display: flex;
-  margin-top: 10px;
-  gap: 3px;
-}
-
-.task-container .task-footer .answer-but {
-  font-size: 16px;
-  background-color: white;
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
-
-  width: 25px;
-  height: 25px;
-
-  text-align: center;
-  white-space: nowrap;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .task-container .task-footer .buttons > button {
@@ -205,4 +155,9 @@ div.task-container > .wa .answer {
 .task-container .task-footer .buttons {
   display: flex;
   gap: 5px;
+}
+
+.task-container .task-footer .show-solution {
+  cursor: pointer;
+  user-select: none;
 }

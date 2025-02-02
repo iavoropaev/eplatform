@@ -1,3 +1,17 @@
+.bank {
+  width: 80%;
+  margin: auto;
+}
+
+.bank .task {
+  margin: auto;
+  width: 80%;
+}
+
 .tasks {
   padding-top: 40px;
+}
+
+.count-find {
+  text-align: right;
 }

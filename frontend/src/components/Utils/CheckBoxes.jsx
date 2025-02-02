@@ -4,7 +4,7 @@ export const CheckBoxes = ({
   setSelectedBanks,
 }) => {
   return (
-    <div>
+    <div className="tags">
       {bankAuthors.map((item) => {
         return (
           <label key={item.id}>
@@ -13,7 +13,6 @@ export const CheckBoxes = ({
               checked={selectedBanks.includes(item.id)}
               onChange={() => {
                 if (!selectedBanks.includes(item.id)) {
-                  console.log("!", item.id);
                   setSelectedBanks([...selectedBanks, item.id]);
                 } else {
                   setSelectedBanks(
@@ -22,7 +21,7 @@ export const CheckBoxes = ({
                 }
               }}
             />
-            {item.name}
+            {" " + item.name}
           </label>
         );
       })}

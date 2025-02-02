@@ -10,6 +10,7 @@ import {
   setExamTasks,
 } from "../../redux/slices/examSlice";
 import { sendExamSolutionToServer } from "../../server/exam";
+import "./Exam.css";
 
 const Exam = () => {
   //const jwt = localStorage.getItem("jwt_a");
@@ -23,6 +24,8 @@ const Exam = () => {
 
   const [startTime, setStartTime] = useState(new Date());
   const [isError, setError] = useState(false);
+
+  const countUserAnswers = Object.keys(answers).length;
 
   useEffect(() => {
     async function fetchData() {
@@ -58,7 +61,7 @@ const Exam = () => {
       answers,
       duration,
     };
-    console.log(duration);
+
     const res = await sendExamSolutionToServer(data);
     if (res) {
       navigate(`./results/`);
@@ -66,8 +69,9 @@ const Exam = () => {
   };
 
   return (
-    <>
-      <h1>{colName}</h1>
+    <div className="exam-container">
+      <h1 className="exam-title">{colName}</h1>
+      <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>
 
       {tasks.map((task) => {
         return (
@@ -84,10 +88,13 @@ const Exam = () => {
           />
         );
       })}
-      <div>
-        <button onClick={handleSendExamBut}>Завершить решение</button>
+      <div className="finish-exam">
+        <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>
+        <button onClick={handleSendExamBut} className="black-button">
+          Завершить решение
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 

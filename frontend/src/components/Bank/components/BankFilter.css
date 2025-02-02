@@ -1,6 +1,6 @@
 .bank-filter {
   border-radius: 1dvh;
-  width: 70%;
+
   text-align: left;
   margin: auto;
   margin-top: 20px;
@@ -96,6 +96,13 @@
 }
 
 .button-row {
+  display: flex;
+
+  justify-content: space-between;
   margin-top: 10px;
   text-align: right;
+}
+
+.button-row button {
+  margin-left: auto;
 }

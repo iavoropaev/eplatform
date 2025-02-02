@@ -3,6 +3,7 @@ import Answer from "../Utils/Answer/Answer";
 import { CustomSelect } from "../Utils/CustomSelect";
 import TinyMCE from "../Utils/TinyMCE";
 import { CheckBoxes } from "../Utils/CheckBoxes";
+import "./CreateTask.css";
 
 const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
   const handleAnswerTypeSelect = (e) => {
@@ -23,9 +24,9 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
   if (taskData.taskId && loadStatus === 0) {
     return <h2>Загрузка...</h2>;
   }
-  console.log(taskData);
+
   return (
-    <>
+    <div className="create-task">
       <div className="tags">
         <TaskTags
           name={"Экзамен"}
@@ -50,18 +51,24 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
           />
         )}
       </div>
-      <TaskTags
-        name={"Сложность"}
-        options={taskData.difficulty_levels}
-        selectedOption={taskData.selectedDifLevel}
-        setSelectedOption={taskData.setSelectedDifLevel}
-      />
-      <TaskTags
-        name={"Актуальность"}
-        options={taskData.actualities}
-        selectedOption={taskData.selectedActuality}
-        setSelectedOption={taskData.setSelectedActuality}
-      />
+      <div className="tags">
+        {taskData.actualities.length > 0 && (
+          <TaskTags
+            name={"Актуальность"}
+            options={taskData.actualities}
+            selectedOption={taskData.selectedActuality}
+            setSelectedOption={taskData.setSelectedActuality}
+          />
+        )}
+        {taskData.difficulty_levels.length > 0 && (
+          <TaskTags
+            name={"Сложность"}
+            options={taskData.difficulty_levels}
+            selectedOption={taskData.selectedDifLevel}
+            setSelectedOption={taskData.setSelectedDifLevel}
+          />
+        )}
+      </div>
 
       <CheckBoxes
         selectedBanks={taskData.selectedBanks}
@@ -69,27 +76,39 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
         setSelectedBanks={taskData.setSelectedBanks}
       />
 
-      <TinyMCE
-        editorContent={taskData.editorContent}
-        setEditorContent={(c) => {
-          taskData.setEditorContent(c);
-        }}
-      />
-      <CustomSelect
-        options={["text", "table"]}
-        selected={taskData.answerType}
-        handleSelect={handleAnswerTypeSelect}
-      />
+      <div className="editor-container">
+        <p className="editor-label">Условие задачи</p>
+        <TinyMCE
+          editorContent={taskData.editorContent}
+          setEditorContent={(c) => {
+            taskData.setEditorContent(c);
+          }}
+        />
+      </div>
 
-      <Answer
-        type={taskData.answerType}
-        answer={taskData.answer}
-        setAnswer={(ans) => {
-          taskData.setAnswer(ans);
-        }}
-      />
-      <button onClick={handleSaveButton}>Сохранить</button>
-    </>
+      <div className="answer">
+        <p className="answer-label">Ответ</p>
+        <CustomSelect
+          options={[
+            ["text", "Текст"],
+            ["table", "Таблица"],
+          ]}
+          selected={taskData.answerType}
+          handleSelect={handleAnswerTypeSelect}
+        />
+        <Answer
+          type={taskData.answerType}
+          answer={taskData.answer}
+          setAnswer={(ans) => {
+            taskData.setAnswer(ans);
+          }}
+        />
+      </div>
+
+      <button onClick={handleSaveButton} className="black-button">
+        Сохранить
+      </button>
+    </div>
   );
 };
 

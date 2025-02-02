@@ -51,10 +51,10 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
         </tbody>
       </table>
       <div className="answer-buttons">
-        <button className="answer-but" onClick={addRow}>
+        <button className="answer-but" onClick={addRow} disabled={disabled}>
           +
         </button>
-        <button className="answer-but" onClick={delRow}>
+        <button className="answer-but" onClick={delRow} disabled={disabled}>
           -
         </button>
       </div>

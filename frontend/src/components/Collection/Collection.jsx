@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCollectionBySlug } from "../../server/collections";
 import Task from "../Task/Task";
 import { getSolveStatuses, sendSolution } from "../../server/bank";
+import "./Collection.css";
 
 const Collection = () => {
   const jwt = localStorage.getItem("jwt_a");
+  const navigate = useNavigate();
 
   const { slug } = useParams();
   const [isError, setError] = useState(false);
@@ -44,11 +46,12 @@ const Collection = () => {
     return <h2>Такой подборки не существует.</h2>;
   }
   return (
-    <>
+    <div className="collection-container">
       <h1>{colName}</h1>
       <p>
         Решено {countOk}/{tasks.length}.
       </p>
+
       {tasks.map((task) => {
         return (
           <Task
@@ -59,7 +62,18 @@ const Collection = () => {
           />
         );
       })}
-    </>
+      <div className="play-container">
+        <button
+          onClick={() => {
+            navigate(`./../../variant/${slug}`);
+            window.scrollTo(0, 0);
+          }}
+          className="play black-button"
+        >
+          Решать в формате варианта
+        </button>
+      </div>
+    </div>
   );
 };
 

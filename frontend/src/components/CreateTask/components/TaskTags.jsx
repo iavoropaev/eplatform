@@ -13,7 +13,11 @@ const TaskTags = ({ options, selectedOption, setSelectedOption, name }) => {
 
   return (
     <div>
-      <select value={selectedOption} onChange={handleChange}>
+      <select
+        className={selectedOption === -1 ? "NC" : "OK"}
+        value={selectedOption}
+        onChange={handleChange}
+      >
         <option value={-1} disabled>
           {name}
         </option>

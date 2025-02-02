@@ -1,0 +1,46 @@
+/* .task-answer input {
+  border: 1px solid grey;
+
+  padding: 5px;
+  font-size: 1.1rem;
+  width: 150px;
+}
+
+.task-answer input::placeholder {
+  font-size: 0.8rem;
+}
+
+.task-answer input:focus {
+  background-color: rgb(255, 247, 234);
+  outline: 0;
+  border: 1px solid rgb(56, 56, 56);
+} */
+
+.input-with-but {
+  display: flex;
+
+  align-items: start;
+  flex-wrap: wrap;
+  grid-gap: 20px 15px;
+}
+
+.task-answer input {
+  padding: 5px;
+  font-size: 1.1rem;
+  width: 150px;
+}
+
+.task-answer input::placeholder {
+  font-size: 0.8rem;
+}
+
+/* Text answer */
+.task-answer .answer > input {
+  border: 1px solid grey;
+  border-radius: 4px;
+}
+.task-answer input:focus {
+  background-color: rgb(255, 247, 234);
+  outline: none;
+  box-shadow: none;
+}

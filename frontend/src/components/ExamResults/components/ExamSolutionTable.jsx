@@ -1,8 +1,9 @@
 import SingleAnswer from "./SingleAnswer";
+import "./ExamSolutionTable.css";
 
 const ExamSolutionTable = ({ answers }) => {
   return (
-    <table border="1">
+    <table className="results-table" border="1">
       <thead>
         <tr>
           <th>№</th>

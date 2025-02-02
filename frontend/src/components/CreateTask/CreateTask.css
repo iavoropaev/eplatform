@@ -1,0 +1,45 @@
+.create-task {
+  padding: 30px;
+  text-align: left;
+}
+
+.create-task .tags {
+  margin-bottom: 10px;
+  gap: 8px;
+}
+.create-task .tags label {
+  margin-right: 8px;
+}
+.create-task select {
+  padding: 4px;
+  outline-color: grey;
+}
+
+.create-task .tags .NC {
+  color: rgb(255, 108, 108);
+}
+.create-task .tags option {
+  color: black;
+}
+
+.create-task .editor-container {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.create-task .editor-label {
+  color: grey;
+  padding: 3px;
+}
+.create-task .answer-label {
+  color: grey;
+  margin-bottom: 5px;
+}
+
+.create-task .answer {
+  margin-bottom: 30px;
+}
+.create-task .answer input {
+  /* margin-top: 5px; */
+  padding: 5px;
+  font-size: 18px;
+}
