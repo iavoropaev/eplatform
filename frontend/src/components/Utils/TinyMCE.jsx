@@ -24,6 +24,9 @@ const TinyMCE = ({ editorContent, setEditorContent }) => {
         value={editorContent}
         onEditorChange={handleEditorChange}
         init={{
+          file_picker_types: "file image media",
+          // automatic_uploads: true,
+          images_upload_url: "http://127.0.0.1:8000/api/v1/upload-file/",
           height: 500,
           menubar: true,
           plugins: [
@@ -53,19 +56,20 @@ const TinyMCE = ({ editorContent, setEditorContent }) => {
             "removeformat | help",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+
           //   menu: {
           //     edit: { title: "Edit", items: "undo, redo, selectall" },
           //   },
         }}
       />
-      {/* <button onClick={log}>Log editor content</button>
+      <button onClick={log}>Log editor content</button>
       <button
         onClick={() => {
           setEditorContent("Тык");
         }}
       >
         Поменять
-      </button> */}
+      </button>
     </div>
   );
 };

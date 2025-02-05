@@ -410,15 +410,15 @@ class NumbersViewSet(viewsets.ModelViewSet):
 
 @extend_schema(description='Uploading a file to the server.')
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([AllowAny])
 def upload_file(request):
     try:
         file = request.FILES['file']
         fp = UploadFiles(file=file)
         fp.save()
         return Response({
-            'file_url': f'{DOMEN}media/{fp.file}',
-        }, status=406)
+            'location': f'{DOMEN}media/{fp.file}',
+        }, status=200)
     except:
         return Response({
             'error': 'File did not save.',

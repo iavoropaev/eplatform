@@ -169,7 +169,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                                         "ok_answer": ok_answer,
                                         "score": score,
                                         'status': status})
-
+            print(answers_summary)
             solve = TaskCollectionSolve(
                 task_collection_id=collection.id,
                 user_id=cur_user_id,
