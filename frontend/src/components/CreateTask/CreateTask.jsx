@@ -27,6 +27,10 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
 
   return (
     <div className="create-task">
+      {taskData?.taskId && (
+        <p className="task-id">{`Задача ${taskData.taskId}.`}</p>
+      )}
+
       <div className="tags">
         <TaskTags
           name={"Экзамен"}
