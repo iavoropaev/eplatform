@@ -1,8 +1,17 @@
 def check_answer(user_answer, true_answer):
     print(user_answer, true_answer)
     is_ok = True
+
     if true_answer['type'] == 'text':
         return str(user_answer['text']).strip() == str(true_answer['text']).strip()
+
+    if true_answer['type'] == 'choice':
+        true_choice = true_answer['choice']
+        user_choice = user_answer['choice']
+        if len(true_choice) == len(user_choice):
+            return true_choice == user_choice
+        return False
+
     if true_answer['type'] == 'table':
         true_table = true_answer['table']
         user_table = user_answer['table']
@@ -19,5 +28,4 @@ def check_answer(user_answer, true_answer):
         else:
             is_ok = False
         return is_ok
-
     return False

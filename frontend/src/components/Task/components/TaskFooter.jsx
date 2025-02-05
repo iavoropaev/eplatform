@@ -1,6 +1,6 @@
 import { BiDislike, BiLike } from "react-icons/bi";
 import Answer from "../../Utils/Answer/Answer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TaskFooter = ({
   taskData,
@@ -12,6 +12,9 @@ const TaskFooter = ({
   let defaultAnswer = "";
   if (taskData.answer_type === "table") {
     defaultAnswer = [["", ""]];
+  }
+  if (taskData.answer_type === "choice") {
+    defaultAnswer = [];
   }
 
   const [answer, setAnswer] = useState(defaultAnswer);
@@ -35,6 +38,7 @@ const TaskFooter = ({
           <span className="input-with-but">
             <Answer
               type={taskData.answer_type}
+              answerData={taskData.answer_data}
               answer={curAnswerData}
               setAnswer={setAnswer}
               disabled={isAnswerSaveReady}

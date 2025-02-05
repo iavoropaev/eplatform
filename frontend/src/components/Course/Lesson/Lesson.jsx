@@ -43,7 +43,7 @@ const Lesson = ({ lesson, sectionIndex }) => {
     });
     dispatch(updateSolveStatus({ id: res.section, solve: res }));
   };
-
+  console.log("Lesson", solveFromServer);
   return (
     <div className="lesson-container">
       <div className="lesson">

@@ -115,9 +115,9 @@ const Bank = () => {
   const sendAnswerToServer = async ({ taskId, answer, type }) => {
     const readyAnswer = { type: type, [type]: answer };
     const res = await sendSolution({ taskId, answer: readyAnswer });
+    console.log(res);
     setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
   };
-  console.log(tasks);
   return (
     <div className="bank">
       <BankFilter

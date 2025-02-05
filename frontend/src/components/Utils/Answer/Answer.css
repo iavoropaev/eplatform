@@ -44,3 +44,14 @@
   outline: none;
   box-shadow: none;
 }
+
+.task-answer .ch-option {
+  display: flex;
+  align-items: center;
+}
+
+.task-answer .ch-input {
+  width: initial;
+  margin-right: 5px;
+  margin-top: 2px;
+}

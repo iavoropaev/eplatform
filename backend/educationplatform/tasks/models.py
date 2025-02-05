@@ -7,7 +7,8 @@ class Task(models.Model):
     created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False)
     content = models.CharField(blank=False)
 
-    answer_type = models.CharField(choices=[('text', 'text'), ('table', 'table')])
+    answer_type = models.CharField(choices=[('text', 'text'), ('table', 'table'), ('choice', 'choice')])
+    answer_data = models.JSONField(blank=True, null=True)
     answer = models.CharField(blank=False)
 
     number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=True, null=True)

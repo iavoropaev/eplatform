@@ -41,6 +41,10 @@ const Course = () => {
     fetchData();
   }, [dispatch, lessonId]);
 
+  if (!courseData?.id || !currentLesson) {
+    console.log(courseData, currentLesson);
+    return <h1>Загрузка</h1>;
+  }
   return (
     <div className="course-container">
       <LeftMenu modules={modules} activeLessonId={lessonId} />

@@ -192,7 +192,7 @@ const CreateTaskPage = () => {
   return (
     <>
       <div className="container">
-        {taskId && (
+        {taskId && loadStatus !== -1 && (
           <div>
             <button onClick={goToPrevTask}>Предыдущая</button>
             <button onClick={goToNewTask}>Новая</button>

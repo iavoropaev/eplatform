@@ -2,8 +2,10 @@ import { useState } from "react";
 import TextAnswer from "./TextAnswer";
 import TableAnswer from "./TableAnswer";
 import "./Answer.css";
+import ChoiceAnswer from "./ChoiceAnswer";
 
-const Answer = ({ type, answer, setAnswer, disabled }) => {
+const Answer = ({ type, answerData, answer, setAnswer, disabled }) => {
+  console.log(["AAAA", answer]);
   if (type === "text") {
     return (
       <div className="task-answer">
@@ -24,6 +26,18 @@ const Answer = ({ type, answer, setAnswer, disabled }) => {
     );
   }
 
+  if (type === "choice") {
+    return (
+      <div className="task-answer">
+        <ChoiceAnswer
+          answerData={answerData}
+          answer={answer}
+          setAnswer={setAnswer}
+          disabled={disabled}
+        />{" "}
+      </div>
+    );
+  }
   return <></>;
 };
 export default Answer;

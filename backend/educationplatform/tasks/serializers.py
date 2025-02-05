@@ -12,7 +12,6 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class TaskSerializerForCreate(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -55,16 +54,17 @@ class TaskNumberInExamSerializer(serializers.ModelSerializer):
         model = TaskNumberInExam
         fields = '__all__'
 
+
 class TaskActualitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Actuality
         fields = '__all__'
 
+
 class TaskSubjectSerializer(serializers.ModelSerializer):
     numbers = TaskNumberInExamSerializer(many=True, read_only=True)
     sources = TaskBankAuthorSerializer(many=True, read_only=True)
     authors = TaskAuthorSerializer(many=True, read_only=True)
-
 
     class Meta:
         model = TaskSubject
@@ -89,5 +89,5 @@ class TaskSerializerForUser(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer', 'difficulty_level', 'actuality',
-                  'time_update', 'time_create')
+        fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
+                  'difficulty_level', 'actuality', 'time_update', 'time_create')
