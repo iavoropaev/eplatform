@@ -61,11 +61,12 @@ const Exam = () => {
       answers,
       duration,
     };
-
+    console.log(answers);
     const res = await sendExamSolutionToServer(data);
     if (res) {
       navigate(`./results/`);
     }
+    console.log(res);
   };
 
   return (

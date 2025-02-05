@@ -50,7 +50,10 @@ const ExamResults = () => {
       </div>
       <p>Баллы {score}</p>
       <p>Времени потрачено {duration}</p>
-      <ExamSolutionTable answers={answers} />
+      <div className="results-table-cont">
+        <ExamSolutionTable answers={answers} />
+        {/* <ExamSolutionTable answers={answers} /> */}
+      </div>
     </div>
   );
 };

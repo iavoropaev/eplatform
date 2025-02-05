@@ -6,37 +6,62 @@ import { useSelector } from "react-redux";
 const LeftMenu = ({ modules, activeLessonId }) => {
   const navigate = useNavigate();
   const courseName = useSelector((state) => state.course.courseData.name);
-  console.log(courseName);
+  const [isHide, setHide] = useState(false);
+
+  if (isHide) {
+    return (
+      <button
+        onClick={() => {
+          setHide(false);
+        }}
+        className="show-menu"
+      >
+        →
+      </button>
+    );
+  }
+
   return (
     <div className="left-menu">
-      <div className="course-info">
-        <div className="course-name">{courseName}</div>
+      <div className="left-menu-content">
+        <div className="course-info">
+          <div className="course-name">{courseName}</div>
+        </div>
+        {modules &&
+          modules.map((mod, modInd) => {
+            return (
+              <div key={mod.id}>
+                <p className="module-title">{modInd + 1 + ". " + mod.name}</p>
+                {mod.lessons.map((lesson, lesInd) => {
+                  return (
+                    <p
+                      className={
+                        String(activeLessonId) === String(lesson.id)
+                          ? "active-lesson"
+                          : "lesson"
+                      }
+                      key={lesson.id}
+                      onClick={() => {
+                        navigate(`./../../../${lesson.id}/s/1/`);
+                      }}
+                    >
+                      {modInd + 1 + "." + (lesInd + 1) + ". " + lesson.name}
+                    </p>
+                  );
+                })}
+              </div>
+            );
+          })}
       </div>
-      {modules &&
-        modules.map((mod, modInd) => {
-          return (
-            <div key={mod.id}>
-              <p className="module-title">{modInd + 1 + ". " + mod.name}</p>
-              {mod.lessons.map((lesson, lesInd) => {
-                return (
-                  <p
-                    className={
-                      String(activeLessonId) === String(lesson.id)
-                        ? "active-lesson"
-                        : "lesson"
-                    }
-                    key={lesson.id}
-                    onClick={() => {
-                      navigate(`./../../../${lesson.id}/s/1/`);
-                    }}
-                  >
-                    {modInd + 1 + "." + (lesInd + 1) + ". " + lesson.name}
-                  </p>
-                );
-              })}
-            </div>
-          );
-        })}
+
+      <button
+        onClick={() => {
+          setHide(true);
+        }}
+        className="hide-menu"
+      >
+        ←
+      </button>
     </div>
   );
 };

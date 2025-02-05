@@ -21,7 +21,7 @@ const Lesson = ({ lesson, sectionIndex }) => {
   const content = currentSectionData?.content;
   const solveFromServer = currentSectionData?.solve;
   const textForBut =
-    solveFromServer === null ? "Отметить выполененным" : "Выполнено";
+    solveFromServer === null ? "Отметить выполненным" : "Выполнено";
 
   const menuStatuses = lesson?.sections?.map((section) => {
     return section.solve?.solve_status;

@@ -1,6 +1,7 @@
 .bank {
   width: 80%;
   margin: auto;
+  padding-bottom: 30px;
 }
 
 .bank .task {

@@ -1,11 +1,30 @@
 .course-container .left-menu {
-  width: 200px;
+  display: flex;
+  width: 250px;
   background-color: white;
-  overflow: auto;
+
   text-align: left;
   border-right: 1px solid grey;
 }
 
+.course-container .left-menu-content {
+  overflow: auto;
+  flex: 1;
+}
+
+.course-container .hide-menu,
+.course-container .show-menu {
+  padding: 5px;
+  border: 0px;
+  border-radius: 0px;
+  margin: 0px;
+}
+.course-container .hide-menu {
+  border-left: 1px solid grey;
+}
+.course-container .show-menu {
+  border-right: 1px solid grey;
+}
 .course-container .left-menu .course-info {
   padding: 10px;
   text-align: center;

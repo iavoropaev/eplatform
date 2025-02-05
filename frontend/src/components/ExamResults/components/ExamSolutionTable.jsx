@@ -15,7 +15,9 @@ const ExamSolutionTable = ({ answers }) => {
       <tbody>
         {answers.map((answer, index) => (
           <tr key={index}>
-            <td>{answer.number_in_exam}</td>
+            <td style={{ textAlign: "left" }}>{`${index + 1}. (${
+              answer.number_in_exam
+            })`}</td>
             <td>{answer.score}</td>
             <td>
               <SingleAnswer answer={answer.user_answer} />
