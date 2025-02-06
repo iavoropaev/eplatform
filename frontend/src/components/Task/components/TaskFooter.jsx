@@ -16,6 +16,15 @@ const TaskFooter = ({
   if (taskData.answer_type === "choice") {
     defaultAnswer = [];
   }
+  if (taskData.answer_type === "comparison") {
+    defaultAnswer = [];
+    taskData.answer_data.left.map((el, i) => {
+      defaultAnswer.push([
+        taskData.answer_data.left[i],
+        taskData.answer_data.right[i],
+      ]);
+    });
+  }
 
   const [answer, setAnswer] = useState(defaultAnswer);
   const [isAnswerSave, setAnswerSave] = useState(false);

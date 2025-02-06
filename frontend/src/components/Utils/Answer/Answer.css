@@ -45,13 +45,73 @@
   box-shadow: none;
 }
 
+/* Choice answer */
 .task-answer .ch-option {
   display: flex;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.task-answer .ch-option {
+  display: flex;
 }
 
 .task-answer .ch-input {
+  cursor: pointer;
   width: initial;
-  margin-right: 5px;
   margin-top: 2px;
+}
+.task-answer .ch-input:disabled {
+  cursor: initial;
+}
+.task-answer .ch-option button {
+  color: red;
+  border-radius: 3px;
+}
+
+.task-answer .ch-option .option {
+  white-space: pre-wrap;
+}
+
+/* Comp */
+.comparison-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+}
+.comp-option {
+  display: flex;
+  align-items: center;
+  /* gap: 10px; */
+}
+.comp-option hr {
+  width: 20px;
+  height: 1px;
+
+  background-color: grey;
+  border: 0px;
+}
+.task-answer .option-left,
+.task-answer .option-right {
+  white-space: pre-wrap;
+  border: 1px solid grey;
+  padding: 8px;
+}
+.task-answer .option-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-answer .option-right .up-down {
+  cursor: pointer;
+  font-size: 20px;
+  padding-right: 2px;
+}
+.task-answer .option-right .up-down:hover {
+  color: rgb(255, 255, 255);
+}
+.task-answer .option-right .up-down:active {
+  color: red;
 }

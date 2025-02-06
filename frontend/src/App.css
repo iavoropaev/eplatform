@@ -54,3 +54,8 @@ button:active {
 input {
   padding: 3px;
 }
+
+textarea {
+  padding: 5px;
+  font-size: 16px;
+}

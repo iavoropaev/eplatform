@@ -16,6 +16,14 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
     if (type === "table") {
       taskData.setAnswer([["", ""]]);
     }
+    if (type === "choice") {
+      taskData.setAnswer([]);
+      taskData.setAnswerData(["Опция 1"]);
+    }
+    if (type === "comparison") {
+      taskData.setAnswer([["Опция 1", "Ответ 1"]]);
+      taskData.setAnswerData({ left: ["Опция 1"], right: ["Ответ 1"] });
+    }
   };
 
   if (taskData.taskId && loadStatus === -1) {
@@ -96,6 +104,8 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
           options={[
             ["text", "Текст"],
             ["table", "Таблица"],
+            ["choice", "Тестовый ответ"],
+            ["comparison", "Сопоставление"],
           ]}
           selected={taskData.answerType}
           handleSelect={handleAnswerTypeSelect}
@@ -103,9 +113,14 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
         <Answer
           type={taskData.answerType}
           answer={taskData.answer}
+          answerData={taskData.answerData}
           setAnswer={(ans) => {
             taskData.setAnswer(ans);
           }}
+          setAnswerData={(ansdata) => {
+            taskData.setAnswerData(ansdata);
+          }}
+          isCreating={true}
         />
       </div>
       <div className="save-button">

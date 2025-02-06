@@ -16,7 +16,7 @@ div.task-container {
   overflow: hidden;
 }
 
-.task p:not(:last-child) {
+.task .task-body p:not(:last-child) {
   margin: 0px;
   padding-bottom: 10px;
 }

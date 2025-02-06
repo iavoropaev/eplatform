@@ -3,9 +3,17 @@ import TextAnswer from "./TextAnswer";
 import TableAnswer from "./TableAnswer";
 import "./Answer.css";
 import ChoiceAnswer from "./ChoiceAnswer";
+import ComparisonAnswer from "./СomparisonAnswer";
 
-const Answer = ({ type, answerData, answer, setAnswer, disabled }) => {
-  console.log(["AAAA", answer]);
+const Answer = ({
+  type,
+  answerData,
+  answer,
+  setAnswer,
+  setAnswerData,
+  disabled,
+  isCreating,
+}) => {
   if (type === "text") {
     return (
       <div className="task-answer">
@@ -21,7 +29,7 @@ const Answer = ({ type, answerData, answer, setAnswer, disabled }) => {
           answer={answer}
           setAnswer={setAnswer}
           disabled={disabled}
-        />{" "}
+        />
       </div>
     );
   }
@@ -31,13 +39,31 @@ const Answer = ({ type, answerData, answer, setAnswer, disabled }) => {
       <div className="task-answer">
         <ChoiceAnswer
           answerData={answerData}
+          setAnswerData={setAnswerData}
           answer={answer}
           setAnswer={setAnswer}
           disabled={disabled}
-        />{" "}
+          isCreating={isCreating}
+        />
       </div>
     );
   }
+
+  if (type === "comparison") {
+    return (
+      <div className="task-answer">
+        <ComparisonAnswer
+          answerData={answerData}
+          setAnswerData={setAnswerData}
+          answer={answer}
+          setAnswer={setAnswer}
+          disabled={disabled}
+          isCreating={isCreating}
+        />
+      </div>
+    );
+  }
+
   return <></>;
 };
 export default Answer;

@@ -20,6 +20,8 @@ const CreateTaskPage = () => {
   const [editorContent, setEditorContent] = useState("Начальный");
   const [answer, setAnswer] = useState("");
   const [answerType, setAnswerType] = useState("text");
+  const [answerData, setAnswerData] = useState(["Опция 1"]);
+
   const [selectedExam, setSelectedExam] = useState(-1);
   const [selectedSubject, setSelectedSubject] = useState(-1);
   const [selectedNumber, setSelectedNumber] = useState(-1);
@@ -70,6 +72,7 @@ const CreateTaskPage = () => {
         setEditorContent(data.content);
         setAnswer(data.answer);
         setAnswerType(data.answer_type);
+        setAnswerData(data.answer_data);
         const numberId = data.number_in_exam?.id;
         const subjectId = data.number_in_exam?.subject?.id;
         const examId = data.number_in_exam?.subject?.exam?.id;
@@ -130,6 +133,7 @@ const CreateTaskPage = () => {
     const newTask = await createTaskOnServer({
       content: editorContent,
       answer: JSON.stringify(answer),
+      answer_data: answerData,
       answer_type: answerType,
       number_in_exam: activeNumber?.id,
       taskId: taskId,
@@ -162,6 +166,7 @@ const CreateTaskPage = () => {
     taskId,
     editorContent,
     answerType,
+    answerData,
     answer,
     exams,
     selectedExam,
@@ -181,6 +186,7 @@ const CreateTaskPage = () => {
     setEditorContent,
     setAnswer,
     setAnswerType,
+    setAnswerData,
     setSelectedExam,
     setSelectedSubject,
     setSelectedNumber,

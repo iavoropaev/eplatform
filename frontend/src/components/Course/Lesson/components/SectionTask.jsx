@@ -13,8 +13,10 @@ const SectionTask = ({ taskData, sendSolution, solveFromServer }) => {
   const dispatch = useDispatch();
 
   const handleCancelButton = () => {
-    dispatch(deleteSolveStatus(solveFromServer.section));
-    setSkipServerAnswer(true);
+    if (solveFromServer?.section) {
+      dispatch(deleteSolveStatus(solveFromServer.section));
+      setSkipServerAnswer(true);
+    }
   };
 
   let tasksStatus = "";

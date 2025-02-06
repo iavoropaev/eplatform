@@ -12,6 +12,13 @@ def check_answer(user_answer, true_answer):
             return true_choice == user_choice
         return False
 
+    if true_answer['type'] == 'comparison':
+        true_sorting = true_answer['comparison']
+        user_sorting = user_answer['comparison']
+        if len(true_sorting) == len(user_sorting):
+            return all(pair in user_sorting for pair in true_sorting)
+        return False
+
     if true_answer['type'] == 'table':
         true_table = true_answer['table']
         user_table = user_answer['table']
