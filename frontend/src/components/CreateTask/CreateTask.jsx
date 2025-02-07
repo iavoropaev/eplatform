@@ -24,6 +24,10 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
       taskData.setAnswer([["Опция 1", "Ответ 1"]]);
       taskData.setAnswerData({ left: ["Опция 1"], right: ["Ответ 1"] });
     }
+    if (type === "sorting") {
+      taskData.setAnswer(["Опция 1", "Опция 2"]);
+      taskData.setAnswerData(["Опция 1", "Опция 2"]);
+    }
   };
 
   if (taskData.taskId && loadStatus === -1) {
@@ -106,6 +110,7 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
             ["table", "Таблица"],
             ["choice", "Тестовый ответ"],
             ["comparison", "Сопоставление"],
+            ["sorting", "Сортировка"],
           ]}
           selected={taskData.answerType}
           handleSelect={handleAnswerTypeSelect}

@@ -1,4 +1,4 @@
-const ComparisonAnswer = ({
+const SortingAnswer = ({
   setAnswerData,
   answerData,
   answer,
@@ -7,56 +7,51 @@ const ComparisonAnswer = ({
   isCreating,
 }) => {
   const ansToAnsData = (ans) => {
-    const ansData = { left: [], right: [] };
-    ans.map((el) => {
-      ansData.left.push(el[0]);
-      ansData.right.push(el[1]);
-    });
-    ansData.right.sort((a, b) => a[0].localeCompare(b[0]));
+    const ansData = [...ans];
+    ansData.sort((a, b) => a.localeCompare(b));
     return ansData;
   };
 
   const handleChange = (i, type) => {
-    const newAns = [...answer.map((row) => [...row])];
+    const newAns = [...answer];
     if (type === "up" && i >= 1) {
-      [newAns[i][1], newAns[i - 1][1]] = [newAns[i - 1][1], newAns[i][1]];
+      [newAns[i], newAns[i - 1]] = [newAns[i - 1], newAns[i]];
     }
     if (type === "down" && i + 1 < newAns.length) {
-      [newAns[i][1], newAns[i + 1][1]] = [newAns[i + 1][1], newAns[i][1]];
+      [newAns[i], newAns[i + 1]] = [newAns[i + 1], newAns[i]];
     }
 
-    setAnswer([...newAns.map((row) => [...row])]);
+    setAnswer([...newAns]);
   };
 
   const addOption = () => {
-    const newAns = [...answer, ["Опция", "Ответ"]];
+    const newAns = [...answer, "Опция"];
     setAnswer(newAns);
     setAnswerData(ansToAnsData(newAns));
   };
-  const changeOptionName = (data, i, j) => {
+  const changeOptionName = (data, i) => {
     const newAns = [...answer];
-    newAns[i][j] = data;
+    newAns[i] = data;
     setAnswer(newAns);
     setAnswerData(ansToAnsData(newAns));
   };
   const delOptionName = (i) => {
-    const newAns = [...answer];
-    newAns.splice(i, 1);
-    setAnswer(newAns);
-    setAnswerData(ansToAnsData(newAns));
+    if (answer.length > 1) {
+      const newAns = [...answer];
+      newAns.splice(i, 1);
+      setAnswer(newAns);
+      setAnswerData(ansToAnsData(newAns));
+    }
   };
   console.log(answer);
   return (
-    <div className="comparison-answer">
-      {!isCreating &&
-        answer.map((opt, i) => {
-          return (
-            <div className="comp-option" key={i}>
-              <p className="option-left">{opt[0]}</p>
-              <hr></hr>
-              <div className="option-right">
-                <p>{opt[1]}</p>
-
+    <div className="sorting-answer">
+      {!isCreating && (
+        <div className="for-user">
+          {answer.map((opt, i) => {
+            return (
+              <div className="option" key={i}>
+                <p>{opt}</p>
                 {!disabled && (
                   <div>
                     <span
@@ -78,9 +73,10 @@ const ComparisonAnswer = ({
                   </div>
                 )}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+      )}
 
       {isCreating && (
         <div>
@@ -88,19 +84,12 @@ const ComparisonAnswer = ({
             return (
               <div className="ch-option" key={i}>
                 <textarea
-                  value={opt[0]}
+                  value={opt}
                   className="ch-input"
-                  checked={answer.includes(i)}
                   onChange={(e) => {
                     changeOptionName(e.target.value, i, 0);
                   }}
                   disabled={disabled}
-                ></textarea>
-                <textarea
-                  value={opt[1]}
-                  onChange={(e) => {
-                    changeOptionName(e.target.value, i, 1);
-                  }}
                 ></textarea>
                 <button
                   onClick={() => {
@@ -118,4 +107,4 @@ const ComparisonAnswer = ({
     </div>
   );
 };
-export default ComparisonAnswer;
+export default SortingAnswer;

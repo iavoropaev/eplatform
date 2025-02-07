@@ -25,6 +25,9 @@ const TaskFooter = ({
       ]);
     });
   }
+  if (taskData.answer_type === "sorting") {
+    defaultAnswer = [...taskData.answer_data];
+  }
 
   const [answer, setAnswer] = useState(defaultAnswer);
   const [isAnswerSave, setAnswerSave] = useState(false);

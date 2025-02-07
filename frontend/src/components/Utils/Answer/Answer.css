@@ -1,21 +1,3 @@
-/* .task-answer input {
-  border: 1px solid grey;
-
-  padding: 5px;
-  font-size: 1.1rem;
-  width: 150px;
-}
-
-.task-answer input::placeholder {
-  font-size: 0.8rem;
-}
-
-.task-answer input:focus {
-  background-color: rgb(255, 247, 234);
-  outline: 0;
-  border: 1px solid rgb(56, 56, 56);
-} */
-
 .input-with-but {
   display: flex;
 
@@ -78,7 +60,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 30px;
+  gap: 20px;
 }
 .comp-option {
   display: flex;
@@ -86,10 +68,12 @@
   /* gap: 10px; */
 }
 .comp-option hr {
-  width: 20px;
+  width: 30px;
   height: 1px;
 
   background-color: grey;
+  /* background-color: black; */
+
   border: 0px;
 }
 .task-answer .option-left,
@@ -97,6 +81,8 @@
   white-space: pre-wrap;
   border: 1px solid grey;
   padding: 8px;
+  border-radius: 5px;
+  background-color: white;
 }
 .task-answer .option-right {
   display: flex;
@@ -104,14 +90,30 @@
   gap: 10px;
 }
 
-.task-answer .option-right .up-down {
+.task-answer .up-down {
   cursor: pointer;
   font-size: 20px;
   padding-right: 2px;
+  user-select: none;
 }
-.task-answer .option-right .up-down:hover {
-  color: rgb(255, 255, 255);
+.task-answer .up-down:hover {
+  color: rgb(121, 167, 253);
 }
-.task-answer .option-right .up-down:active {
+.task-answer .up-down:active {
   color: red;
+}
+
+/* Sorting Answer */
+.task-answer .sorting-answer .for-user {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.task-answer .sorting-answer .for-user .option {
+  display: flex;
+  gap: 15px;
+  padding: 8px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: white;
 }

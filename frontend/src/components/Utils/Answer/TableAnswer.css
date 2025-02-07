@@ -1,27 +1,3 @@
-/* .answer-table table {
-  border-collapse: collapse;
-  border: none;
-}
-
-.answer-table table td {
-  border: none;
-}
-
-.answer-table table {
-  border-collapse: collapse;
-}
-.answer-table td {
-  border: 1px solid grey;
-}
-
-.answer-table input {
-  border: 0px;
-  max-width: 100px;
-}
-.answer-table input:focus {
-  border: 0px;
-} */
-
 .answer-table .input-with-but {
   display: flex;
 
