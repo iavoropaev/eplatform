@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .models import Task, TaskSolutions, TaskNumberInExam, TaskExam, TaskSubject, TaskSource, Author, DifficultyLevel, \
-    TaskBankAuthor, Actuality
+from .models import Task, TaskSolutions, TaskNumberInExam, TaskExam, TaskSubject, TaskSource, DifficultyLevel, \
+    TaskBankAuthor, Actuality, TaskAuthor
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -33,8 +33,8 @@ class TaskDifficultyLevelSerializer(serializers.ModelSerializer):
 
 class TaskAuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Author
-        fields = ['id', 'name']
+        model = TaskAuthor
+        fields = ['id', 'name', 'link']
 
 
 class TaskSourceSerializer(serializers.ModelSerializer):

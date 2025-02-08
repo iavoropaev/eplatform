@@ -3,16 +3,15 @@ import json
 
 import pytz
 from django.db.models import Count, Q
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse, inline_serializer
+from drf_spectacular.utils import extend_schema
 
-from rest_framework import viewsets, serializers, status
+from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from educationplatform.settings import DOMEN
-from .models import Task, UploadFiles, Author, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskNumberInExam, \
+from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskNumberInExam, \
     TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
     TaskNumberInExamSerializer, TaskSerializerForCreate
@@ -33,9 +32,26 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'filtered', 'new_tasks']:
             permission_classes = [AllowAny]
-        else:
+        elif self.action in ['upload_task', 'partial_update', 'task_with_ans_by_id']:
             permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+
+    @action(detail=False, methods=['post'], url_path='task-with-ans-by-id')
+    def task_with_ans_by_id(self, request):
+        try:
+            task_id = request.data['task_id']
+            task = Task.objects.all().filter(id=task_id)[0]
+            if (task.created_by != request.user) and (not request.user.is_staff):
+                return Response('Доступ запрещен.', status=status.HTTP_403_FORBIDDEN)
+
+            serializer = TaskSerializerForCreate(task, many=False)
+            return Response(serializer.data, status=200)
+        except:
+            return Response({'Error': 'Не удалось загрузить задачи.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
     @extend_schema(description='''Get tasks filtered by authors, sources, topics, create time. Ordering by create time. 
     Params: authors, sources, topics, d_levels, period(day, week, month).''')
@@ -80,6 +96,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 tasks = tasks.order_by('time_create')
             else:
                 return Response({'Error': 'Неверно указан критерий сортировки.'}, status=406)
+        tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
         return Response({'count': len(data), 'tasks': data})
@@ -133,28 +150,41 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def upload_task(self, request):
-        tasks_data = request.data
-        tasks_data['created_by'] = request.user.id
-        serializer = self.get_serializer(data=tasks_data, many=False)
-        if serializer.is_valid():
-            saved_task = serializer.save()
-            response_ser = TaskSerializerForCreate(saved_task)
-            return Response(
-                response_ser.data,
-                status=status.HTTP_201_CREATED
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            task_data = request.data
+            print(task_data)
+            if not request.user.is_staff:
+                task_data['bank_authors'] = []
+
+            task_data['created_by'] = request.user.id
+            serializer = self.get_serializer(data=task_data, many=False)
+            if serializer.is_valid():
+                saved_task = serializer.save()
+                response_ser = TaskSerializerForCreate(saved_task)
+                return Response(
+                    response_ser.data,
+                    status=status.HTTP_201_CREATED
+                )
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
         task = self.get_object()
+        data = request.data.copy()
+        if task.created_by != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
-        update_serializer = TaskSerializer(task, data=request.data, partial=True)
+        if not request.user.is_staff:
+            data.pop('bank_authors')
+
+        update_serializer = TaskSerializer(task, data=data, partial=True)
         if update_serializer.is_valid():
             updated_instance = update_serializer.save()
             response_serializer = TaskSerializerForCreate(updated_instance)
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
-        # Вернуть ошибки валидации
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'])
@@ -174,7 +204,7 @@ class TaskInfoViewSet(viewsets.ViewSet):
     @extend_schema(description='Get all task authors.')
     @action(detail=False, methods=['get'])
     def authors(self, request):
-        authors = [{'id': author.id, 'name': author.name} for author in Author.objects.all()]
+        authors = [{'id': author.id, 'name': author.name} for author in TaskAuthor.objects.all()]
         return Response({
             'authors': authors,
         })

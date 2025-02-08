@@ -3,6 +3,7 @@ export const getPreparedFilterData = ({
   selectedExam,
   selectedSubject,
   selectedNumber,
+  selectedTaskAuthor,
 }) => {
   let exams = filterData["exams"];
   exams = exams ? exams : [];
@@ -11,6 +12,12 @@ export const getPreparedFilterData = ({
   let subjects = activeExam?.subjects;
   subjects = subjects ? subjects : [];
   const activeSubject = subjects.find((item) => item.id === selectedSubject);
+
+  let taskAuthors = activeSubject?.authors;
+  taskAuthors = taskAuthors ? taskAuthors : [];
+  const activeAuthor = taskAuthors.find(
+    (item) => item.id === selectedTaskAuthor
+  );
 
   let numbers = activeSubject?.numbers;
   numbers = numbers ? numbers : [];
@@ -32,7 +39,9 @@ export const getPreparedFilterData = ({
     activeExam,
     activeSubject,
     activeNumber,
+    activeAuthor,
     bankAuthors,
+    taskAuthors,
     actualities,
     difficulty_levels,
   };

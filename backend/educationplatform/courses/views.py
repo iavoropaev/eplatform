@@ -18,7 +18,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['all']:
             permission_classes = [AllowAny]
-        elif self.action in ['data', 'send_solution', 'solved_sections', 'get_lesson']:
+        elif self.action in ['data', 'send_solution', 'solved_sections', 'get_lesson', 'data']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -44,10 +44,10 @@ class CoursesViewSet(viewsets.ModelViewSet):
         try:
             cur_user_id = request.user.id
             cur_course_id = int(pk)
-            if not Course.objects.all().filter(id=cur_course_id).first().users.values().filter(id=cur_user_id).count():
-                return Response({
-                    'Error': 'У вас нет доступа к курсу.',
-                }, status=403)
+            # if not Course.objects.all().filter(id=cur_course_id).first().users.values().filter(id=cur_user_id).count():
+            #     return Response({
+            #         'Error': 'У вас нет доступа к курсу.',
+            #     }, status=403)
 
             course = Course.objects.all().filter(id=cur_course_id)[0]
             course_serializer = CourseSerializer(course, many=False)

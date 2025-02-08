@@ -12,15 +12,9 @@ import ExamResultsPage from "./components/Pages/Exam results/ExamResultsPage";
 import CoursePage from "./components/Pages/Course/CoursePage";
 
 export const publicRoutes = [
-  { path: "edit-task/:taskId/", Component: CreateTaskPage },
-  { path: "create-task/:taskId/", Component: CreateTaskPage },
-  { path: "create-task/", Component: CreateTaskPage },
-
   { path: "bank", Component: BankPage },
   { path: "variants", Component: Variants },
 
-  { path: "update-collection/:slug/", Component: CreateCollectionPage },
-  { path: "create-collection/", Component: CreateCollection },
   { path: "collections/:slug/", Component: CollectionPage },
   { path: "collections/", Component: CollectionCatalogPage },
 
@@ -37,6 +31,13 @@ export const publicRoutes = [
   { path: "*", Component: NotFound },
 ];
 
-export const authRoutes = [];
+export const authRoutes = [
+  { path: "edit-task/:taskId/", Component: CreateTaskPage },
+  { path: "create-task/:taskId/", Component: CreateTaskPage },
+  { path: "create-task/", Component: CreateTaskPage },
+
+  { path: "update-collection/:slug/", Component: CreateCollectionPage },
+  { path: "create-collection/", Component: CreateCollection },
+];
 
 export const adminRoutes = [];

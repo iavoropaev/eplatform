@@ -7,6 +7,8 @@ import { getTokenByVKID } from "../../server/auth";
 const Main = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const userName = localStorage.getItem("first_name");
+  const isAuth = localStorage.getItem("isAuth");
 
   useEffect(() => {
     async function fetchData() {
@@ -19,12 +21,17 @@ const Main = () => {
             uuid: payload.uuid,
           });
           try {
+            console.log(data);
             console.log(data.access);
             localStorage.setItem("jwt_a", data.access);
             localStorage.setItem("jwt_r", data.refresh);
             localStorage.setItem("photo", data.photo_50);
+            localStorage.setItem("first_name", data.first_name);
+            localStorage.setItem("isAuth", true);
+            localStorage.setItem("isAdmin", data.is_admin);
             //dispatch(setHasToken(true));
             navigate("./", { relative: "path" });
+            window.location.reload();
           } catch (error) {
             navigate("./", { relative: "path" });
           }
@@ -34,10 +41,18 @@ const Main = () => {
 
     fetchData();
   }, [location, navigate]);
+
+  const logOut = () => {
+    localStorage.clear();
+    navigate("./", { relative: "path" });
+    window.location.reload();
+  };
+
   return (
     <>
-      <h1>Главная</h1>
-      <Auth />
+      <h1>Главная, {userName}</h1>
+      {!isAuth && <Auth />}
+
       <div className="menu">
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <NavLink to="/" end>
@@ -61,6 +76,7 @@ const Main = () => {
 
           <NavLink></NavLink>
         </div>
+        <button onClick={logOut}>Выйти</button>
       </div>
     </>
   );

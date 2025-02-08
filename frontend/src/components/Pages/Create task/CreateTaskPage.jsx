@@ -6,6 +6,7 @@ import {
   createTaskOnServer,
   getFilterData,
   getTaskById,
+  getTaskWithAnsById,
 } from "../../../server/bank";
 import { getPreparedFilterData } from "../../Utils/FilterUtils";
 
@@ -27,6 +28,7 @@ const CreateTaskPage = () => {
   const [selectedNumber, setSelectedNumber] = useState(-1);
   const [selectedBanks, setSelectedBanks] = useState([]);
   const [selectedDifLevel, setSelectedDifLevel] = useState(-1);
+  const [selectedTaskAuthor, setSelectedTaskAuthor] = useState(-1);
   const [selectedActuality, setSelectedActuality] = useState(-1);
   const [filterData, setFilterData] = useState([]);
 
@@ -37,7 +39,9 @@ const CreateTaskPage = () => {
     activeExam,
     activeSubject,
     activeNumber,
+    activeAuthor,
     bankAuthors,
+    taskAuthors,
     actualities,
     difficulty_levels,
   } = getPreparedFilterData({
@@ -45,15 +49,22 @@ const CreateTaskPage = () => {
     selectedExam,
     selectedSubject,
     selectedNumber,
+    selectedTaskAuthor,
   });
 
   const setDefault = () => {
     setEditorContent("Начальный");
     setAnswer("");
     setAnswerType("text");
+    setAnswerData(["Опция 1"]);
+    setSelectedBanks([]);
+
     setSelectedNumber(-1);
     setSelectedExam(-1);
     setSelectedSubject(-1);
+    setSelectedDifLevel(-1);
+    setSelectedTaskAuthor(-1);
+    setSelectedActuality(-1);
   };
 
   useEffect(() => {
@@ -66,9 +77,10 @@ const CreateTaskPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getTaskById(taskId);
-      console.log(data);
+      const data = await getTaskWithAnsById(taskId);
+
       if (data !== undefined && filterData?.exams?.length > 0) {
+        console.log(data);
         setEditorContent(data.content);
         setAnswer(data.answer);
         setAnswerType(data.answer_type);
@@ -76,13 +88,15 @@ const CreateTaskPage = () => {
         const numberId = data.number_in_exam?.id;
         const subjectId = data.number_in_exam?.subject?.id;
         const examId = data.number_in_exam?.subject?.exam?.id;
+        console.log("res", data.bank_authors);
         const bankAuthors = data.bank_authors.map((el) => el.id);
+        const taskAuthor = data.author?.id;
+        setSelectedTaskAuthor(taskAuthor);
         setSelectedExam(examId);
         setSelectedSubject(subjectId);
         setSelectedNumber(numberId);
         setSelectedBanks(bankAuthors);
-
-        if (data.difficulty_level?.id) {
+        if (data.difficulty_level?.id !== undefined) {
           setSelectedDifLevel(data.difficulty_level.id);
         } else {
           setSelectedDifLevel(-1);
@@ -136,6 +150,7 @@ const CreateTaskPage = () => {
       answer_data: answerData,
       answer_type: answerType,
       number_in_exam: activeNumber?.id,
+      author: activeAuthor?.id,
       taskId: taskId,
       bank_authors: selectedBanks,
       difficulty_level: selectedDifLevel !== -1 ? selectedDifLevel : null,
@@ -178,9 +193,11 @@ const CreateTaskPage = () => {
     selectedBanks,
     selectedDifLevel,
     selectedActuality,
+    selectedTaskAuthor,
     activeSubject,
     activeNumber,
     bankAuthors,
+    taskAuthors,
     difficulty_levels,
     actualities,
     setEditorContent,
@@ -190,11 +207,12 @@ const CreateTaskPage = () => {
     setSelectedExam,
     setSelectedSubject,
     setSelectedNumber,
+    setSelectedTaskAuthor,
     setSelectedBanks,
     setSelectedDifLevel,
     setSelectedActuality,
   };
-
+  console.log("SB", selectedBanks);
   return (
     <>
       <div className="container">

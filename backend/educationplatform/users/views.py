@@ -56,6 +56,7 @@ def auth_by_vk(request):
             'last_name': user_info.get('last_name', ''),
             'photo_50': user_info.get('photo_50', ''),
             'sex': user_info.get('sex', ''),
+            'is_admin': user.is_staff
         })
     except:
         return Response({

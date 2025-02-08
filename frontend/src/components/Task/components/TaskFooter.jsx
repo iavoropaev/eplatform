@@ -81,15 +81,25 @@ const TaskFooter = ({
           </span>
         )}
 
-        <span className="author">{taskData?.author?.name}</span>
+        {taskData?.author?.link ? (
+          <a target="_blank" href={taskData?.author?.link} className="author">
+            {taskData?.author?.name}
+          </a>
+        ) : (
+          <span className="author">
+            {taskData?.author?.name !== "Не указан"
+              ? taskData?.author?.name
+              : ""}
+          </span>
+        )}
       </div>
 
-      <div className="floor">
-        <span className="tags">
-          {/* <span className="tag">Комментарии</span> */}
-          <span className="tag show-solution">Решение</span>
-        </span>
-        {/* <span className="tag likes">
+      {/* <div className="floor"> */}
+      {/* <span className="tags"> */}
+      {/* <span className="tag">Комментарии</span> */}
+      {/* <span className="tag show-solution">Решение</span> */}
+      {/* </span> */}
+      {/* <span className="tag likes">
           <span className="like">
             <span>120</span>
             <BiLike />
@@ -99,7 +109,7 @@ const TaskFooter = ({
             <span>20</span>
           </span>
         </span> */}
-      </div>
+      {/* </div> */}
     </div>
   );
 };

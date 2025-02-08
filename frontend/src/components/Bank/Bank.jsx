@@ -3,7 +3,6 @@ import "./Bank.css";
 import Task from "../Task/Task";
 import { useEffect, useState } from "react";
 import {
-  createTaskOnServer,
   getAllTasksFromServer,
   getFilterData,
   getSolveStatuses,
@@ -94,7 +93,6 @@ const Bank = () => {
   }, []);
 
   const handleFindButtonClick = async () => {
-    setFind(true);
     const tasksFromServer = await getAllTasksFromServer({
       numbers,
       authors,
@@ -110,14 +108,15 @@ const Bank = () => {
       setSolvedStatuses(idSolvedStatuses);
     }
     setTasks(tasksFromServer["tasks"]);
+    setFind(true);
   };
 
   const sendAnswerToServer = async ({ taskId, answer, type }) => {
     const readyAnswer = { type: type, [type]: answer };
     const res = await sendSolution({ taskId, answer: readyAnswer });
-    console.log(res);
     setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
   };
+
   return (
     <div className="bank">
       <BankFilter

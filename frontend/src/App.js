@@ -6,8 +6,8 @@ import { adminRoutes, authRoutes, publicRoutes } from "./routes";
 import "./App.css";
 
 function App() {
-  const isAdmin = true;
-  const isAuth = true;
+  const isAuth = JSON.parse(localStorage.getItem("isAuth"));
+  const isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
 
   return (
     <BrowserRouter>

@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import Task, Author, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskExam, TaskNumberInExam, \
-    TaskSubject, TaskBankAuthor, Actuality
+from .models import Task, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskExam, TaskNumberInExam, \
+    TaskSubject, TaskBankAuthor, Actuality, TaskAuthor
 
 admin.site.register(Task)
-admin.site.register(Author)
+admin.site.register(TaskAuthor)
 admin.site.register(TaskSource)
 admin.site.register(DifficultyLevel)
 admin.site.register(TaskTopic)

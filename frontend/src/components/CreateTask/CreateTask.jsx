@@ -6,6 +6,8 @@ import { CheckBoxes } from "../Utils/CheckBoxes";
 import "./CreateTask.css";
 
 const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
+  const isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
+
   const handleAnswerTypeSelect = (e) => {
     const type = e.target.value;
     taskData.setAnswerType(type);
@@ -84,13 +86,23 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
             setSelectedOption={taskData.setSelectedDifLevel}
           />
         )}
+        {taskData.taskAuthors.length > 0 && (
+          <TaskTags
+            name={"Автор"}
+            options={taskData.taskAuthors}
+            selectedOption={taskData.selectedTaskAuthor}
+            setSelectedOption={taskData.setSelectedTaskAuthor}
+          />
+        )}
       </div>
 
-      <CheckBoxes
-        selectedBanks={taskData.selectedBanks}
-        bankAuthors={taskData.bankAuthors}
-        setSelectedBanks={taskData.setSelectedBanks}
-      />
+      {isAdmin && (
+        <CheckBoxes
+          selectedBanks={taskData.selectedBanks}
+          bankAuthors={taskData.bankAuthors}
+          setSelectedBanks={taskData.setSelectedBanks}
+        />
+      )}
 
       <div className="editor-container">
         <p className="editor-label">Условие задачи</p>

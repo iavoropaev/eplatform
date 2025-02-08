@@ -17,13 +17,29 @@ export const getTaskById = async (id) => {
     );
 
     if (res.status === 200) {
-      //console.log(res.data);
       return prepareTask(res.data);
     }
     return undefined;
   } catch (error) {
-    //alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
+    return undefined;
+  }
+};
+
+export const getTaskWithAnsById = async (id) => {
+  try {
+    const res = await axios.post(
+      "http://127.0.0.1:8000/api/v1/tasks/task-with-ans-by-id/",
+      { task_id: id },
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return prepareTask(res.data);
+    }
+    return undefined;
+  } catch (error) {
     return undefined;
   }
 };

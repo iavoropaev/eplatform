@@ -15,7 +15,7 @@ class Task(models.Model):
 
     number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=True, null=True)
 
-    author = models.ForeignKey('Author', on_delete=models.PROTECT, blank=True, null=True)
+    author = models.ForeignKey('TaskAuthor', on_delete=models.PROTECT, blank=True, null=True)
     source = models.ForeignKey('TaskSource', on_delete=models.PROTECT, blank=True, null=True)
     difficulty_level = models.ForeignKey('DifficultyLevel', on_delete=models.PROTECT, blank=True, null=True)
     actuality = models.ForeignKey('Actuality', on_delete=models.PROTECT, blank=True, null=True)
@@ -31,8 +31,9 @@ class Task(models.Model):
         return f'{self.id} {self.content[:10]}'
 
 
-class Author(models.Model):
+class TaskAuthor(models.Model):
     name = models.CharField(max_length=100)
+    link = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -96,7 +97,7 @@ class TaskSubject(models.Model):
     slug = models.SlugField(max_length=100)
 
     exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False, related_name='subjects')
-    authors = models.ManyToManyField('Author', related_name='subjects')
+    authors = models.ManyToManyField('TaskAuthor', related_name='subjects')
     difficulty_levels = models.ManyToManyField('DifficultyLevel', related_name='subjects')
 
     def __str__(self):

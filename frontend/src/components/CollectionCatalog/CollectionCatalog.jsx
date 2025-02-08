@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCollections } from "../../server/collections";
-import { NavLink, useNavigate } from "react-router-dom";
-import { FaRegCirclePlay } from "react-icons/fa6";
-import { MdOutlinePlayCircleFilled } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import "./CollectionCatalog.css";
 
 const CollectionCatalog = () => {
@@ -11,7 +9,9 @@ const CollectionCatalog = () => {
   useEffect(() => {
     async function fetchData() {
       const collectionsFromServer = await getCollections();
-      setCollections(collectionsFromServer);
+      if (collectionsFromServer) {
+        setCollections(collectionsFromServer);
+      }
     }
     fetchData();
   }, []);
