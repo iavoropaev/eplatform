@@ -1,29 +1,32 @@
-import { useEffect, useState } from "react";
-import "./Lesson.css";
 import SectionMenu from "./components/SectionMenu";
 import SectionContent from "./components/SectionContent";
 import SectionTask from "./components/SectionTask";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { sendSectionSolution } from "../../../server/course";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateSolveStatus } from "../../../redux/slices/courseSlice";
+import "./Lesson.css";
 
-const Lesson = ({ lesson, sectionIndex }) => {
+const Lesson = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { sectionIndex } = useParams();
+  const intSectionIndex = Number(sectionIndex) - 1;
 
-  if (lesson === undefined) {
+  const currentLesson = useSelector((state) => state.course.currentLesson);
+
+  if (currentLesson === undefined) {
     return <p>Загрузка...</p>;
   }
 
-  const currentSectionData = lesson?.sections?.[sectionIndex];
+  const currentSectionData = currentLesson?.sections?.[intSectionIndex];
   const taskData = currentSectionData?.task;
   const content = currentSectionData?.content;
   const solveFromServer = currentSectionData?.solve;
   const textForBut =
     solveFromServer === null ? "Отметить выполненным" : "Выполнено";
 
-  const menuStatuses = lesson?.sections?.map((section) => {
+  const menuStatuses = currentLesson?.sections?.map((section) => {
     return section.solve?.solve_status;
   });
 
@@ -43,14 +46,14 @@ const Lesson = ({ lesson, sectionIndex }) => {
     });
     dispatch(updateSolveStatus({ id: res.section, solve: res }));
   };
-  console.log("Lesson", solveFromServer);
+
   return (
     <div className="lesson-container">
       <div className="lesson">
-        <p className="lesson-name">{lesson.name}</p>
+        <p className="lesson-name">{currentLesson.name}</p>
         <SectionMenu
           menuStatuses={menuStatuses}
-          indexActive={sectionIndex}
+          indexActive={intSectionIndex}
           setActiveSectionIndex={setActiveSectionIndex}
         />
         {content && <SectionContent content={content} />}

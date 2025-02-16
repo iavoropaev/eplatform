@@ -3,6 +3,7 @@ from educationplatform.settings import AUTH_USER_MODEL
 
 
 class Course(models.Model):
+    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,  related_name='created_courses')
     name = models.CharField(max_length=100, blank=False)
     slug = models.CharField(max_length=100, blank=False, unique=True)
     description = models.CharField(blank=True)
@@ -18,10 +19,10 @@ class Course(models.Model):
 
 
 class Module(models.Model):
+    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,
+                                   related_name='created_modules')
     name = models.CharField(max_length=100, blank=False)
-    slug = models.CharField(max_length=100, blank=False, unique=True)
     description = models.CharField(blank=True)
-
     lessons = models.ManyToManyField('courses.Lesson', through='ModuleLesson', related_name='modules', blank=True)
 
     time_create = models.DateTimeField(auto_now_add=True)
@@ -32,8 +33,9 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
+    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,
+                                   related_name='created_lessons')
     name = models.CharField(max_length=100, blank=False)
-    description = models.CharField(blank=True)
 
     section = models.ManyToManyField('Section', blank=True, through='LessonSection', related_name='lessons')
 
@@ -45,6 +47,8 @@ class Lesson(models.Model):
 
 
 class Section(models.Model):
+    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,
+                                   related_name='created_sections')
     name = models.CharField(max_length=100, blank=False)
     type = models.CharField(choices=[('task', 'task'), ('text', 'text')])
 

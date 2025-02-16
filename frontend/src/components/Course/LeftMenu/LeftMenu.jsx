@@ -1,11 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./LeftMenu.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const LeftMenu = ({ modules, activeLessonId }) => {
+const LeftMenu = () => {
   const navigate = useNavigate();
+
+  const { lessonId } = useParams();
+  const activeLessonId = lessonId;
+
+  const modules = useSelector((state) => state.course.courseData.modules);
   const courseName = useSelector((state) => state.course.courseData.name);
+
   const [isHide, setHide] = useState(false);
 
   if (isHide) {

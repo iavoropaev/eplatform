@@ -1,6 +1,6 @@
-import { BiDislike, BiLike } from "react-icons/bi";
+// import { BiDislike, BiLike } from "react-icons/bi";
 import Answer from "../../Utils/Answer/Answer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const TaskFooter = ({
   taskData,
@@ -18,7 +18,7 @@ const TaskFooter = ({
   }
   if (taskData.answer_type === "comparison") {
     defaultAnswer = [];
-    taskData.answer_data.left.map((el, i) => {
+    taskData.answer_data.left.forEach((el, i) => {
       defaultAnswer.push([
         taskData.answer_data.left[i],
         taskData.answer_data.right[i],
@@ -82,7 +82,12 @@ const TaskFooter = ({
         )}
 
         {taskData?.author?.link ? (
-          <a target="_blank" href={taskData?.author?.link} className="author">
+          <a
+            target="_blank"
+            href={taskData?.author?.link}
+            className="author"
+            rel="noopener noreferrer"
+          >
             {taskData?.author?.name}
           </a>
         ) : (

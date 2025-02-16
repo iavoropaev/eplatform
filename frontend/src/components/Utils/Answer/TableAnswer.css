@@ -8,7 +8,7 @@
 
 .answer-table input {
   border: 1px solid grey;
-
+  border-radius: 0px;
   padding: 5px;
   font-size: 1.1rem;
   width: 150px;

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from courses.models import Course, Module, Lesson, Section, LessonSection,  SectionSolve
+from courses.models import Course, Module, Lesson, Section, LessonSection, SectionSolve, CourseModule, ModuleLesson
 from tasks.serializers import  TaskSerializerForUser
 
 
@@ -40,6 +40,11 @@ class LessonSerializer(serializers.ModelSerializer):
         section = [ls.section for ls in lesson_sections]
         return SectionSerializer(section, many=True).data
 
+class LessonOnlyNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ('id', 'name')
+
 
 class ModuleSerializer(serializers.ModelSerializer):
     lessons = serializers.SerializerMethodField()
@@ -65,3 +70,24 @@ class CourseSerializer(serializers.ModelSerializer):
         modules = [cm.module for cm in course_module]
         return ModuleSerializer(modules, many=True).data
 
+
+class ModuleAllFieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Module
+        fields = '__all__'
+class LessonAllFieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = '__all__'
+
+
+# Links
+class CourseModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseModule
+        fields = '__all__'
+
+class ModuleLessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ModuleLesson
+        fields = '__all__'

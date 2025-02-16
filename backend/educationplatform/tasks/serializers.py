@@ -15,7 +15,7 @@ class TaskSerializer(serializers.ModelSerializer):
 class TaskSerializerForCreate(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
+        exclude = ('created_by',)
         depth = 3
 
 

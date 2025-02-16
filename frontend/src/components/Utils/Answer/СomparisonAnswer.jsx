@@ -8,7 +8,7 @@ const ComparisonAnswer = ({
 }) => {
   const ansToAnsData = (ans) => {
     const ansData = { left: [], right: [] };
-    ans.map((el) => {
+    ans.forEach((el) => {
       ansData.left.push(el[0]);
       ansData.right.push(el[1]);
     });
@@ -45,7 +45,7 @@ const ComparisonAnswer = ({
     setAnswer(newAns);
     setAnswerData(ansToAnsData(newAns));
   };
-  console.log(answer);
+
   return (
     <div className="comparison-answer">
       {!isCreating &&

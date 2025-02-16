@@ -1,0 +1,112 @@
+.edit-course {
+  padding-bottom: 30px;
+}
+.edit-course .modules {
+  margin: auto;
+  margin-top: 20px;
+  width: 70%;
+  min-width: 300px;
+}
+
+.edit-course .modules .module {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 30px 0px 30px 0px;
+}
+
+.edit-course .modules .module .navigate {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.edit-course .modules .module .module-data {
+  flex: 1;
+  border: 1px solid grey;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #d9d9d9;
+}
+
+.edit-course .module-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 20px;
+  padding: 15px;
+  border-bottom: 1px solid grey;
+  white-space: nowrap;
+}
+.edit-course .module-name input {
+  border: 1px solid grey;
+  padding: 5px;
+  padding-left: 10px;
+  font-size: 20px;
+
+  flex: 1;
+  min-width: 0%;
+}
+
+.edit-course .add-lesson {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: space-between;
+  border-top: 1px solid grey;
+  padding: 10px 20px 10px 20px;
+}
+.edit-course .add-lesson button,
+.edit-course .add-module button {
+  margin-left: 5px;
+  border-radius: 3px;
+  padding: 5px;
+}
+.edit-course .add-module {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+.edit-course .lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 20px 10px 20px;
+}
+
+.edit-course .lesson-cont {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.edit-course .lesson {
+  text-align: left;
+  flex: 1;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+
+.edit-course .lesson-cont .navigate .arrows {
+  display: flex;
+}
+
+.edit-course .save-button-cont {
+  margin-top: 30px;
+}
+
+/* Input */
+.edit-course input {
+  user-select: none;
+  outline: none;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 14px;
+}
+.edit-course input:focus {
+  background-color: rgb(255, 246, 236);
+}

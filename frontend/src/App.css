@@ -20,6 +20,7 @@
 }
 
 button {
+  user-select: none;
   border: 1px solid grey;
   padding: 6px;
   border-radius: 1dvh;
@@ -58,4 +59,42 @@ input {
 textarea {
   padding: 5px;
   font-size: 16px;
+}
+
+.arrow,
+.delete {
+  font-size: 25px;
+  cursor: pointer;
+  user-select: none;
+  color: grey;
+}
+.arrow:hover,
+.delete:hover {
+  color: rgb(0, 0, 0);
+}
+
+.arrow:active {
+  color: rgb(54, 255, 57);
+}
+
+.delete {
+  font-size: 20px;
+}
+.delete:active {
+  color: red;
+}
+
+input {
+  user-select: none;
+  outline: none;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 5px;
+}
+.edit-course input:focus {
+  background-color: rgb(255, 246, 236);
+}
+
+button:disabled {
+  pointer-events: none;
 }

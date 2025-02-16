@@ -10,6 +10,7 @@ import CreateCollection from "./components/CreateCollection/CreateCollection";
 import ExamPage from "./components/Pages/Exam/ExamPage";
 import ExamResultsPage from "./components/Pages/Exam results/ExamResultsPage";
 import CoursePage from "./components/Pages/Course/CoursePage";
+import UpdateCourse from "./components/CreateCourse/UpdateCourse";
 
 export const publicRoutes = [
   { path: "bank", Component: BankPage },
@@ -23,7 +24,7 @@ export const publicRoutes = [
   { path: "variant/:slug/results/", Component: ExamResultsPage },
 
   {
-    path: "course/:courseId/lesson/:lessonId/s/:sectionIndex/",
+    path: "course/:courseId/:lesson/:lessonId/s/:sectionIndex/",
     Component: CoursePage,
   },
 
@@ -38,6 +39,8 @@ export const authRoutes = [
 
   { path: "update-collection/:slug/", Component: CreateCollectionPage },
   { path: "create-collection/", Component: CreateCollection },
+
+  { path: "edit-course/:courseId/", Component: UpdateCourse },
 ];
 
 export const adminRoutes = [];

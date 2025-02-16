@@ -29,6 +29,8 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'post']:
             permission_classes = [AllowAny]
+        elif self.action in ['create_collection', 'update_collection']:
+            permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
@@ -127,7 +129,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     serializer_class = TaskCollectionSolveSerializer
 
     def get_permissions(self):
-        if self.action in ['send_solution']:
+        if self.action in ['send_solution', 'get_solution']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -141,7 +143,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             cur_col_slug = request.data['col_slug']
             user_answers = request.data['answers']
             duration = request.data['duration']
-            print(user_answers)
+
             collection = TaskCollection.objects.all().filter(slug=cur_col_slug).first()
 
             answers_summary = []
@@ -169,7 +171,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                                         "ok_answer": ok_answer,
                                         "score": score,
                                         'status': status})
-            print(answers_summary)
+
             solve = TaskCollectionSolve(
                 task_collection_id=collection.id,
                 user_id=cur_user_id,
@@ -211,7 +213,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             serializer = TaskCollectionSolveForUserSerializer(solve, many=False)
             data = serializer.data
-            return Response(data)
+            return Response(data, status=200)
         except Exception as e:
             return Response({
                 'Error': 'Не удалось обработать запрос.',

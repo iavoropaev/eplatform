@@ -277,9 +277,9 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 'status': sol_status
             })
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать решение.',
+                'status': 'wa'
             })
 
     @extend_schema(description='Get all user solutions.')
