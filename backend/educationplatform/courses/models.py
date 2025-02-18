@@ -49,7 +49,6 @@ class Lesson(models.Model):
 class Section(models.Model):
     created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,
                                    related_name='created_sections')
-    name = models.CharField(max_length=100, blank=False)
     type = models.CharField(choices=[('task', 'task'), ('text', 'text')])
 
     task = models.ForeignKey('tasks.Task', on_delete=models.PROTECT, blank=True, null=True)
@@ -60,7 +59,7 @@ class Section(models.Model):
     time_update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.content[:20]
 
 
 class SectionSolve(models.Model):
@@ -87,7 +86,7 @@ class LessonSection(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return f"{self.lesson.name} - {self.section.name} (Order: {self.order})"
+        return f"{self.lesson.name} - {self.section.content} (Order: {self.order})"
 
 
 class CourseModule(models.Model):

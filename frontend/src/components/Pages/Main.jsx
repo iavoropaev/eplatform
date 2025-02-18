@@ -76,6 +76,9 @@ const Main = () => {
           <NavLink end to="/edit-course/1/">
             Редактировать курс
           </NavLink>
+          <NavLink end to="/course/1/edit-lesson/2/s/1">
+            Редактировать урок
+          </NavLink>
 
           <NavLink></NavLink>
         </div>

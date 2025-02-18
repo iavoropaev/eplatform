@@ -35,6 +35,7 @@ const AddNewLesson = ({ addLesson, indMod }) => {
         onSubmit={(e) => {
           e.preventDefault();
           addLesson(indMod, addingLessonId);
+          setAddingLessonId("");
         }}
       >
         <input

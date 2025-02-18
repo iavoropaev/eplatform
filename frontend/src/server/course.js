@@ -63,6 +63,45 @@ export const getLessonNameOnlyByIdFromServer = async (lessonId) => {
   }
 };
 
+export const getModuleById = async (moduleId) => {
+  try {
+    const params = { module_id: moduleId };
+    const res = await axios.get(
+      `http://127.0.0.1:8000/api/v1/courses/get-module-with-lessons/`,
+      {
+        params: params,
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+export const getSectionById = async (sectionId) => {
+  try {
+    const params = { section_id: sectionId };
+    const res = await axios.get(
+      `http://127.0.0.1:8000/api/v1/courses/get-section/`,
+      {
+        params: params,
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
 export const sendSectionSolution = async (data) => {
   try {
     const res = await axios.post(
@@ -77,25 +116,6 @@ export const sendSectionSolution = async (data) => {
       return res.data;
     }
     return undefined;
-  } catch (error) {
-    return undefined;
-  }
-};
-
-export const updateCourse = async (data) => {
-  try {
-    const res = await axios.post(
-      `http://127.0.0.1:8000/api/v1/edit-course/update/`,
-      data,
-      {
-        headers: headers,
-      }
-    );
-
-    if (res.status === 201) {
-      return res.data;
-    }
-    return res.data;
   } catch (error) {
     return undefined;
   }
@@ -137,22 +157,58 @@ export const createLesson = async (data) => {
     return undefined;
   }
 };
-
-export const getModuleById = async (moduleId) => {
+export const createSection = async (data) => {
   try {
-    const params = { module_id: moduleId };
-    const res = await axios.get(
-      `http://127.0.0.1:8000/api/v1/courses/get-module-with-lessons/`,
+    const res = await axios.post(
+      `http://127.0.0.1:8000/api/v1/edit-course/create-section/`,
+      data,
       {
-        params: params,
         headers: headers,
       }
     );
 
-    if (res.status === 200) {
+    if (res.status === 201) {
       return res.data;
     }
     return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const updateCourse = async (data) => {
+  try {
+    const res = await axios.post(
+      `http://127.0.0.1:8000/api/v1/edit-course/update/`,
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 201) {
+      return res.data;
+    }
+    return res.data;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const updateLesson = async (data) => {
+  try {
+    const res = await axios.post(
+      `http://127.0.0.1:8000/api/v1/edit-course/update-lesson/`,
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 201) {
+      return res.data;
+    }
+    return res.data;
   } catch (error) {
     return undefined;
   }

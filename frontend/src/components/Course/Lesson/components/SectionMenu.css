@@ -18,7 +18,9 @@
   cursor: pointer;
   border: 1px solid grey;
 }
-
+.course-container .lesson .plus {
+  background-color: rgb(138, 255, 140);
+}
 .course-container .lesson-menu > .ok {
   background-color: rgb(138, 255, 140);
 }

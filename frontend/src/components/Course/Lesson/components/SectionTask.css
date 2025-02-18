@@ -1,8 +1,8 @@
 .task-in-lesson {
-  margin-top: 30px;
 }
 .task-in-lesson .task-container {
   margin: 0px;
+  margin-bottom: 20px;
 }
 
 .task-in-lesson .task-container .task {

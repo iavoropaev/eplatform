@@ -1,0 +1,69 @@
+.edit-les-cont {
+  background-color: rgb(210, 210, 210);
+}
+.lesson-container .nav-save-cont {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.lesson-container .navigate {
+  text-align: left;
+}
+
+.lesson-container .save-return button {
+  margin-right: 5px;
+}
+
+.lesson-container .navigate button {
+  margin-right: 3px;
+  border-radius: 3px;
+  height: 30px;
+  width: 30px;
+}
+
+.lesson-container .content-cont {
+  text-align: left;
+  color: grey;
+}
+.lesson-container .content-cont textarea {
+  box-sizing: border-box;
+  margin-top: 5px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  height: 150px;
+}
+
+.lesson-container .task-cont {
+  text-align: left;
+  color: grey;
+}
+.lesson-container .task-cont .add-del {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.lesson-container .task-cont p {
+  margin-bottom: 5px;
+}
+.lesson-container .task-cont .add-del form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.lesson-container .add-section {
+  text-align: left;
+}
+.lesson-container .add-section form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.lesson-container .add-section button {
+  border-radius: 3px;
+  padding: 5px;
+}

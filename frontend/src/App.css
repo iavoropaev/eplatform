@@ -51,9 +51,10 @@ button:active {
   border-color: grey;
   background-color: transparent;
 }
-
-input {
-  padding: 3px;
+.red-button {
+  background-color: #ff7f7f;
+  border-style: solid;
+  border-color: grey;
 }
 
 textarea {
@@ -91,7 +92,7 @@ input {
   border-radius: 5px;
   padding: 5px;
 }
-.edit-course input:focus {
+input:focus {
   background-color: rgb(255, 246, 236);
 }
 

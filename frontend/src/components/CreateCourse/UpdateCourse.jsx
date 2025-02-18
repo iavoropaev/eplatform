@@ -90,6 +90,13 @@ const UpdateCourse = () => {
   };
   const addLesson = async (indMod, lessonId) => {
     if (indMod >= 0 && indMod < courseData.modules.length) {
+      const alreadyExist = courseData.modules.some((module) =>
+        module.lessons.some((lesson) => lesson.id === Number(lessonId))
+      );
+      if (alreadyExist === true) {
+        return;
+      }
+
       const lessons = courseData.modules[indMod].lessons;
       const lesson = await getLessonNameOnlyByIdFromServer(lessonId);
       if (lesson) {
@@ -105,7 +112,7 @@ const UpdateCourse = () => {
   };
 
   const addModule = async (module) => {
-    if (module) {
+    if (module && !courseData.modules.some((el) => el.id === module.id)) {
       const newModules = [...courseData.modules, module];
       setCourseData({ ...courseData, modules: newModules });
     }

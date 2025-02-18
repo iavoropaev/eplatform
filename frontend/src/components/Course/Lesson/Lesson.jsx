@@ -10,7 +10,7 @@ import "./Lesson.css";
 const Lesson = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { sectionIndex } = useParams();
+  const { lessonId, sectionIndex } = useParams();
   const intSectionIndex = Number(sectionIndex) - 1;
 
   const currentLesson = useSelector((state) => state.course.currentLesson);
@@ -33,7 +33,9 @@ const Lesson = () => {
   const setActiveSectionIndex = (sectionId) => {
     navigate(`./../${sectionId + 1}/`);
   };
-
+  const goEditing = () => {
+    navigate(`./../../../../edit-lesson/${lessonId}/s/${intSectionIndex + 1}/`);
+  };
   const sendSolution = async (data) => {
     const answer = {
       type: data.type,
@@ -46,16 +48,23 @@ const Lesson = () => {
     });
     dispatch(updateSolveStatus({ id: res.section, solve: res }));
   };
-
+  console.log(menuStatuses);
   return (
     <div className="lesson-container">
       <div className="lesson">
-        <p className="lesson-name">{currentLesson.name}</p>
+        <div className="lesson-name-cont">
+          <p className="lesson-name">{currentLesson.name}</p>
+          <p className="edit-but" onClick={goEditing}>
+            Редактировать
+          </p>
+        </div>
+
         <SectionMenu
           menuStatuses={menuStatuses}
           indexActive={intSectionIndex}
           setActiveSectionIndex={setActiveSectionIndex}
         />
+
         {content && <SectionContent content={content} />}
 
         {taskData && (

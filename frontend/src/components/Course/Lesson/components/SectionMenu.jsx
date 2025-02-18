@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import "./SectionMenu.css";
 
-const SectionMenu = ({ menuStatuses, indexActive, setActiveSectionIndex }) => {
+const SectionMenu = ({
+  menuStatuses,
+  indexActive,
+  setActiveSectionIndex,
+  addButton,
+}) => {
   return (
     <div className="lesson-menu">
       {menuStatuses.map((status, index) => {
@@ -28,6 +33,11 @@ const SectionMenu = ({ menuStatuses, indexActive, setActiveSectionIndex }) => {
           </div>
         );
       })}
+      {addButton && (
+        <div className={"menu-el plus"} key={"new"} onClick={addButton}>
+          +
+        </div>
+      )}
     </div>
   );
 };

@@ -12,6 +12,7 @@ import {
   setCurrentLesson,
 } from "../../redux/slices/courseSlice";
 import Lesson from "./Lesson/Lesson";
+import EditLesson from "./EditLesson/EditLesson";
 
 const Course = () => {
   const { courseId, lesson, lessonId } = useParams();
@@ -51,7 +52,7 @@ const Course = () => {
     <div className="course-container">
       <LeftMenu />
       {viewType === "lesson" && <Lesson />}
-      {viewType === "edit-lesson" && <p>Редактировать урок</p>}
+      {viewType === "edit-lesson" && <EditLesson />}
     </div>
   );
 };

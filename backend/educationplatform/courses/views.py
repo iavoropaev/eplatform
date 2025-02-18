@@ -7,12 +7,14 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
+from yaml import serialize
 
-from courses.models import Course, Section, SectionSolve, Module, Lesson, CourseModule, ModuleLesson
+from courses.models import Course, Section, SectionSolve, Module, Lesson, CourseModule, ModuleLesson, LessonSection
 from courses.serializers import CourseSerializer, SectionSolveSerializer, ModuleSerializer, LessonSerializer, \
     LessonOnlyNameSerializer, CourseModuleSerializer, ModuleAllFieldsSerializer, ModuleLessonSerializer, \
-    LessonAllFieldsSerializer
+    LessonAllFieldsSerializer, SectionAllFieldsSerializer, LessonSectionSerializer, SectionSerializer
+from courses.utils import get_lesson_data_with_solves, create_empty_section
 from tasks.utils import check_answer
 
 
@@ -24,7 +26,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
         if self.action in ['all']:
             permission_classes = [AllowAny]
         elif self.action in ['data', 'send_solution', 'solved_sections', 'get_lesson',
-                             'get_lesson_name', 'get_module_with_lessons']:
+                             'get_lesson_name', 'get_module_with_lessons', 'get_section']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -70,28 +72,29 @@ class CoursesViewSet(viewsets.ModelViewSet):
         try:
             cur_user_id = request.user.id
             cur_lesson_id = request.GET.get('lesson_id')
-            lesson = Lesson.objects.all().filter(id=cur_lesson_id)[0]
-            lesson_serializer = LessonSerializer(lesson, many=False)
-            section_ids = [section['id'] for section in lesson_serializer.data['sections']]
-
-            solves = (SectionSolve.objects.all().filter(user=cur_user_id, section__in=section_ids)
-                      .order_by('section', '-score', '-time_create').distinct('section'))
-            solve_serializer = SectionSolveSerializer(solves, many=True)
-
-            lesson_data = lesson_serializer.data
-            section_solve_dict = {solve['section']: solve for solve in solve_serializer.data}
-            for section in lesson_data['sections']:
-                if section['id'] in section_solve_dict:
-                    section['solve'] = section_solve_dict[section['id']]
-                else:
-                    section['solve'] = None
-
+            lesson_data = get_lesson_data_with_solves(cur_lesson_id, cur_user_id)
             return Response(lesson_data)
         except Exception as e:
             print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             })
+
+    @action(detail=False, methods=['get'], url_path='get-section')
+    def get_section(self, request):
+        try:
+            cur_user_id = request.user.id
+            cur_section_id = request.GET.get('section_id')
+            print(cur_section_id)
+            section = Section.objects.all().get(id=cur_section_id)
+            serializer = SectionSerializer(section)
+            return Response(serializer.data, status=200)
+
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось обработать запрос.',
+            }, status=HTTP_404_NOT_FOUND)
 
     @extend_schema(description='Get lesson name by Id.')
     @action(detail=False, methods=['get'], url_path='get-lesson-name')
@@ -158,11 +161,121 @@ class EditCourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
 
     def get_permissions(self):
-        if self.action in ['update_course', 'create_module']:
+        if self.action in ['update_course', 'update_lesson', 'create_module', 'create_lesson', 'create-section']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+
+    @action(detail=False, methods=['post'], url_path='create-module')
+    def create_module(self, request):
+        try:
+            cur_user_id = request.user.id
+            data = request.data | {'created_by': cur_user_id}
+            print(data)
+            serializer = ModuleAllFieldsSerializer(data=data)
+            if serializer.is_valid():
+                new_module = serializer.save()
+                serializer_with_lessons = ModuleSerializer(new_module)
+                return Response(serializer_with_lessons.data, status=status.HTTP_201_CREATED)
+            return Response({'Error': 'Не удалось создать модуль.'}, status=status.HTTP_417_EXPECTATION_FAILED)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать модуль.',
+            }, status=status.HTTP_417_EXPECTATION_FAILED)
+
+    @action(detail=False, methods=['post'], url_path='create-lesson')
+    def create_lesson(self, request):
+        try:
+            cur_user_id = request.user.id
+            data = request.data | {'created_by': cur_user_id}
+            serializer = LessonAllFieldsSerializer(data=data)
+            if serializer.is_valid():
+                new_lesson = serializer.save()
+                only_name_serializer = LessonOnlyNameSerializer(new_lesson)
+                first_section = create_empty_section(cur_user_id)
+                s_l_data = {'lesson': new_lesson.id, 'section': first_section.id, 'order':0}
+                lesson_section_serializer = LessonSectionSerializer(data=s_l_data)
+                if lesson_section_serializer.is_valid():
+                    lesson_section_serializer.save()
+                return Response(only_name_serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'Error': 'Не удалось создать модуль.'}, status=status.HTTP_417_EXPECTATION_FAILED)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать модуль.',
+            }, status=status.HTTP_417_EXPECTATION_FAILED)
+
+    @action(detail=False, methods=['post'], url_path='create-section')
+    def create_section(self, request):
+        try:
+            cur_user_id = request.user.id
+            created_section = create_empty_section(cur_user_id)
+            serializer = SectionSerializer(created_section)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать секцию.',
+            }, status=status.HTTP_417_EXPECTATION_FAILED)
+
+    @action(detail=False, methods=['post'], url_path='update-lesson')
+    def update_lesson(self, request):
+        try:
+            cur_user_id = request.user.id
+            is_admin = request.user.is_staff
+
+            if 'id' in request.data:
+                lesson_id = request.data['id']
+                lesson = Lesson.objects.get(id=lesson_id)
+            else:
+                return Response({"detail": "Урок не найден."},
+                                status=status.HTTP_404_NOT_FOUND)
+
+            if (cur_user_id != lesson.created_by.id) and (request.user.is_staff == False):
+                return Response({"detail": "У вас нет прав на редактирование этого урока."},
+                                status=status.HTTP_403_FORBIDDEN)
+
+            # Lesson info update
+            course_info = {}
+            if 'name' in request.data:
+                course_info['name'] = request.data['name']
+            serializer = LessonOnlyNameSerializer(lesson, data=course_info, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Sections info update
+            for section in request.data['sections']:
+                section_obj = Section.objects.all().get(id=section['id'])
+                if (cur_user_id == section_obj.created_by.id) or (is_admin):
+                    section_data = {'content': section['content'], 'task': section['task']}
+
+                    section_serializer = SectionAllFieldsSerializer(section_obj, data=section_data, partial=True)
+                    if section_serializer.is_valid():
+                        section_serializer.save()
+
+            # Lesson-section update
+            sections_links_to_delete_saved = list(LessonSection.objects.filter(lesson=lesson_id).values())
+            sections_links_to_delete = LessonSection.objects.filter(lesson=lesson_id)
+            data = []
+            for i, section in enumerate(request.data['sections']):
+                data.append({'lesson': lesson_id, 'section': section['id'], 'order': i})
+            sections_links_to_delete.delete()
+            serializer = LessonSectionSerializer(data=data, many=True)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                LessonSection.objects.bulk_create([LessonSection(**data) for data in sections_links_to_delete_saved])
+
+            lesson_data = get_lesson_data_with_solves(lesson_id, cur_user_id)
+            return Response(lesson_data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(e)
+            lesson_data = get_lesson_data_with_solves(lesson_id, cur_user_id)
+            return Response(lesson_data)
 
     @action(detail=False, methods=['post'], url_path='update')
     def update_course(self, request):
@@ -178,7 +291,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
                                 status=status.HTTP_404_NOT_FOUND)
 
             if (cur_user_id != course.created_by.id) and (request.user.is_staff == False):
-                return Response({"detail": "У вас нет прав на редактирование этой подборки."},
+                return Response({"detail": "У вас нет прав на редактирование этого курса."},
                                 status=status.HTTP_403_FORBIDDEN)
 
             # Course info update
@@ -187,7 +300,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
                 course_info['name'] = request.data['name']
             if 'description' in request.data:
                 course_info['description'] = request.data['description']
-            serializer = CourseSerializer(course, data=request.data, partial=True)
+            serializer = CourseSerializer(course, data=course_info, partial=True)
             if serializer.is_valid():
                 serializer.save()
             else:
@@ -197,12 +310,10 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             for module in request.data['modules']:
                 module_obj = Module.objects.all().get(id=module['id'])
                 if (cur_user_id == module_obj.created_by.id) or (is_admin):
-                    module_data = {'name':module['name']}
+                    module_data = {'name': module['name']}
                     module_serializer = ModuleAllFieldsSerializer(module_obj, data=module_data, partial=True)
                     if module_serializer.is_valid():
                         module_serializer.save()
-
-
 
             # Course-modules update
             modules_links_to_delete_saved = list(CourseModule.objects.filter(course=course).values())
@@ -242,41 +353,6 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             course = Course.objects.all().get(id=course_id)
             course_serializer = CourseSerializer(course, many=False)
             return Response(course_serializer.data)
-
-    @action(detail=False, methods=['post'], url_path='create-module')
-    def create_module(self, request):
-        try:
-            cur_user_id = request.user.id
-            data = request.data | {'created_by': cur_user_id}
-            print(data)
-            serializer = ModuleAllFieldsSerializer(data=data)
-            if serializer.is_valid():
-                new_module = serializer.save()
-                serializer_with_lessons = ModuleSerializer(new_module)
-                return Response(serializer_with_lessons.data, status=status.HTTP_201_CREATED)
-            return Response({'Error': 'Не удалось создать модуль.'}, status=status.HTTP_417_EXPECTATION_FAILED)
-        except Exception as e:
-            print(e)
-            return Response({
-                'Error': 'Не удалось создать модуль.',
-            }, status=status.HTTP_417_EXPECTATION_FAILED)
-    @action(detail=False, methods=['post'], url_path='create-lesson')
-    def create_lesson(self, request):
-        try:
-            cur_user_id = request.user.id
-            data = request.data | {'created_by': cur_user_id}
-            serializer = LessonAllFieldsSerializer(data=data)
-            if serializer.is_valid():
-                new_lesson = serializer.save()
-                only_name_serializer = LessonOnlyNameSerializer(new_lesson)
-                return Response(only_name_serializer.data, status=status.HTTP_201_CREATED)
-            return Response({'Error': 'Не удалось создать модуль.'}, status=status.HTTP_417_EXPECTATION_FAILED)
-        except Exception as e:
-            print(e)
-            return Response({
-                'Error': 'Не удалось создать модуль.',
-            }, status=status.HTTP_417_EXPECTATION_FAILED)
-
     # @extend_schema(description='Get solved sections in course.')
     # @action(detail=True, methods=['get'], url_path='solved-sections')
     # def solved_sections(self, request, pk):

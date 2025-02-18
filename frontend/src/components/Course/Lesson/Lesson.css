@@ -1,20 +1,33 @@
 .course-container > .lesson-container {
   box-sizing: border-box;
-  padding-top: 30px;
+  padding-top: 20px;
   padding-bottom: 30px;
   flex: 1;
   overflow: auto;
 }
 
+.course-container > .lesson-container .lesson-name-cont {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.course-container .edit-but {
+  color: grey;
+  cursor: pointer;
+}
+.course-container .edit-but:hover {
+  text-decoration: underline;
+}
+
 .course-container > .lesson-container .lesson-name {
-  text-align: right;
+  text-align: left;
   color: grey;
 }
 
 .course-container > .lesson-container .lesson {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   width: 80%;
   margin: auto;
 }

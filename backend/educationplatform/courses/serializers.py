@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from courses.models import Course, Module, Lesson, Section, LessonSection, SectionSolve, CourseModule, ModuleLesson
-from tasks.serializers import  TaskSerializerForUser
+from tasks.serializers import TaskSerializerForUser
 
 
 class SectionSolveSerializer(serializers.ModelSerializer):
@@ -15,17 +15,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ('id', 'name', 'task', 'content', 'video')
-
-
-
-class LessonSectionSerializer(serializers.ModelSerializer):
-    section = SectionSerializer(read_only=True, many=False)
-
-    class Meta:
-        model = LessonSection
-        fields = ('id', 'section', 'order')
-        depth = 2
+        fields = ('id', 'type', 'task', 'content', 'video')
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -40,6 +30,7 @@ class LessonSerializer(serializers.ModelSerializer):
         section = [ls.section for ls in lesson_sections]
         return SectionSerializer(section, many=True).data
 
+
 class LessonOnlyNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
@@ -48,6 +39,7 @@ class LessonOnlyNameSerializer(serializers.ModelSerializer):
 
 class ModuleSerializer(serializers.ModelSerializer):
     lessons = serializers.SerializerMethodField()
+
     class Meta:
         model = Module
         fields = ('id', 'name', 'lessons')
@@ -61,6 +53,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     modules = serializers.SerializerMethodField()
+
     class Meta:
         model = Course
         fields = ('id', 'name', 'slug', 'description', 'modules')
@@ -75,9 +68,17 @@ class ModuleAllFieldsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = '__all__'
+
+
 class LessonAllFieldsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
+        fields = '__all__'
+
+
+class SectionAllFieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
         fields = '__all__'
 
 
@@ -87,7 +88,14 @@ class CourseModuleSerializer(serializers.ModelSerializer):
         model = CourseModule
         fields = '__all__'
 
+
 class ModuleLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModuleLesson
+        fields = '__all__'
+
+
+class LessonSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LessonSection
         fields = '__all__'
