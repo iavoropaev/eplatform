@@ -86,3 +86,23 @@ export const createCollection = async (data) => {
     return undefined;
   }
 };
+
+export const generateCollection = async (data) => {
+  try {
+    const res = await axios.post(
+      "http://127.0.0.1:8000/api/v1/tasks-collections/generate-collection/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 201) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};

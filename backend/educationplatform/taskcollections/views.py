@@ -1,9 +1,11 @@
 import json
 
+from django.db.models import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from taskcollections.models import TaskCollection, TaskCollectionSolve, TaskCollectionTask
 from taskcollections.serializers import TaskCollectionSerializer, TaskCollectionSolveSerializer, \
@@ -29,7 +31,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'post']:
             permission_classes = [AllowAny]
-        elif self.action in ['create_collection', 'update_collection']:
+        elif self.action in ['create_collection', 'update_collection', 'generate_collection']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -122,6 +124,55 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             return Response({
                 'Error': 'Не удалось обновить подборку.',
             })
+
+    @action(detail=False, methods=['post'], url_path='generate-collection')
+    def generate_collection(self, request):
+        try:
+            print(request.data)
+            cur_user_id = request.user.id
+
+            selected_tasks = []
+            data = request.data
+            for number_info in data:
+                count = number_info['count']
+                number_id = number_info['number']['id']
+                difficulty_id = number_info['difficulty']
+                author_id = number_info['author']
+                actuality_id = number_info['actuality']
+
+                filters = Q(number_in_exam_id=number_id)
+
+                if difficulty_id != '-':
+                    filters &= Q(difficulty_level_id=difficulty_id)
+                if author_id != '-':
+                    filters &= Q(author_id=author_id)
+                if actuality_id != '-':
+                    filters &= Q(actuality_id=actuality_id)
+                tasks = Task.objects.filter(filters).order_by('?')[:count]
+                selected_tasks.extend(tasks)
+
+            selected_tasks_ids = [task.id for task in selected_tasks]
+            collection_data = {'name':'qqq', 'slug':'ggggg', 'description':'---', 'created_by':cur_user_id}
+            serializer = TaskCollectionCreateSerializer(data=collection_data)
+
+            if serializer.is_valid():
+                created_collection = serializer.save()
+                links = []
+                for i, task_id in enumerate(selected_tasks_ids):
+                    links.append({'task_collection': created_collection.id, 'task': task_id, 'order': i})
+                links_serializer = TaskCollectionTaskSerializer(data=links, many=True)
+                if links_serializer.is_valid():
+                    links_serializer.save()
+                user_serializer = TaskCollectionGetSerializer(created_collection)
+                return Response(user_serializer.data, status=201)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(1, status=201)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать подборку.',
+            }, status=HTTP_400_BAD_REQUEST)
 
 
 class TaskCollectionSolveViewSet(viewsets.ModelViewSet):

@@ -2,7 +2,6 @@ from django.db import models
 from educationplatform.settings import AUTH_USER_MODEL
 
 
-# exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False)
 class Task(models.Model):
     created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False)
     content = models.CharField(blank=False)

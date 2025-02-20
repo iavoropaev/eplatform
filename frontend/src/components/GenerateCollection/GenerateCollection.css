@@ -1,0 +1,51 @@
+.gen-col-table {
+  border-collapse: collapse;
+  border: 1px solid grey;
+}
+.gen-col-table td,
+.gen-col-table tr {
+  border-collapse: collapse;
+  border: 1px solid grey;
+}
+
+.gen-col-table select {
+  border: 0px;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  padding: 5px;
+}
+.gen-col-table select:hover {
+  /* background-color: white; */
+  /* border-color: black; */
+}
+
+.gen-col-table .active-td {
+  background-color: rgb(190, 254, 203);
+}
+
+.gen-col-table .count-input {
+  text-align: center;
+  width: 30px;
+  border-radius: 0px;
+  border: 0px;
+  background-color: transparent;
+}
+
+.gen-col-table .count-but {
+  /* text-align: center; */
+  color: grey;
+  font-size: 14px;
+  padding: 0px;
+  width: 10px;
+  height: 20px;
+  border-radius: 0px;
+  border: 0px solid grey;
+  background-color: transparent;
+}
+.gen-col-table .count-but:hover {
+  color: red;
+}
+.gen-col-table .count-but:active {
+  color: rgb(127, 47, 255);
+}

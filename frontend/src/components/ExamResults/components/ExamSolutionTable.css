@@ -1,12 +1,15 @@
 .results-table {
   border-collapse: collapse;
+  border: 1px solid grey;
 }
 
 .results-table th {
   background-color: rgb(206, 206, 206);
   padding: 5px;
+  border: 1px solid grey;
 }
 .results-table td {
+  border: 1px solid grey;
   padding: 5px;
   text-align: center;
   vertical-align: middle;
@@ -17,4 +20,5 @@
 }
 .results-table td table td {
   padding: 2px;
+  border: 0px;
 }

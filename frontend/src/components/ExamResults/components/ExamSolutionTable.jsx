@@ -3,7 +3,7 @@ import "./ExamSolutionTable.css";
 
 const ExamSolutionTable = ({ answers }) => {
   return (
-    <table className="results-table" border="1">
+    <table className="results-table">
       <thead>
         <tr>
           <th>№</th>
@@ -15,9 +15,7 @@ const ExamSolutionTable = ({ answers }) => {
       <tbody>
         {answers.map((answer, index) => (
           <tr key={index}>
-            <td style={{ textAlign: "left" }}>{`${index + 1}. (${
-              answer.number_in_exam
-            })`}</td>
+            <td>{answer.number_in_exam}</td>
             <td>{answer.score}</td>
             <td>
               <SingleAnswer answer={answer.user_answer} />

@@ -11,6 +11,7 @@ import ExamPage from "./components/Pages/Exam/ExamPage";
 import ExamResultsPage from "./components/Pages/Exam results/ExamResultsPage";
 import CoursePage from "./components/Pages/Course/CoursePage";
 import UpdateCourse from "./components/CreateCourse/UpdateCourse";
+import GenerateCollectionPage from "./components/Pages/Generate collection/GenerateCollectionPage";
 
 export const publicRoutes = [
   { path: "bank", Component: BankPage },
@@ -39,6 +40,10 @@ export const authRoutes = [
 
   { path: "update-collection/:slug/", Component: CreateCollectionPage },
   { path: "create-collection/", Component: CreateCollection },
+  {
+    path: "generate-collection/:examSlug/:subjectSlug/",
+    Component: GenerateCollectionPage,
+  },
 
   { path: "edit-course/:courseId/", Component: UpdateCourse },
 ];

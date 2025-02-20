@@ -79,8 +79,9 @@ const Main = () => {
           <NavLink end to="/course/1/edit-lesson/2/s/1">
             Редактировать урок
           </NavLink>
-
-          <NavLink></NavLink>
+          <NavLink end to="/generate-collection/ege/ege_inf/">
+            Сгенерировать вариант
+          </NavLink>
         </div>
         <button onClick={logOut}>Выйти</button>
       </div>

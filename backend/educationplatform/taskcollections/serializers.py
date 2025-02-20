@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 from taskcollections.models import TaskCollection, TaskCollectionSolve, TaskCollectionTask
-from tasks.serializers import TaskSerializerForUser
+from tasks.models import Task
+from tasks.serializers import TaskSerializerForUser, TaskSerializer
 
 
 class TaskCollectionInfoSerializer(serializers.ModelSerializer):
