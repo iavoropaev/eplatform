@@ -10,7 +10,7 @@ if (jwt_a) {
 export const getTaskById = async (id) => {
   try {
     const res = await axios.get(
-      "http://127.0.0.1:8000/api/v1/tasks/" + id + "/",
+      `${process.env.REACT_APP_API_URL}/tasks/${id}/`,
       {
         headers: headers,
       }
@@ -28,7 +28,7 @@ export const getTaskById = async (id) => {
 export const getTaskWithAnsById = async (id) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/v1/tasks/task-with-ans-by-id/",
+      process.env.REACT_APP_API_URL + "tasks/task-with-ans-by-id/",
       { task_id: id },
       {
         headers: headers,
@@ -63,7 +63,7 @@ export const getAllTasksFromServer = async ({
     };
 
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/v1/tasks/filtered/",
+      process.env.REACT_APP_API_URL + "tasks/filtered/",
       data,
       {
         headers,
@@ -84,13 +84,9 @@ export const getAllTasksFromServer = async ({
 
 export const getFilterData = async () => {
   try {
-    const res = await axios.get(
-      "http://127.0.0.1:8000/api/v1/filter/",
-
-      {
-        headers,
-      }
-    );
+    const res = await axios.get(process.env.REACT_APP_API_URL + "filter/", {
+      headers,
+    });
 
     if (res.status === 200) {
       //console.log(res.data);
@@ -107,7 +103,7 @@ export const getFilterData = async () => {
 export const getNumbers = async (examSlug, subjectSlug) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/v1/filter/get_numbers/",
+      process.env.REACT_APP_API_URL + "filter/get_numbers/",
       { examSlug: examSlug, subjectSlug: subjectSlug },
       {
         headers,
@@ -128,7 +124,7 @@ export const getNumbers = async (examSlug, subjectSlug) => {
 export const sendSolution = async ({ taskId, answer }) => {
   try {
     const res = await axios({
-      url: "http://127.0.0.1:8000/api/v1/tasks-solutions/send-solution/",
+      url: process.env.REACT_APP_API_URL + "tasks-solutions/send-solution/",
       method: "post",
       data: { task_id: taskId, answer },
       headers,
@@ -147,7 +143,7 @@ export const sendSolution = async ({ taskId, answer }) => {
 export const getSolveStatuses = async ({ taskIds }) => {
   try {
     const res = await axios({
-      url: "http://127.0.0.1:8000/api/v1/tasks-solutions/get_statuses/",
+      url: process.env.REACT_APP_API_URL + "tasks-solutions/get_statuses/",
       method: "post",
       data: { task_ids: taskIds },
       headers,
@@ -166,10 +162,10 @@ export const getSolveStatuses = async ({ taskIds }) => {
 
 export const createTaskOnServer = async (data) => {
   try {
-    let url = `http://127.0.0.1:8000/api/v1/tasks/upload_task/`;
+    let url = process.env.REACT_APP_API_URL + "tasks/upload_task/";
     let method = "post";
     if (data.taskId !== undefined) {
-      url = `http://127.0.0.1:8000/api/v1/tasks/${data.taskId}/`;
+      url = `${process.env.REACT_APP_API_URL}tasks/${data.taskId}/`;
       method = "patch";
     }
     console.log("to server", data);

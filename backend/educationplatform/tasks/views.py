@@ -392,7 +392,6 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
-            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):

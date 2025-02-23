@@ -9,7 +9,7 @@ if (jwt_a) {
 export const getCollectionBySlug = async (slug) => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/v1/tasks-collections/${slug}/`,
+      `${process.env.REACT_APP_API_URL}tasks-collections/${slug}/`,
       {
         headers: headers,
       }
@@ -29,7 +29,7 @@ export const getCollectionBySlug = async (slug) => {
 export const updateCollection = async (data) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/v1/tasks-collections/update_collection/",
+      process.env.REACT_APP_API_URL + "tasks-collections/update_collection/",
       data,
       {
         headers: headers,
@@ -51,7 +51,7 @@ export const updateCollection = async (data) => {
 export const getCollections = async () => {
   try {
     const res = await axios.get(
-      "http://127.0.0.1:8000/api/v1/tasks-collections/get_collections/",
+      process.env.REACT_APP_API_URL + "tasks-collections/get_collections/",
       {
         headers: headers,
       }
@@ -70,7 +70,7 @@ export const getCollections = async () => {
 export const createCollection = async (data) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/v1/tasks-collections/",
+      process.env.REACT_APP_API_URL + "tasks-collections/",
       data,
       {
         headers: headers,
@@ -90,7 +90,7 @@ export const createCollection = async (data) => {
 export const generateCollection = async (data) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/v1/tasks-collections/generate-collection/",
+      process.env.REACT_APP_API_URL + "tasks-collections/generate-collection/",
       data,
       {
         headers: headers,

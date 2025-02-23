@@ -9,7 +9,7 @@ if (jwt_a) {
 export const getCourseFromServerById = async (courseId) => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/v1/courses/${courseId}/data/`,
+      `${process.env.REACT_APP_API_URL}courses/${courseId}/data/`,
       {
         headers: headers,
       }
@@ -28,7 +28,7 @@ export const getLessonFromServerById = async (lessonId) => {
   try {
     const params = { lesson_id: lessonId };
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/v1/courses/get-lesson/`,
+      process.env.REACT_APP_API_URL + "courses/get-lesson/",
       {
         params: params,
         headers: headers,
@@ -47,7 +47,7 @@ export const getLessonNameOnlyByIdFromServer = async (lessonId) => {
   try {
     const params = { lesson_id: lessonId };
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/v1/courses/get-lesson-name/`,
+      process.env.REACT_APP_API_URL + "courses/get-lesson-name/",
       {
         params: params,
         headers: headers,
@@ -67,7 +67,7 @@ export const getModuleById = async (moduleId) => {
   try {
     const params = { module_id: moduleId };
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/v1/courses/get-module-with-lessons/`,
+      process.env.REACT_APP_API_URL + "courses/get-module-with-lessons/",
       {
         params: params,
         headers: headers,
@@ -86,7 +86,7 @@ export const getSectionById = async (sectionId) => {
   try {
     const params = { section_id: sectionId };
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/v1/courses/get-section/`,
+      process.env.REACT_APP_API_URL + "courses/get-section/",
       {
         params: params,
         headers: headers,
@@ -105,7 +105,7 @@ export const getSectionById = async (sectionId) => {
 export const sendSectionSolution = async (data) => {
   try {
     const res = await axios.post(
-      `http://127.0.0.1:8000/api/v1/courses/send-solution/`,
+      process.env.REACT_APP_API_URL + "courses/send-solution/",
       data,
       {
         headers: headers,
@@ -124,7 +124,7 @@ export const sendSectionSolution = async (data) => {
 export const createModule = async (data) => {
   try {
     const res = await axios.post(
-      `http://127.0.0.1:8000/api/v1/edit-course/create-module/`,
+      process.env.REACT_APP_API_URL + "edit-course/create-module/",
       data,
       {
         headers: headers,
@@ -142,7 +142,7 @@ export const createModule = async (data) => {
 export const createLesson = async (data) => {
   try {
     const res = await axios.post(
-      `http://127.0.0.1:8000/api/v1/edit-course/create-lesson/`,
+      process.env.REACT_APP_API_URL + "edit-course/create-lesson/",
       data,
       {
         headers: headers,
@@ -160,7 +160,7 @@ export const createLesson = async (data) => {
 export const createSection = async (data) => {
   try {
     const res = await axios.post(
-      `http://127.0.0.1:8000/api/v1/edit-course/create-section/`,
+      process.env.REACT_APP_API_URL + "edit-course/create-section/",
       data,
       {
         headers: headers,
@@ -179,7 +179,7 @@ export const createSection = async (data) => {
 export const updateCourse = async (data) => {
   try {
     const res = await axios.post(
-      `http://127.0.0.1:8000/api/v1/edit-course/update/`,
+      process.env.REACT_APP_API_URL + "edit-course/update/",
       data,
       {
         headers: headers,
@@ -198,7 +198,7 @@ export const updateCourse = async (data) => {
 export const updateLesson = async (data) => {
   try {
     const res = await axios.post(
-      `http://127.0.0.1:8000/api/v1/edit-course/update-lesson/`,
+      process.env.REACT_APP_API_URL + "edit-course/update-lesson/",
       data,
       {
         headers: headers,

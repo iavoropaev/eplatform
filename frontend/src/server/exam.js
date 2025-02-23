@@ -10,7 +10,7 @@ if (jwt_a) {
 export const sendExamSolutionToServer = async (data) => {
   try {
     const res = await axios.post(
-      "http://127.0.0.1:8000/api/v1/tasks-collections-solve/send-solution/",
+      process.env.REACT_APP_API_URL + "tasks-collections-solve/send-solution/",
       data,
       {
         headers: headers,
@@ -29,7 +29,7 @@ export const sendExamSolutionToServer = async (data) => {
 export const getExamSolution = async (col_slug, sol_type) => {
   try {
     const res = await axios.get(
-      "http://127.0.0.1:8000/api/v1/tasks-collections-solve/get-solution/",
+      process.env.REACT_APP_API_URL + "tasks-collections-solve/get-solution/",
       {
         headers: headers,
         params: {
