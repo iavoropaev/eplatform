@@ -10,11 +10,11 @@ const Menu = () => {
             Главная
           </NavLink>
           <NavLink to="/bank/">Банк задач</NavLink>
-          <NavLink to="/create-task/">Добавить задачу</NavLink>
+          {/* <NavLink to="/create-task/">Добавить задачу</NavLink> */}
           {/* <NavLink to="/test/">Тест</NavLink> */}
-          <NavLink to="/create-collection/">Создать подборку</NavLink>
+          {/* <NavLink to="/create-collection/">Создать подборку</NavLink>
           <NavLink to="/update-collection/1/">Обновить подборку</NavLink>
-          <NavLink to="/collections/1/">Подборка</NavLink>
+          <NavLink to="/collections/1/">Подборка</NavLink> */}
           <NavLink end to="/collections/">
             Подборки
           </NavLink>

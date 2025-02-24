@@ -251,7 +251,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             for section in request.data['sections']:
                 section_obj = Section.objects.all().get(id=section['id'])
                 if (cur_user_id == section_obj.created_by.id) or (is_admin):
-                    section_data = {'content': section['content'], 'task': section['task']}
+                    section_data = {'content': section['content'], 'task': section['task'], 'type': section['type']}
 
                     section_serializer = SectionAllFieldsSerializer(section_obj, data=section_data, partial=True)
                     if section_serializer.is_valid():

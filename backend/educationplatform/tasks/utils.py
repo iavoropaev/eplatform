@@ -2,6 +2,9 @@ def check_answer(user_answer, true_answer):
     print(user_answer, true_answer)
     is_ok = True
 
+    if true_answer['type'] == 'open_answer':
+        return user_answer['open_answer'] != ''
+
     if true_answer['type'] == 'text':
         return str(user_answer['text']).strip() == str(true_answer['text']).strip()
 

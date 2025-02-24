@@ -14,9 +14,11 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
 
     if (type === "text") {
       taskData.setAnswer("");
+      taskData.setAnswerData(null);
     }
     if (type === "table") {
       taskData.setAnswer([["", ""]]);
+      taskData.setAnswerData(null);
     }
     if (type === "choice") {
       taskData.setAnswer([]);
@@ -29,6 +31,10 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
     if (type === "sorting") {
       taskData.setAnswer(["Опция 1", "Опция 2"]);
       taskData.setAnswerData(["Опция 1", "Опция 2"]);
+    }
+    if (type === "open_answer") {
+      taskData.setAnswer("");
+      taskData.setAnswerData(null);
     }
   };
 
@@ -123,6 +129,7 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
             ["choice", "Тестовый ответ"],
             ["comparison", "Сопоставление"],
             ["sorting", "Сортировка"],
+            ["open_answer", "Свободный ответ"],
           ]}
           selected={taskData.answerType}
           handleSelect={handleAnswerTypeSelect}

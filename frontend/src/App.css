@@ -85,11 +85,12 @@ textarea {
   color: red;
 }
 
-input {
+input,
+select {
   user-select: none;
   outline: none;
   border: 1px solid grey;
-  border-radius: 5px;
+  border-radius: 2px;
   padding: 5px;
 }
 input:focus {

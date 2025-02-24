@@ -1,11 +1,17 @@
-import TableAnswer from "../../Utils/Answer/TableAnswer";
+import { useState } from "react";
 
 const Test = () => {
+  const [selectedDate, setSelectedDate] = useState("");
+  console.log(selectedDate);
   return (
     <>
       <h1>Тест</h1>
-      <TableAnswer />
-      {/* <TinyMCE /> */}
+      <input
+        type="date"
+        value={selectedDate}
+        min={new Date().toISOString().split("T")[0]}
+        onChange={(e) => setSelectedDate(e.target.value)}
+      />
     </>
   );
 };

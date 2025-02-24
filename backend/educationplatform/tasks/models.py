@@ -8,7 +8,7 @@ class Task(models.Model):
 
     answer_type = models.CharField(choices=[('text', 'text'), ('table', 'table'),
                                             ('comparison', 'comparison'), ('sorting', 'sorting'),
-                                            ('choice', 'choice')])
+                                            ('choice', 'choice'), ('open_answer', 'open_answer')])
     answer_data = models.JSONField(blank=True, null=True)
     answer = models.CharField(blank=False)
 

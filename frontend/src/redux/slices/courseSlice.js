@@ -67,6 +67,7 @@ const courseSlice = createSlice({
       const curSection = {
         ...state.currentLesson.sections[sectionIndex],
         task: newTask,
+        type: newTask ? "task" : "text",
       };
 
       const newSections = [...state.currentLesson.sections];
