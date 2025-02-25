@@ -19,7 +19,7 @@ const Menu = () => {
             Подборки
           </NavLink>
 
-          <NavLink></NavLink>
+          <NavLink to="/lk/teach/">ЛК</NavLink>
         </nav>
       </div>
     </div>

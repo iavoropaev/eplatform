@@ -1,7 +1,9 @@
 import datetime
 import json
+import time
 
 import pytz
+from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from drf_spectacular.utils import extend_schema
 
@@ -19,8 +21,6 @@ from .utils import check_answer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    '''CRUD operations with tasks.'''
-
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
@@ -32,7 +32,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'filtered', 'new_tasks']:
             permission_classes = [AllowAny]
-        elif self.action in ['upload_task', 'partial_update', 'task_with_ans_by_id']:
+        elif self.action in ['upload_task', 'partial_update', 'task_with_ans_by_id', 'my_tasks']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -127,6 +127,22 @@ class TaskViewSet(viewsets.ModelViewSet):
         except:
             return Response({'Error': 'Не удалось загрузить задачи.'}, status=406)
 
+    @action(detail=False, methods=['get'], url_path='my')
+    def my_tasks(self, request):
+        try:
+            cur_user_id = request.user.id
+            tasks = Task.objects.filter(created_by=cur_user_id)
+            count_all = tasks.count()
+            tasks = tasks.order_by('-time_create')[:10] # !!!!!!!!!
+            paginator = Paginator(tasks, 10**6)
+            tasks_page = paginator.get_page(1)
+            tasks = tasks_page.object_list
+            serializer = TaskSerializerForUser(tasks, many=True)
+            data = serializer.data
+            return Response({'count': count_all, 'tasks': data})
+        except:
+            return Response({'Error': 'Не удалось загрузить задачи.'}, status=406)
+
     @action(detail=False, methods=['post'])
     def upload_tasks(self, request):
         """
@@ -152,7 +168,6 @@ class TaskViewSet(viewsets.ModelViewSet):
     def upload_task(self, request):
         try:
             task_data = request.data
-            print(task_data)
             if not request.user.is_staff:
                 task_data['bank_authors'] = []
 
@@ -328,7 +343,6 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
         try:
             cur_user_id = request.user.id
             task_ids = request.data['task_ids']
-            print([task_ids])
             tasks = Task.objects.filter(id__in=task_ids)
             tasks_with_counts = tasks.annotate(
                 correct_solutions=Count('tasksolutions',

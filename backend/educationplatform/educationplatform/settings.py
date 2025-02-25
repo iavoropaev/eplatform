@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "tasks.apps.TasksConfig",
     "users.apps.UsersConfig",
     "taskcollections.apps.TaskCollectionsConfig",
+    "classes.apps.ClassesConfig",
     "courses.apps.CoursesConfig",
     "rest_framework",
     'django_extensions',

@@ -22,6 +22,7 @@ from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
 
+from classes.views import ClassesViewSet
 from courses.views import CoursesViewSet, EditCourseViewSet
 from taskcollections.views import TaskCollectionViewSet, TaskCollectionSolveViewSet
 from tasks.views import TaskViewSet, upload_file, TaskInfoViewSet, FilterForTaskViewSet, NumbersViewSet, \
@@ -36,8 +37,11 @@ router.register(r'task-numbers', NumbersViewSet, basename='task-numbers')
 router.register(r'tasks-solutions', TaskSolutionsViewSet)
 router.register(r'tasks-collections', TaskCollectionViewSet)
 router.register(r'tasks-collections-solve', TaskCollectionSolveViewSet)
+
 router.register(r'courses', CoursesViewSet)
 router.register(r'edit-course', EditCourseViewSet, basename='edit-course')
+
+router.register(r'class', ClassesViewSet)
 
 urlpatterns = [
                   path('admin/', admin.site.urls),

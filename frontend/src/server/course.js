@@ -6,6 +6,24 @@ if (jwt_a) {
   headers["Authorization"] = `Bearer ${jwt_a}`;
 }
 
+export const getMyCourses = async () => {
+  try {
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL + "courses/my-courses/",
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
 export const getCourseFromServerById = async (courseId) => {
   try {
     const res = await axios.get(

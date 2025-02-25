@@ -66,6 +66,24 @@ export const getCollections = async () => {
     return undefined;
   }
 };
+export const getMyCollections = async () => {
+  try {
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL + "tasks-collections/my-collections/",
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
 
 export const createCollection = async (data) => {
   try {

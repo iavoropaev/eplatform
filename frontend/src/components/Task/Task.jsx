@@ -11,11 +11,12 @@ const Task = ({
   showCancelBut,
   handleCancelButton,
   hideAnswerBlock,
+  showEditIcon,
 }) => {
   return (
     <div className="task-container">
       <div className={"task " + status}>
-        <TaskHeader taskData={taskData} />
+        <TaskHeader taskData={taskData} showEditIcon={showEditIcon} />
         <TaskBody taskData={taskData} />
         <TaskFooter
           taskData={taskData}

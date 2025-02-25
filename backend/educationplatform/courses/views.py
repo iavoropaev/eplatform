@@ -26,7 +26,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
         if self.action in ['all']:
             permission_classes = [AllowAny]
         elif self.action in ['data', 'send_solution', 'solved_sections', 'get_lesson',
-                             'get_lesson_name', 'get_module_with_lessons', 'get_section']:
+                             'get_lesson_name', 'get_module_with_lessons', 'get_section', 'my_courses']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -45,6 +45,11 @@ class CoursesViewSet(viewsets.ModelViewSet):
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             })
+    @action(detail=False, methods=['get'], url_path='my-courses')
+    def my_courses(self, request):
+        cur_user_id = request.user.id
+        courses = Course.objects.all().filter(created_by=cur_user_id).values('id', 'name', 'slug', 'description')
+        return Response(courses, status=status.HTTP_200_OK)
 
     @extend_schema(description='Get course.')
     @action(detail=True, methods=['get'])

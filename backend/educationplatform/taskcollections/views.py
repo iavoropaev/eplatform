@@ -10,7 +10,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 from taskcollections.models import TaskCollection, TaskCollectionSolve, TaskCollectionTask
 from taskcollections.serializers import TaskCollectionSerializer, TaskCollectionSolveSerializer, \
     TaskCollectionCreateSerializer, TaskCollectionTaskSerializer, TaskCollectionTaskForUserSerializer, \
-    TaskCollectionGetSerializer, TaskCollectionSolveForUserSerializer
+    TaskCollectionGetSerializer, TaskCollectionSolveForUserSerializer, TaskCollectionInfoSerializer
 from rest_framework.response import Response
 
 from tasks.models import Task
@@ -60,6 +60,13 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     def get_collections(self, request):
         queryset = TaskCollection.objects.all().filter(is_public=True)
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='my-collections')
+    def my_collections(self, request):
+        cur_user_id = request.user.id
+        queryset = TaskCollection.objects.all().filter(created_by=cur_user_id)
+        serializer = TaskCollectionInfoSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'])

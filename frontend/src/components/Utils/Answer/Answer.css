@@ -4,6 +4,7 @@
   align-items: start;
   flex-wrap: wrap;
   grid-gap: 20px 15px;
+  overflow: auto;
 }
 
 .task-answer input {

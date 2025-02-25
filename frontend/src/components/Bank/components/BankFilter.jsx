@@ -9,6 +9,7 @@ const BankFilter = ({
   countFind,
   selectedFilters,
   handleFindButtonClick,
+  isLoading,
 }) => {
   const activeExam = filterData["exams"][selectedFilters["exam"]];
   const activeSubject = activeExam["subjects"][selectedFilters["subject"]];
@@ -99,12 +100,16 @@ const BankFilter = ({
         )}
       </div>
       <div className="button-row">
-        {countFind !== undefined && (
+        {countFind !== undefined && !isLoading && (
           <p className="count-find">{`Найдено ${countFind} задач.`}</p>
         )}
 
-        <button onClick={handleFindButtonClick} className="black-button">
-          Найти задачи
+        <button
+          onClick={handleFindButtonClick}
+          className="black-button"
+          disabled={isLoading}
+        >
+          {isLoading ? "Поиск..." : "Найти задачи"}
         </button>
       </div>
     </div>

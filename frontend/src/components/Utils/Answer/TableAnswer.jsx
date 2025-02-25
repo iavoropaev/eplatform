@@ -7,14 +7,39 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
   };
 
   const addRow = () => {
-    const length = answer[answer.length - 1].length;
-    const newRow = Array(length).fill("");
-    setAnswer([...answer, newRow]);
+    if (answer.length < 15) {
+      const length = answer[answer.length - 1].length;
+      const newRow = Array(length).fill("");
+      setAnswer([...answer, newRow]);
+    }
   };
   const delRow = () => {
     if (answer.length > 1) {
       const newAns = [...answer];
       newAns.pop();
+      setAnswer(newAns);
+    }
+  };
+
+  const addColumn = () => {
+    if (answer[0].length < 8) {
+      const newAns = answer.map((row) => {
+        const newRow = [...row, ""];
+        return newRow;
+      });
+      setAnswer(newAns);
+    }
+  };
+  const delColumn = () => {
+    if (answer.length >= 1) {
+      const newAns = answer.map((row) => {
+        if (row.length > 1) {
+          const newRow = row.slice(0, -1);
+          return newRow;
+        } else {
+          return row;
+        }
+      });
       setAnswer(newAns);
     }
   };
@@ -40,33 +65,53 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
   };
 
   return (
-    <div className="answer-table">
-      <table border="1">
-        <thead></thead>
-        <tbody>
-          {answer.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {/* <td>{rowIndex + 1}</td> */}
-              {row.map((cell, colIndex) => (
-                <td key={colIndex}>
-                  <input
-                    className="table-input"
-                    disabled={disabled}
-                    type="text"
-                    value={cell}
-                    onPaste={(e) => {
-                      paste(e, rowIndex, colIndex);
-                    }}
-                    onChange={(e) =>
-                      handleInputChange(rowIndex, colIndex, e.target.value)
-                    }
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div>
+      <div className="answer-table">
+        <table border="1">
+          <thead></thead>
+          <tbody>
+            {answer.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {/* <td>{rowIndex + 1}</td> */}
+                {row.map((cell, colIndex) => (
+                  <td key={colIndex}>
+                    <input
+                      className="table-input"
+                      disabled={disabled}
+                      type="text"
+                      value={cell}
+                      onPaste={(e) => {
+                        paste(e, rowIndex, colIndex);
+                      }}
+                      onChange={(e) =>
+                        handleInputChange(rowIndex, colIndex, e.target.value)
+                      }
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {!disabled && (
+          <div className="right-buttons">
+            <button
+              className="answer-but"
+              onClick={addColumn}
+              disabled={disabled}
+            >
+              +
+            </button>
+            <button
+              className="answer-but"
+              onClick={delColumn}
+              disabled={disabled}
+            >
+              -
+            </button>
+          </div>
+        )}
+      </div>
       {!disabled && (
         <div className="answer-buttons">
           <button className="answer-but" onClick={addRow} disabled={disabled}>

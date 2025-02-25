@@ -81,6 +81,22 @@ export const getAllTasksFromServer = async ({
     return [];
   }
 };
+export const getMyTasks = async () => {
+  try {
+    const res = await axios.get(process.env.REACT_APP_API_URL + "tasks/my/", {
+      headers,
+    });
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return [];
+  } catch (error) {
+    alert("Не удалось загрузить задачи. Попробуйте позже.");
+    console.log(error);
+    return [];
+  }
+};
 
 export const getFilterData = async () => {
   try {

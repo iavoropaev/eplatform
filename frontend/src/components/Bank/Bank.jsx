@@ -45,6 +45,7 @@ const Bank = () => {
   });
   const [solvedStatuses, setSolvedStatuses] = useState({});
   const [isFind, setFind] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const exam = filterData["exams"][selectedFilters["exam"]];
   const subject = exam["subjects"][selectedFilters["subject"]];
@@ -93,6 +94,7 @@ const Bank = () => {
   }, []);
 
   const handleFindButtonClick = async () => {
+    setLoading(true);
     const tasksFromServer = await getAllTasksFromServer({
       numbers,
       authors,
@@ -108,6 +110,7 @@ const Bank = () => {
       setSolvedStatuses(idSolvedStatuses);
     }
     setTasks(tasksFromServer["tasks"]);
+    setLoading(false);
     setFind(true);
   };
 
@@ -125,6 +128,7 @@ const Bank = () => {
         filterData={filterData}
         countFind={isFind ? tasks.length : undefined}
         handleFindButtonClick={handleFindButtonClick}
+        isLoading={isLoading}
       />
 
       <div className="tasks">
