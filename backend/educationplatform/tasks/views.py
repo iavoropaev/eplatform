@@ -4,6 +4,7 @@ import time
 
 import pytz
 from django.core.paginator import Paginator
+from django.db import connection
 from django.db.models import Count, Q
 from drf_spectacular.utils import extend_schema
 
@@ -16,7 +17,7 @@ from educationplatform.settings import DOMEN
 from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskNumberInExam, \
     TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
-    TaskNumberInExamSerializer, TaskSerializerForCreate
+    TaskNumberInExamSerializer, TaskSerializerForCreate, TaskSerializerForUser1
 from .utils import check_answer
 
 
@@ -57,7 +58,10 @@ class TaskViewSet(viewsets.ModelViewSet):
     Params: authors, sources, topics, d_levels, period(day, week, month).''')
     @action(detail=False, methods=['post'])
     def filtered(self, request):
-        tasks = Task.objects.all()
+        tasks = Task.objects.all().select_related(
+            'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
+        ).prefetch_related('bank_authors')
+
         if 'subject' in request.data:
             tasks = tasks.filter(number_in_exam__subject__id=request.data['subject'])
 
@@ -69,8 +73,6 @@ class TaskViewSet(viewsets.ModelViewSet):
             tasks = tasks.filter(author_id__in=request.data['authors'])
         if 'sources' in request.data and request.data['sources']:
             tasks = tasks.filter(source_id__in=request.data['sources'])
-        if 'topics' in request.data and request.data['topics']:
-            tasks = tasks.filter(topic_id__in=request.data['topics'])
         if 'dif_levels' in request.data and request.data['dif_levels']:
             tasks = tasks.filter(difficulty_level_id__in=request.data['dif_levels'])
         if 'actualities' in request.data and request.data['actualities']:
@@ -99,6 +101,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
+
         return Response({'count': len(data), 'tasks': data})
 
     @extend_schema(description='Get new tasks. Available periods: day, week, month.')
@@ -344,7 +347,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             cur_user_id = request.user.id
             task_ids = request.data['task_ids']
             tasks = Task.objects.filter(id__in=task_ids)
-            tasks_with_counts = tasks.annotate(
+            tasks_with_counts = tasks.filter(id__in=task_ids).annotate(
                 correct_solutions=Count('tasksolutions',
                                         filter=Q(tasksolutions__user_id=cur_user_id,
                                                  tasksolutions__is_ok_solution=True)),
@@ -357,6 +360,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                     id_status[task.id] = 'ok'
                 elif task.incorrect_solutions > 0:
                     id_status[task.id] = 'wa'
+            print(len(connection.queries))
             return Response(id_status)
         except:
             return Response({

@@ -44,7 +44,13 @@ const TeacherCourses = () => {
       </button>
       <div className="col-cont">
         {courses.map((course) => (
-          <div key={course.id} className="collection">
+          <div
+            key={course.id}
+            className="collection"
+            onClick={() => {
+              window.open(`/course/${course.id}/lesson/-1/s/-1/`, "_blank");
+            }}
+          >
             <p>{course.name}</p>
             <div className="buttons">
               <button
@@ -62,7 +68,8 @@ const TeacherCourses = () => {
                 Редактировать
               </button>
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   handleCourseDelete(course.id);
                 }}
               >
