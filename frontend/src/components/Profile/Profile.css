@@ -1,11 +1,13 @@
 .lk {
   margin: auto;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
   width: 80%;
   text-align: left;
 }
-
+.lk h2 {
+  text-align: center;
+}
 .lk .lk-navigate {
   display: flex;
   flex-wrap: wrap;
@@ -14,5 +16,11 @@
   border-radius: 5px;
   padding: 10px;
   background-color: white;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.lk .lk-navigate .el {
+  cursor: pointer;
+  user-select: none;
 }

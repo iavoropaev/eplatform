@@ -5,7 +5,7 @@ from educationplatform.settings import AUTH_USER_MODEL
 class Course(models.Model):
     created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,  related_name='created_courses')
     name = models.CharField(max_length=100, blank=False)
-    slug = models.CharField(max_length=100, blank=False, unique=True)
+    #slug = models.CharField(max_length=100, blank=False, unique=True)
     description = models.CharField(blank=True)
 
     users = models.ManyToManyField(AUTH_USER_MODEL, blank=True)

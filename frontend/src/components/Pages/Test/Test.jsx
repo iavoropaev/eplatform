@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const Test = () => {
   const [selectedDate, setSelectedDate] = useState("");
-  console.log(selectedDate);
+
   return (
     <>
       <h1>Тест</h1>

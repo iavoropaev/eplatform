@@ -13,7 +13,8 @@ from yaml import serialize
 from courses.models import Course, Section, SectionSolve, Module, Lesson, CourseModule, ModuleLesson, LessonSection
 from courses.serializers import CourseSerializer, SectionSolveSerializer, ModuleSerializer, LessonSerializer, \
     LessonOnlyNameSerializer, CourseModuleSerializer, ModuleAllFieldsSerializer, ModuleLessonSerializer, \
-    LessonAllFieldsSerializer, SectionAllFieldsSerializer, LessonSectionSerializer, SectionSerializer
+    LessonAllFieldsSerializer, SectionAllFieldsSerializer, LessonSectionSerializer, SectionSerializer, \
+    CourseCreateSerializer
 from courses.utils import get_lesson_data_with_solves, create_empty_section
 from tasks.utils import check_answer
 
@@ -44,11 +45,12 @@ class CoursesViewSet(viewsets.ModelViewSet):
         except:
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
+
     @action(detail=False, methods=['get'], url_path='my-courses')
     def my_courses(self, request):
         cur_user_id = request.user.id
-        courses = Course.objects.all().filter(created_by=cur_user_id).values('id', 'name', 'slug', 'description')
+        courses = Course.objects.all().filter(created_by=cur_user_id).values('id', 'name', 'description')
         return Response(courses, status=status.HTTP_200_OK)
 
     @extend_schema(description='Get course.')
@@ -69,7 +71,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
 
     @extend_schema(description='Get lesson by Id.')
     @action(detail=False, methods=['get'], url_path='get-lesson')
@@ -83,7 +85,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['get'], url_path='get-section')
     def get_section(self, request):
@@ -158,7 +160,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
 
 
 class EditCourseViewSet(viewsets.ModelViewSet):
@@ -166,11 +168,28 @@ class EditCourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
 
     def get_permissions(self):
-        if self.action in ['update_course', 'update_lesson', 'create_module', 'create_lesson', 'create-section']:
+        if self.action in ['create_course', 'update_course', 'update_lesson', 'create_module', 'create_lesson',
+                           'create-section', 'delete_course']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+
+    @action(detail=False, methods=['post'], url_path='create-course')
+    def create_course(self, request):
+        try:
+            cur_user_id = request.user.id
+            data = request.data | {'created_by': cur_user_id}
+            serializer = CourseCreateSerializer(data=data)
+            if serializer.is_valid():
+                new_course = serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'Error': 'Не удалось создать курс.'}, status=status.HTTP_417_EXPECTATION_FAILED)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать курс.',
+            }, status=status.HTTP_417_EXPECTATION_FAILED)
 
     @action(detail=False, methods=['post'], url_path='create-module')
     def create_module(self, request):
@@ -200,7 +219,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
                 new_lesson = serializer.save()
                 only_name_serializer = LessonOnlyNameSerializer(new_lesson)
                 first_section = create_empty_section(cur_user_id)
-                s_l_data = {'lesson': new_lesson.id, 'section': first_section.id, 'order':0}
+                s_l_data = {'lesson': new_lesson.id, 'section': first_section.id, 'order': 0}
                 lesson_section_serializer = LessonSectionSerializer(data=s_l_data)
                 if lesson_section_serializer.is_valid():
                     lesson_section_serializer.save()
@@ -358,6 +377,20 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             course = Course.objects.all().get(id=course_id)
             course_serializer = CourseSerializer(course, many=False)
             return Response(course_serializer.data)
+
+    @action(detail=False, methods=['post'], url_path='delete-course')
+    def delete_course(self, request):
+        try:
+            cur_user_id = request.user.id
+            course_id = request.data['course_id']
+            cur_course = Course.objects.filter(id=course_id).get()
+            if cur_course.created_by.id != cur_user_id:
+                return Response(status=406)
+            cur_course.delete()
+            return Response("deleted")
+        except Exception as e:
+            print(e)
+            return Response(status=400)
     # @extend_schema(description='Get solved sections in course.')
     # @action(detail=True, methods=['get'], url_path='solved-sections')
     # def solved_sections(self, request, pk):

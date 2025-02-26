@@ -100,3 +100,12 @@ input:focus {
 button:disabled {
   pointer-events: none;
 }
+
+.active {
+  text-decoration: underline;
+}
+
+.grey-text {
+  color: grey;
+  font-size: 14px;
+}

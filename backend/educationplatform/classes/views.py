@@ -4,7 +4,8 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from classes.models import Class, Invitation
-from classes.serializers import ClassSerializer, InvitationSerializer, ClassSerializerForTeacher, ClassCreateSerializer
+from classes.serializers import ClassSerializer, InvitationSerializer, ClassSerializerForTeacher, ClassCreateSerializer, \
+    MessageSerializer
 
 
 class ClassesViewSet(viewsets.ModelViewSet):
@@ -14,7 +15,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in []:
             permission_classes = [AllowAny]
-        elif self.action in ['create_class', 'create_invitation', 'delete_invitation',
+        elif self.action in ['create_class', 'create_invitation', 'delete_invitation', 'create_message',
                              'activate_invitation', 'get_my_classes', 'get_class_data']:
             permission_classes = [IsAuthenticated]
         else:
@@ -71,7 +72,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             is_admin = request.user.is_staff
             class_id = request.data['class_id']
             cur_class = Class.objects.filter(id=class_id).get()
-            print(cur_user_id, cur_class.created_by)
+
             if (not is_admin) and (cur_user_id != cur_class.created_by.id):
                 return Response({'Error': 'Доступ запрещён.'}, status=406)
 
@@ -125,3 +126,26 @@ class ClassesViewSet(viewsets.ModelViewSet):
             return Response({
                 'Error': 'Не удалось активировать приглашение.',
             }, status=400)
+
+    @action(detail=False, methods=['post'], url_path='create-message')
+    def create_message(self, request):
+        try:
+            cur_user_id = request.user.id
+            class_id = request.data['class_id']
+            cur_class = Class.objects.filter(id=class_id).get()
+
+            if cur_user_id != cur_class.created_by.id:
+                return Response({'Error': 'Доступ запрещён.'}, status=406)
+
+            data = {'content': request.data['content'], 'mes_class':cur_class.id}
+            serializer = MessageSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=201)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать приглашение.',
+            })

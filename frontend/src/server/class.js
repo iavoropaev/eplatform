@@ -63,6 +63,25 @@ export const createClass = async (data) => {
   }
 };
 
+export const createInvitation = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "class/create-invitation/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
 export const deleteInvitation = async (data) => {
   try {
     const res = await axios.post(
@@ -93,6 +112,25 @@ export const activateInvitation = async (data) => {
     );
 
     if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const createMessage = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "class/create-message/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 201) {
       return res.data;
     }
     return undefined;

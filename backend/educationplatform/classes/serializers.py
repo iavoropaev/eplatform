@@ -1,8 +1,13 @@
 from rest_framework import serializers
 
-from classes.models import Class, Invitation
+from classes.models import Class, Invitation, Message
 from users.serializers import UserSerializer
 
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('id', 'content', 'mes_class', 'created_at')
 
 class InvitationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,8 +29,16 @@ class ClassCreateSerializer(serializers.ModelSerializer):
 class ClassSerializerForTeacher(serializers.ModelSerializer):
     students = UserSerializer(many=True)
     invitations = InvitationSerializer(many=True)
+    messages = serializers.SerializerMethodField()
+
     class Meta:
         model = Class
-        fields = ('id', 'name', 'students', 'invitations')
+        fields = ('id', 'name', 'students', 'invitations', 'messages')
+
+    def get_messages(self, obj):
+        qs = obj.messages.order_by('-created_at')
+        return MessageSerializer(qs, many=True).data
+
+
 
 

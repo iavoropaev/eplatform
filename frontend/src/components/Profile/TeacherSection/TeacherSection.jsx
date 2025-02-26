@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { createClass, getMyClasses } from "../../../server/class";
+import "./TeacherSection.css";
 
 const TeacherSection = () => {
   const navigate = useNavigate();
@@ -18,19 +19,34 @@ const TeacherSection = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="lk-teach">
       <div>
         <h3>Материалы</h3>
-        <div>
-          <NavLink to="/bank/">Добавить задачу</NavLink>
-          <NavLink to="/bank/">Создать вариант</NavLink>
-          <NavLink to="/bank/">Создать курс</NavLink>
+
+        <p className="grey-text">Мои материалы</p>
+        <div className="my-materilas">
+          <NavLink to="./my-tasks/" className={"tag"}>
+            Мои задачи
+          </NavLink>
+          <NavLink to="./my-variants/" className={"tag"}>
+            Мои варианты
+          </NavLink>
+          <NavLink to="./my-courses/" className={"tag"}>
+            Мои курсы
+          </NavLink>
         </div>
 
-        <div>
-          <NavLink to="./my-tasks/">Мои задачи</NavLink>
-          <NavLink to="./my-variants/">Мои варианты</NavLink>
-          <NavLink to="./my-courses/">Мои курсы</NavLink>
+        <p className="grey-text">Добавить новые</p>
+        <div className="add-new">
+          <NavLink to="/create-task//" className={"tag"}>
+            Добавить задачу
+          </NavLink>
+          <NavLink to="/create-collection/" className={"tag"}>
+            Создать вариант
+          </NavLink>
+          <NavLink to="/create-course/" className={"tag"}>
+            Создать курс
+          </NavLink>
         </div>
       </div>
       <div>

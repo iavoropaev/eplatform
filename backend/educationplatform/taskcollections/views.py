@@ -1,4 +1,5 @@
 import json
+from collections.abc import Collection
 
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema
@@ -181,6 +182,23 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                 'Error': 'Не удалось создать подборку.',
             }, status=HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['post'], url_path='delete-collection')
+    def delete_collection(self, request):
+        try:
+            cur_user_id = request.user.id
+            coll_id = request.data['collection_id']
+            cur_coll = TaskCollection.objects.filter(id=coll_id).get()
+            print(cur_coll.created_by.id, cur_user_id)
+            if cur_coll.created_by.id != cur_user_id:
+                return Response(status=406)
+            cur_coll.delete()
+            return Response("deleted")
+
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать подборку.',
+            }, status=400)
 
 class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     queryset = TaskCollectionSolve.objects.all()

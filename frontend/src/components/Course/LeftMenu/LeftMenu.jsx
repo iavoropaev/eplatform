@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const LeftMenu = () => {
   const navigate = useNavigate();
 
-  const { lessonId } = useParams();
+  const { courseId, lessonId } = useParams();
   const activeLessonId = lessonId;
 
   const modules = useSelector((state) => state.course.courseData.modules);
@@ -48,7 +48,9 @@ const LeftMenu = () => {
                       }
                       key={lesson.id}
                       onClick={() => {
-                        navigate(`./../../../${lesson.id}/s/1/`);
+                        navigate(
+                          `/course/${courseId}/lesson/${lesson.id}/s/1/`
+                        );
                       }}
                     >
                       {modInd + 1 + "." + (lesInd + 1) + ". " + lesson.name}

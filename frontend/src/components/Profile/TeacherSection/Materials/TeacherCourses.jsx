@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Task from "../../../Task/Task";
 import { getMyCollections } from "../../../../server/collections";
-import { getMyCourses } from "../../../../server/course";
+import { deleteCourse, getMyCourses } from "../../../../server/course";
 
 const TeacherCourses = () => {
   const navigate = useNavigate();
@@ -22,6 +22,20 @@ const TeacherCourses = () => {
     navigate("./../");
   };
 
+  const handleCourseDelete = async (id) => {
+    if (window.confirm("Вы уверены, что хотите удалить?")) {
+      const res = await deleteCourse({ course_id: id });
+
+      if (res) {
+        const newCourses = courses.filter((course) => {
+          return course.id !== id;
+        });
+
+        setCourses(newCourses);
+      }
+    }
+  };
+
   return (
     <div className="">
       <h2> Мои курсы</h2>
@@ -32,17 +46,24 @@ const TeacherCourses = () => {
             <div>{course.name}</div>
             <button
               onClick={() => {
-                navigate(`/course/${course.slug}/`);
+                window.open(`/course/${course.id}/lesson/-1/s/-1/`, "_blank");
               }}
             >
               Смотреть
             </button>
             <button
               onClick={() => {
-                navigate(`/edit-course/${course.id}/`);
+                window.open(`/edit-course/${course.id}/`, "_blank");
               }}
             >
               Редактировать
+            </button>
+            <button
+              onClick={() => {
+                handleCourseDelete(course.id);
+              }}
+            >
+              Удалить
             </button>
           </div>
         ))}

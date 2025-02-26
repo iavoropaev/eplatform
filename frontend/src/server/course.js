@@ -139,6 +139,24 @@ export const sendSectionSolution = async (data) => {
   }
 };
 
+export const createCourse = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "edit-course/create-course/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 201) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
 export const createModule = async (data) => {
   try {
     const res = await axios.post(
@@ -227,6 +245,25 @@ export const updateLesson = async (data) => {
       return res.data;
     }
     return res.data;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const deleteCourse = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "edit-course/delete-course/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
   } catch (error) {
     return undefined;
   }

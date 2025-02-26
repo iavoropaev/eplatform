@@ -105,6 +105,26 @@ export const createCollection = async (data) => {
   }
 };
 
+export const deleteCollection = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "tasks-collections/delete-collection/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
+
 export const generateCollection = async (data) => {
   try {
     const res = await axios.post(

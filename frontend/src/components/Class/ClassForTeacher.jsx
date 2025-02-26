@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { deleteInvitation, getClassbyId } from "../../server/class";
+import {
+  createInvitation,
+  createMessage,
+  deleteInvitation,
+  getClassbyId,
+} from "../../server/class";
 
 const ClassForTeacher = () => {
   const { classId } = useParams();
   const [classData, setClassData] = useState(undefined);
+  const [newMessageContent, setNewMessageContent] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -26,6 +32,30 @@ const ClassForTeacher = () => {
     }
   };
 
+  const handleNewInvBut = async () => {
+    const newInv = await createInvitation({ class_id: classId });
+    if (newInv) {
+      setClassData({
+        ...classData,
+        invitations: [...classData.invitations, newInv],
+      });
+    }
+  };
+
+  const handleNewMesBut = async () => {
+    const newMes = await createMessage({
+      class_id: classId,
+      content: newMessageContent,
+    });
+    if (newMes) {
+      setClassData({
+        ...classData,
+        messages: [newMes, ...classData.messages],
+      });
+      setNewMessageContent("");
+    }
+  };
+
   if (!classData) {
     return <></>;
   }
@@ -44,6 +74,22 @@ const ClassForTeacher = () => {
             }`}</div>
           );
         })}
+      </div>
+      <div>
+        <h3>Сообщения</h3>
+        {classData?.messages.map((mes) => {
+          return <div key={mes.id}>{mes.content}</div>;
+        })}
+        <div>
+          <h3>Отправить новое сообщение</h3>
+          <textarea
+            value={newMessageContent}
+            onChange={(e) => {
+              setNewMessageContent(e.target.value);
+            }}
+          ></textarea>
+          <button onClick={handleNewMesBut}>Отправить</button>
+        </div>
       </div>
       <div>
         <h3>Приглашения</h3>
@@ -70,6 +116,7 @@ const ClassForTeacher = () => {
             </div>
           );
         })}
+        <button onClick={handleNewInvBut}>Создать приглашение</button>
       </div>
     </div>
   );

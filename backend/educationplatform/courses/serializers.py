@@ -56,13 +56,17 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('id', 'name', 'slug', 'description', 'modules')
+        fields = ('id', 'name', 'description', 'modules')
 
     def get_modules(self, course):
         course_module = course.coursemodules.order_by('order')
         modules = [cm.module for cm in course_module]
         return ModuleSerializer(modules, many=True).data
 
+class CourseCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('id', 'name', 'description', 'created_by')
 
 class ModuleAllFieldsSerializer(serializers.ModelSerializer):
     class Meta:

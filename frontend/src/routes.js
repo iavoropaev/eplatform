@@ -18,6 +18,7 @@ import TeacherCollections from "./components/Profile/TeacherSection/Materials/Te
 import TeacherCourses from "./components/Profile/TeacherSection/Materials/TeacherCourses";
 import ActivateInvitation from "./components/Class/ActivateInvitation";
 import ClassForTeacher from "./components/Class/ClassForTeacher";
+import CreateCourse from "./components/Course/CreateCourse/CreateCourse";
 
 export const publicRoutes = [
   { path: "bank", Component: BankPage },
@@ -30,6 +31,10 @@ export const publicRoutes = [
   { path: "variant/:slug/results/:solveType/", Component: ExamResultsPage },
   { path: "variant/:slug/results/", Component: ExamResultsPage },
 
+  {
+    path: "course/:courseId/",
+    Component: CoursePage,
+  },
   {
     path: "course/:courseId/:lesson/:lessonId/s/:sectionIndex/",
     Component: CoursePage,
@@ -61,6 +66,7 @@ export const authRoutes = [
   },
 
   { path: "edit-course/:courseId/", Component: UpdateCourse },
+  { path: "create-course/", Component: CreateCourse },
 ];
 
 export const adminRoutes = [];

@@ -74,9 +74,10 @@
 .filter-option {
   user-select: none;
 }
+
 .bank-filter .option {
   text-align: center;
-  padding: 2px;
+  padding: 3px 8px 3px 8px;
 }
 .bank-filter .tag .option:hover {
   cursor: pointer;

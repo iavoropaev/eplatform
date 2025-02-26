@@ -1,0 +1,17 @@
+.create-course {
+  text-align: left;
+  margin: 0px;
+  padding: 30px;
+}
+.create-course > * {
+  padding-bottom: 10px;
+}
+.create-course .discr {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  max-width: 90%;
+}
+.create-course button {
+  padding: 6px;
+}

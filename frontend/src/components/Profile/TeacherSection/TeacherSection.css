@@ -1,0 +1,16 @@
+.lk-teach h3 {
+  text-align: center;
+}
+
+.lk-teach .add-new,
+.lk-teach .my-materilas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.lk-teach .tag {
+  color: black;
+  text-decoration: none;
+}

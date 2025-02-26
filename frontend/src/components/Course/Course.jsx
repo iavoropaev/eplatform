@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LeftMenu from "./LeftMenu/LeftMenu";
 import "./Course.css";
 import {
@@ -18,6 +18,7 @@ const Course = () => {
   const { courseId, lesson, lessonId } = useParams();
   const viewType = lesson;
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const courseData = useSelector((state) => state.course.courseData);
   const currentLesson = useSelector((state) => state.course.currentLesson);
@@ -38,16 +39,17 @@ const Course = () => {
       const lessonData = await getLessonFromServerById(lessonId);
       if (lessonData) {
         dispatch(setCurrentLesson(lessonData));
+      } else {
+        navigate(`/course/${courseId}/`);
       }
     }
     fetchData();
   }, [dispatch, lessonId]);
 
-  if (!courseData?.id || !currentLesson) {
-    console.log(courseData, currentLesson);
+  if (!courseData?.id) {
     return <h1>Загрузка</h1>;
   }
-
+  console.log(courseData);
   return (
     <div className="course-container">
       <LeftMenu />
