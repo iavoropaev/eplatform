@@ -1,0 +1,84 @@
+.teacher-class {
+  text-align: left;
+  width: 75%;
+  margin: auto;
+  margin-top: 10px;
+  padding-bottom: 30px;
+}
+.teacher-class h2 {
+  text-align: center;
+}
+.teacher-class .stud-mes-cont {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.teacher-class .new-message {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+.teacher-class textarea {
+  width: 600px;
+  height: 100px;
+}
+
+.teacher-class .messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.teacher-class .message {
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: white;
+  overflow: hidden;
+}
+.teacher-class .message .content {
+  overflow: auto;
+}
+.teacher-class .message > div {
+  padding: 10px;
+}
+.teacher-class .message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(222, 222, 222);
+}
+.teacher-class .message-header button {
+  margin-left: 5px;
+}
+
+.teacher-class .students {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teacher-class .new-inv-but {
+  margin-top: 5px;
+}
+
+.teacher-class .invitations {
+  color: grey;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: start;
+  margin-left: 15px;
+}
+.teacher-class .invitation {
+  color: grey;
+  display: flex;
+  gap: 10px;
+}
+.teacher-class .invitation button {
+  padding: 4px;
+  font-size: 12px;
+  border-radius: 2px;
+}

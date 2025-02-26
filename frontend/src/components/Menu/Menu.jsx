@@ -1,7 +1,8 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import "./Menu.css";
 
 const Menu = () => {
+  const { section } = useParams();
   return (
     <div className="menu-container">
       <div className="menu">
@@ -19,7 +20,9 @@ const Menu = () => {
             Подборки
           </NavLink>
 
-          <NavLink to="/lk/teach/">ЛК</NavLink>
+          <NavLink to="/lk/teach/" className={section ? "active" : ""}>
+            ЛК
+          </NavLink>
         </nav>
       </div>
     </div>

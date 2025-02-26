@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Task from "../../../Task/Task";
 import { getMyTasks } from "../../../../server/bank";
-
+import "./Materials.css";
 const TeacherTasks = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
@@ -22,18 +22,23 @@ const TeacherTasks = () => {
     navigate("./../");
   };
   return (
-    <div className="">
+    <div className="teacher-materials">
       <h2> Мои задачи</h2>
-      <button onClick={goToLk}>В личный кабинет</button>
-      {countAllTasks && <p>{`Количество ${countAllTasks}`}</p>}
-      {tasks.map((task) => (
-        <Task
-          key={task.id}
-          taskData={task}
-          hideAnswerBlock={true}
-          showEditIcon={true}
-        />
-      ))}
+      {countAllTasks && <p>{`Количество: ${countAllTasks}.`}</p>}
+      <button onClick={goToLk} className="return-but">
+        В личный кабинет
+      </button>
+
+      <div>
+        {tasks.map((task) => (
+          <Task
+            key={task.id}
+            taskData={task}
+            hideAnswerBlock={true}
+            showEditIcon={true}
+          />
+        ))}
+      </div>
     </div>
   );
 };

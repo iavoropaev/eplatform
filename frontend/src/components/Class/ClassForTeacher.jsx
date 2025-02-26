@@ -6,6 +6,7 @@ import {
   deleteInvitation,
   getClassbyId,
 } from "../../server/class";
+import "./ClassForTeacher.css";
 
 const ClassForTeacher = () => {
   const { classId } = useParams();
@@ -55,6 +56,16 @@ const ClassForTeacher = () => {
       setNewMessageContent("");
     }
   };
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return new Intl.DateTimeFormat("ru-RU", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  };
 
   if (!classData) {
     return <></>;
@@ -63,60 +74,97 @@ const ClassForTeacher = () => {
   console.log(classData);
 
   return (
-    <div>
-      <h2>{`Класс: ${classData.name}.`}</h2>
-      <div>
-        <h3>Ученики</h3>
-        {classData?.students.map((student, i) => {
-          return (
-            <div key={i}>{`${i + 1}. ${student.first_name} ${
-              student.last_name
-            }`}</div>
-          );
-        })}
-      </div>
-      <div>
-        <h3>Сообщения</h3>
-        {classData?.messages.map((mes) => {
-          return <div key={mes.id}>{mes.content}</div>;
-        })}
-        <div>
-          <h3>Отправить новое сообщение</h3>
-          <textarea
-            value={newMessageContent}
-            onChange={(e) => {
-              setNewMessageContent(e.target.value);
-            }}
-          ></textarea>
-          <button onClick={handleNewMesBut}>Отправить</button>
-        </div>
-      </div>
-      <div>
-        <h3>Приглашения</h3>
-        {classData?.invitations.map((inv, i) => {
-          const link = `${process.env.REACT_APP_AUTH_REDIRECT_URL}class/activate-invitation/${inv.token}/`;
-          return (
-            <div key={i}>
-              <span>{link}</span>{" "}
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(link);
-                }}
-              >
-                Копировать
-              </button>
-              <button
-                onClick={() => {
-                  console.log(inv.id);
-                  handleDeleteBut(inv.id, i);
-                }}
-              >
-                Удалить
+    <div className="teacher-class">
+      <h2>{classData.name}</h2>
+      <div className="stud-mes-cont">
+        <div className="students">
+          <h3>Ученики</h3>
+          <div>
+            {classData?.students.map((student, i) => {
+              return (
+                <div key={i}>{`${i + 1}. ${student.first_name} ${
+                  student.last_name
+                }`}</div>
+              );
+            })}
+          </div>
+
+          <details>
+            <summary>Приглашения</summary>
+            <div className="invitations">
+              {classData?.invitations.map((inv, i) => {
+                const link = `${i + 1}. ${
+                  process.env.REACT_APP_AUTH_REDIRECT_URL
+                }class/activate-invitation/${inv.token}/`;
+                return (
+                  <div key={i} className="invitation">
+                    <span>{link}</span>{" "}
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(link);
+                      }}
+                    >
+                      Копировать
+                    </button>
+                    <button
+                      onClick={() => {
+                        console.log(inv.id);
+                        handleDeleteBut(inv.id, i);
+                      }}
+                    >
+                      Удалить
+                    </button>
+                  </div>
+                );
+              })}
+              <button className="new-inv-but" onClick={handleNewInvBut}>
+                Создать приглашение
               </button>
             </div>
-          );
-        })}
-        <button onClick={handleNewInvBut}>Создать приглашение</button>
+          </details>
+        </div>
+
+        <div className="messages-cont">
+          <h3>Сообщения</h3>
+          <details className="new-message">
+            <summary>Отправить новое сообщение</summary>
+            <div className="new-message">
+              <div>
+                <textarea
+                  value={newMessageContent}
+                  onChange={(e) => {
+                    setNewMessageContent(e.target.value);
+                  }}
+                ></textarea>
+              </div>
+
+              <button onClick={handleNewMesBut}>Отправить</button>
+            </div>
+          </details>
+
+          <div className="messages">
+            {classData?.messages.map((mes) => {
+              console.log(mes);
+              return (
+                <div className="message">
+                  <div className="message-header">
+                    <span>{formatDate(mes.created_at)}</span>
+                    <div>
+                      <button>Редактировать</button>
+                      <button>Удалить</button>
+                    </div>
+                  </div>
+                  <hr></hr>
+                  <div
+                    className="content"
+                    key={mes.id}
+                    dangerouslySetInnerHTML={{ __html: mes.content }}
+                  ></div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

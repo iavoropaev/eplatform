@@ -5,7 +5,7 @@ import {
   deleteCollection,
   getMyCollections,
 } from "../../../../server/collections";
-
+import "./Materials.css";
 const TeacherCollections = () => {
   const navigate = useNavigate();
   const [collections, setCollections] = useState([]);
@@ -40,34 +40,45 @@ const TeacherCollections = () => {
     }
   };
   return (
-    <div className="">
+    <div className="teacher-materials">
       <h2> Мои варианты</h2>
-      <button onClick={goToLk}>В личный кабинет</button>
-      <div>
+      <button onClick={goToLk} className="return-but">
+        В личный кабинет
+      </button>
+      <div className="col-cont">
         {collections.map((col) => (
-          <div key={col.id} className="tag">
+          <div
+            key={col.id}
+            className="collection"
+            onClick={() => {
+              window.open(`/collections/${col.slug}`, "_blank");
+            }}
+          >
             <div>{col.name}</div>
-            <button
-              onClick={() => {
-                window.open(`/collections/${col.slug}`, "_blank");
-              }}
-            >
-              Смотреть
-            </button>
-            <button
-              onClick={() => {
-                window.open(`/update-collection/${col.slug}`, "_blank");
-              }}
-            >
-              Редактировать
-            </button>
-            <button
-              onClick={() => {
-                handleCollectionDelete(col.id);
-              }}
-            >
-              Удалить
-            </button>
+            <div className="buttons">
+              <button
+                onClick={() => {
+                  window.open(`/collections/${col.slug}`, "_blank");
+                }}
+              >
+                Смотреть
+              </button>
+              <button
+                onClick={() => {
+                  window.open(`/update-collection/${col.slug}`, "_blank");
+                }}
+              >
+                Редактировать
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCollectionDelete(col.id);
+                }}
+              >
+                Удалить
+              </button>
+            </div>
           </div>
         ))}
       </div>

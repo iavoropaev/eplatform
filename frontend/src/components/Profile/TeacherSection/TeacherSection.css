@@ -14,3 +14,31 @@
   color: black;
   text-decoration: none;
 }
+.lk-teach .tag:hover {
+  background-color: transparent;
+}
+
+.lk-teach .grey-text {
+  margin-top: 10px;
+}
+
+.lk-teach .class-cont {
+  display: flex;
+  flex-direction: column;
+}
+.lk-teach .class {
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  /* display: inline-block; */
+  flex-shrink: 0;
+  width: fit-content;
+}
+.lk-teach .class:hover {
+  text-decoration: underline;
+}
+
+.lk-teach .create-class button {
+  border-radius: 3px;
+  margin-left: 5px;
+}

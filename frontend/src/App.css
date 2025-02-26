@@ -25,7 +25,8 @@ button {
   padding: 6px;
   border-radius: 1dvh;
 }
-button:hover {
+button:hover,
+summary:hover {
   cursor: pointer;
 }
 button:disabled {

@@ -52,18 +52,23 @@ const TeacherSection = () => {
       <div>
         <h3>Классы</h3>
         <div>
-          {classes.map((cur_class, i) => (
-            <div
-              key={i}
-              onClick={() => {
-                navigate(`/class/${cur_class.id}`);
-              }}
-            >
-              {cur_class.name}
-            </div>
-          ))}
+          <p className="grey-text">Мои классы</p>
+          <div className="class-cont">
+            {classes.map((cur_class, i) => (
+              <div
+                className="class"
+                key={i}
+                onClick={() => {
+                  navigate(`/class/${cur_class.id}`);
+                }}
+              >
+                {`${i + 1}. ${cur_class.name}`}
+              </div>
+            ))}
+          </div>
         </div>
-        <div>
+        <div className="create-class">
+          <p className="grey-text">Создать новый класс</p>
           <form
             onSubmit={async (e) => {
               e.preventDefault();
