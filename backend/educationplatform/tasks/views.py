@@ -14,7 +14,8 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from educationplatform.settings import DOMEN
-from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskNumberInExam, \
+from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, \
+    TaskNumberInExam, \
     TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
     TaskNumberInExamSerializer, TaskSerializerForCreate, TaskSerializerForUser1
@@ -43,16 +44,17 @@ class TaskViewSet(viewsets.ModelViewSet):
     def task_with_ans_by_id(self, request):
         try:
             task_id = request.data['task_id']
-            task = Task.objects.all().filter(id=task_id)[0]
+            task = Task.objects.select_related(
+            'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
+        ).filter(id=task_id).first()
             if (task.created_by != request.user) and (not request.user.is_staff):
                 return Response('Доступ запрещен.', status=status.HTTP_403_FORBIDDEN)
 
             serializer = TaskSerializerForCreate(task, many=False)
+            print(len(connection.queries))
             return Response(serializer.data, status=200)
         except:
             return Response({'Error': 'Не удалось загрузить задачи.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
     @extend_schema(description='''Get tasks filtered by authors, sources, topics, create time. Ordering by create time. 
     Params: authors, sources, topics, d_levels, period(day, week, month).''')
@@ -101,7 +103,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
-
+        print('filtered', len(connection.queries))
         return Response({'count': len(data), 'tasks': data})
 
     @extend_schema(description='Get new tasks. Available periods: day, week, month.')
@@ -109,7 +111,9 @@ class TaskViewSet(viewsets.ModelViewSet):
     def new_tasks(self, request):
         try:
             cur_time = datetime.datetime.now(pytz.timezone('Europe/Moscow'))
-            tasks = Task.objects.all().filter(is_available_in_bank=True)
+            tasks = Task.objects.select_related(
+                'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
+            ).all().filter(is_public=True)
 
             period = request.data['period']
 
@@ -120,24 +124,28 @@ class TaskViewSet(viewsets.ModelViewSet):
             elif period == 'month':
                 tasks = tasks.filter(time_create__range=(cur_time - datetime.timedelta(days=31), cur_time))
             else:
-                return Response({'Error': 'Неверно указан период.'}, status=406)
+                return Response({'Error': 'Неверно указан период.'}, status=400)
 
             tasks = tasks.order_by('-time_create')
 
             serializer = TaskSerializerForUser(tasks, many=True)
             data = serializer.data
+            print('my', len(connection.queries))
             return Response({'count': len(data), 'tasks': data})
-        except:
-            return Response({'Error': 'Не удалось загрузить задачи.'}, status=406)
+        except Exception as e:
+            print(e)
+            return Response({'Error': 'Не удалось загрузить задачи.'}, status=400)
 
     @action(detail=False, methods=['get'], url_path='my')
     def my_tasks(self, request):
         try:
             cur_user_id = request.user.id
-            tasks = Task.objects.filter(created_by=cur_user_id)
+            tasks = Task.objects.select_related(
+                'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
+            ).filter(created_by=cur_user_id)
             count_all = tasks.count()
-            tasks = tasks.order_by('-time_create')[:10] # !!!!!!!!!
-            paginator = Paginator(tasks, 10**6)
+            tasks = tasks.order_by('-time_create')[:10]  # !!!!!!!!!
+            paginator = Paginator(tasks, 10 ** 6)
             tasks_page = paginator.get_page(1)
             tasks = tasks_page.object_list
             serializer = TaskSerializerForUser(tasks, many=True)
@@ -274,7 +282,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             cur_task_id = request.data['task_id']
             user_answer = request.data['answer']
 
-            task = Task.objects.all().filter(id=cur_task_id)[0]
+            task = Task.objects.values("answer", "answer_type").get(id=cur_task_id)
             ok_answer_data = json.loads(task.answer)
             ok_answer_type = task.answer_type
             ok_answer = {'type': ok_answer_type, ok_answer_type: ok_answer_data}
@@ -291,6 +299,8 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 sol_status = 'ok' if data['is_ok_solution'] else 'wa'
             else:
                 sol_status = 'ok' if check_answer(user_answer, ok_answer) else 'wa'
+
+            print('my', len(connection.queries))
             return Response({
                 'status': sol_status
             })
@@ -305,7 +315,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
     def my(self, request):
         cur_user_id = request.user.id
 
-        count_tasks = Task.objects.all().filter(is_available_in_bank=True).count()
+        count_tasks = Task.objects.all().filter(is_public=True).count()
         solutions = TaskSolutions.objects.all().filter(user_id=cur_user_id)
 
         # Все решения
@@ -314,7 +324,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
 
         # Количество правильных решений, уникальных задач
         count_ok_solutions = solutions.filter(is_ok_solution=True).values('task_id').annotate((Count('id'))).count()
-
+        print('my', len(connection.queries))
         return Response({
             'count': {
                 'all_tasks_count': count_tasks,
@@ -360,7 +370,6 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                     id_status[task.id] = 'ok'
                 elif task.incorrect_solutions > 0:
                     id_status[task.id] = 'wa'
-            print(len(connection.queries))
             return Response(id_status)
         except:
             return Response({
@@ -368,30 +377,31 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             }, status=406)
 
     @extend_schema(description='Get count users, who solved task.')
-    @action(detail=False, methods=['get'], url_path='count-ok-by-task-id')
+    @action(detail=False, methods=['post'], url_path='count-ok-by-task-id')
     def count_users_who_solved_task(self, request):
         try:
             cur_user_id = request.user.id
-            cur_task_id = request.data['task-id']
+            cur_task_id = request.data['task_id']
             count = TaskSolutions.objects.all().filter(user_id=cur_user_id, task_id=cur_task_id) \
                 .values('user_id').annotate((Count('id'))).count()
 
             return Response({
                 'count-unique-ok-solves': count
             })
-        except:
+
+        except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось получить решения.'
-            }, status=406)
+            }, status=400)
 
     @extend_schema(description='Get percent of ok solutions for task by task id.')
-    @action(detail=False, methods=['get'], url_path='percent-ok-by-task-id')
+    @action(detail=False, methods=['post'], url_path='percent-ok-by-task-id')
     def percent_ok_solves_by_task_id(self, request):
         try:
-            cur_task_id = request.data['task-id']
+            cur_task_id = request.data['task_id']
             count_all = TaskSolutions.objects.all().filter(task_id=cur_task_id).count()
             count_ok = TaskSolutions.objects.all().filter(task_id=cur_task_id, is_ok_solution=True).count()
-            a = 1
             return Response({
                 'percent-ok-solves': int(count_ok / count_all * 100)
             })
@@ -413,9 +423,12 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):
-        task_exams = TaskExam.objects.all()
-        actualities = [{'id': item.id, 'name': item.name} for item in Actuality.objects.all()]
+        task_exams = TaskExam.objects.prefetch_related('dif_levels', 'subjects', 'subjects__numbers',
+                                                       'subjects__sources',
+                                                       'subjects__authors').all()
         serializer = FilterSerializer(task_exams, many=True)
+        actualities = [{'id': item.id, 'name': item.name} for item in Actuality.objects.all()]
+        print('my', len(connection.queries))
         return Response({'exams': serializer.data, 'actualities': actualities})
 
     @action(detail=False, methods=['post'])

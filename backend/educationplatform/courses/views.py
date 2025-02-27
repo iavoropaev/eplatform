@@ -1,6 +1,8 @@
 import json
 import time
 
+from django.db import connection
+from django.db.models import Prefetch
 from rest_framework import status
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
@@ -59,13 +61,10 @@ class CoursesViewSet(viewsets.ModelViewSet):
         try:
             cur_user_id = request.user.id
             cur_course_id = int(pk)
-            # if not Course.objects.all().filter(id=cur_course_id).first().users.values().filter(id=cur_user_id).count():
-            #     return Response({
-            #         'Error': 'У вас нет доступа к курсу.',
-            #     }, status=403)
+            course = Course.objects.filter(id=cur_course_id).get()
 
-            course = Course.objects.all().filter(id=cur_course_id)[0]
             course_serializer = CourseSerializer(course, many=False)
+            #print(len(connection.queries))
             return Response(course_serializer.data)
         except Exception as e:
             print(e)
@@ -80,6 +79,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
             cur_user_id = request.user.id
             cur_lesson_id = request.GET.get('lesson_id')
             lesson_data = get_lesson_data_with_solves(cur_lesson_id, cur_user_id)
+            print('lesson', len(connection.queries))
             return Response(lesson_data)
         except Exception as e:
             print(e)

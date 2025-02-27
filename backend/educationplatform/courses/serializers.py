@@ -20,13 +20,17 @@ class SectionSerializer(serializers.ModelSerializer):
 
 class LessonSerializer(serializers.ModelSerializer):
     sections = serializers.SerializerMethodField()
+    #sections = SectionSerializer(many=True)
+    #sections = SectionSerializer(many=True, source='lessonsections__section')
 
     class Meta:
         model = Lesson
         fields = ('id', 'name', 'sections')
 
     def get_sections(self, lesson):
-        lesson_sections = lesson.lessonsections.order_by('order')
+        lesson_sections = getattr(lesson, 'prefetched_lessonsections', None)
+        if not lesson_sections:
+            lesson_sections = lesson.lessonsections.order_by('order')
         section = [ls.section for ls in lesson_sections]
         return SectionSerializer(section, many=True).data
 
@@ -39,6 +43,7 @@ class LessonOnlyNameSerializer(serializers.ModelSerializer):
 
 class ModuleSerializer(serializers.ModelSerializer):
     lessons = serializers.SerializerMethodField()
+    #lessons = LessonSerializer(many=True)
 
     class Meta:
         model = Module
@@ -53,6 +58,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     modules = serializers.SerializerMethodField()
+    #modules = ModuleSerializer(many=True)
 
     class Meta:
         model = Course

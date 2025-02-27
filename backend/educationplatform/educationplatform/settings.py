@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "rest_framework",
     'django_extensions',
     'drf_spectacular',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -76,9 +77,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 CORS_ORIGIN_ALLOW_ALL = True
+INTERNAL_IPS = ['127.0.0.1']
 
 ROOT_URLCONF = "educationplatform.urls"
 
@@ -161,8 +164,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         ['rest_framework_simplejwt.authentication.JWTAuthentication',
-         'rest_framework.authentication.SessionAuthentication', # Erase
-         'rest_framework.authentication.BasicAuthentication' # Erase
+         'rest_framework.authentication.SessionAuthentication',  # Erase
+         'rest_framework.authentication.BasicAuthentication'  # Erase
          ]
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
