@@ -20,8 +20,6 @@ class SectionSerializer(serializers.ModelSerializer):
 
 class LessonSerializer(serializers.ModelSerializer):
     sections = serializers.SerializerMethodField()
-    #sections = SectionSerializer(many=True)
-    #sections = SectionSerializer(many=True, source='lessonsections__section')
 
     class Meta:
         model = Lesson
@@ -43,7 +41,6 @@ class LessonOnlyNameSerializer(serializers.ModelSerializer):
 
 class ModuleSerializer(serializers.ModelSerializer):
     lessons = serializers.SerializerMethodField()
-    #lessons = LessonSerializer(many=True)
 
     class Meta:
         model = Module
@@ -58,7 +55,6 @@ class ModuleSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     modules = serializers.SerializerMethodField()
-    #modules = ModuleSerializer(many=True)
 
     class Meta:
         model = Course
@@ -69,10 +65,12 @@ class CourseSerializer(serializers.ModelSerializer):
         modules = [cm.module for cm in course_module]
         return ModuleSerializer(modules, many=True).data
 
+
 class CourseCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('id', 'name', 'description', 'created_by')
+
 
 class ModuleAllFieldsSerializer(serializers.ModelSerializer):
     class Meta:

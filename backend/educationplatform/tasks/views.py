@@ -18,7 +18,7 @@ from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, 
     TaskNumberInExam, \
     TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
-    TaskNumberInExamSerializer, TaskSerializerForCreate, TaskSerializerForUser1
+    TaskNumberInExamSerializer, TaskSerializerForCreate
 from .utils import check_answer
 
 
@@ -60,6 +60,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     Params: authors, sources, topics, d_levels, period(day, week, month).''')
     @action(detail=False, methods=['post'])
     def filtered(self, request):
+        time.sleep(600)
         tasks = Task.objects.all().select_related(
             'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
         ).prefetch_related('bank_authors')
@@ -113,7 +114,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             cur_time = datetime.datetime.now(pytz.timezone('Europe/Moscow'))
             tasks = Task.objects.select_related(
                 'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
-            ).all().filter(is_public=True)
+            ).filter(is_public=True)
 
             period = request.data['period']
 

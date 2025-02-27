@@ -13,22 +13,21 @@ def get_lesson_data_with_solves(cur_lesson_id, cur_user_id):
         )
     ).get()
 
-    #lesson = Lesson.objects.prefetch_related('lessonsections__section__task').filter(id=cur_lesson_id).get()
+    lesson = Lesson.objects.prefetch_related('lessonsections__section__task').filter(id=cur_lesson_id).get()
     lesson_serializer = LessonSerializer(lesson, many=False)
-    #section_ids = [section['id'] for section in lesson_serializer.data['sections']]
+    section_ids = [section['id'] for section in lesson_serializer.data['sections']]
 
-    # solves = (SectionSolve.objects.all().filter(user=cur_user_id, section__in=section_ids)
-    #           .order_by('section', '-score', '-time_create').distinct('section'))
-    # solve_serializer = SectionSolveSerializer(solves, many=True)
+    solves = (SectionSolve.objects.all().filter(user=cur_user_id, section__in=section_ids)
+              .order_by('section', '-score', '-time_create').distinct('section'))
+    solve_serializer = SectionSolveSerializer(solves, many=True)
 
     lesson_data = lesson_serializer.data
-    print([lesson_data], type(lesson_data))
-    # section_solve_dict = {solve['section']: solve for solve in solve_serializer.data}
-    # for section in lesson_data['sections']:
-    #     if section['id'] in section_solve_dict:
-    #         section['solve'] = section_solve_dict[section['id']]
-    #     else:
-    #         section['solve'] = None
+    section_solve_dict = {solve['section']: solve for solve in solve_serializer.data}
+    for section in lesson_data['sections']:
+        if section['id'] in section_solve_dict:
+            section['solve'] = section_solve_dict[section['id']]
+        else:
+            section['solve'] = None
 
     return lesson_data
 

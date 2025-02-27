@@ -14,7 +14,7 @@ export const SubjectSelect = ({ filterData, subjects }) => {
     navigate(`./../${slug}/`);
   };
   return (
-    <div>
+    <div className="exam-subject-select">
       <select value={examSlug} onChange={handleChangeExam}>
         <option value="-" disabled>
           Выберите экзамен

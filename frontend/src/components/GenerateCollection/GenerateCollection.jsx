@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";
+import slugify from "slugify";
+import { useNavigate, useParams } from "react-router-dom";
 import { getFilterData } from "../../server/bank";
 import { useEffect, useState } from "react";
 import "./GenerateCollection.css";
@@ -6,9 +7,16 @@ import { GenerateCollSelect } from "./components/GenerateCollSelect";
 import { SubjectSelect } from "./components/SubjectSelect";
 import { generateCollection } from "../../server/collections";
 const GenerateCollection = () => {
+  const navigate = useNavigate();
+
   const { examSlug, subjectSlug } = useParams();
 
   const [filterData, setFilterData] = useState(undefined);
+
+  const [collectionName, setCollectionName] = useState("");
+  const [collectionSlug, setCollectionSlug] = useState("");
+  const [collectionDiscr, setCollectionDiscr] = useState("");
+
   const [countForEachNumber, setCountForEachNumber] = useState(undefined);
   const [dlForEachNumber, setDlForEachNumber] = useState(undefined);
   const [authorsForEachNumber, setAuthorsForEachNumber] = useState(undefined);
@@ -74,8 +82,17 @@ const GenerateCollection = () => {
         actuality: actsForEachNumber[i],
       });
     }
-    const res = await generateCollection(generateParams);
+    const data = {
+      name: collectionName,
+      slug: collectionSlug,
+      description: collectionDiscr,
+      generateParams,
+    };
+    const res = await generateCollection(data);
     console.log(res);
+    if (res) {
+      navigate(`/update-collection/${res.slug}/`);
+    }
   };
   console.log("!!!", actualities);
 
@@ -83,7 +100,37 @@ const GenerateCollection = () => {
     return <></>;
   }
   return (
-    <div>
+    <div className="gen-col">
+      <h2>Генерация варианта</h2>
+      <div className="col-info">
+        <input
+          placeholder="Название"
+          value={collectionName}
+          onChange={(e) => {
+            setCollectionName(e.target.value);
+            const slugified = slugify(e.target.value, {
+              lower: true,
+              strict: true,
+            });
+            setCollectionSlug(slugified);
+          }}
+        ></input>
+        <input
+          placeholder="Название"
+          value={collectionSlug}
+          onChange={(e) => {
+            setCollectionSlug(e.target.value);
+          }}
+        ></input>
+        <textarea
+          className="discription"
+          placeholder="Описание"
+          value={collectionDiscr}
+          onChange={(e) => {
+            setCollectionDiscr(e.target.value);
+          }}
+        ></textarea>
+      </div>
       <SubjectSelect filterData={filterData} subjects={subjects} />
 
       <table className="gen-col-table">

@@ -1,11 +1,44 @@
+.gen-col {
+  margin-top: 15px;
+  padding-bottom: 30px;
+}
+
+.gen-col .col-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.gen-col .col-info .discription {
+  width: 300px;
+  height: 50px;
+}
+
+.gen-col .exam-subject-select {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .gen-col-table {
+  margin: auto;
+  margin-bottom: 15px;
+  /* margin: 15px; */
   border-collapse: collapse;
   border: 1px solid grey;
+  width: auto;
+  background-color: white;
 }
 .gen-col-table td,
-.gen-col-table tr {
+.gen-col-table tr,
+.gen-col-table th {
   border-collapse: collapse;
   border: 1px solid grey;
+  padding: 5px;
+  font-size: 12px;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .gen-col-table select {
@@ -14,6 +47,7 @@
   cursor: pointer;
   outline: none;
   padding: 5px;
+  width: fit-content;
 }
 .gen-col-table select:hover {
   /* background-color: white; */

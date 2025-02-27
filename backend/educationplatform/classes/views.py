@@ -1,3 +1,4 @@
+from django.db import connection
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
@@ -32,7 +33,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             cur_class_id = request.GET.get('class_id')
             cur_class = Class.objects.filter(id=cur_class_id).get()
             serializer = ClassSerializerForTeacher(cur_class)
-
+            print('lesson', len(connection.queries))
             return Response(serializer.data)
 
         except Exception as e:

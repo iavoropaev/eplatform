@@ -1,10 +1,13 @@
 import json
+import random
 from collections.abc import Collection
 
+from django.db import connection
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
@@ -41,6 +44,15 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = TaskCollection.objects.prefetch_related(
+            "tasks__author", "tasks__number_in_exam", "tasks__source", "tasks__actuality", "tasks__difficulty_level"
+        )
+        obj = get_object_or_404(queryset, slug=kwargs["slug"])
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
+
     @action(detail=False, methods=['post'])
     def create_collection(self, request):
         try:
@@ -76,9 +88,9 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             cur_user_id = request.user.id
 
             if 'id' in request.data:
-                collection = TaskCollection.objects.get(id=request.data['id'])
+                collection = TaskCollection.objects.select_related('created_by').get(id=request.data['id'])
             elif 'slug' in request.data:
-                collection = TaskCollection.objects.get(slug=request.data['slug'])
+                collection = TaskCollection.objects.select_related('created_by').get(slug=request.data['slug'])
             else:
                 return Response({"detail": "Подборка не найдена."},
                                 status=status.HTTP_404_NOT_FOUND)
@@ -95,37 +107,32 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            # Update tasks
-            updated_tasks = []
-            for task in request.data['tasks']:
-                task_obj = Task.objects.get(id=task['id'])
-                if task['info']:
-                    task_serializer = TaskSerializer(task_obj, data=task['info'], partial=True)
-                    if task_serializer.is_valid():
-                        task_serializer.save()
-                        task_user_serializer = TaskSerializerForUser(task_obj)
-                        updated_tasks.append(task_user_serializer.data)
-                else:
-                    task_user_serializer = TaskSerializerForUser(task_obj)
-                    updated_tasks.append(task_user_serializer.data)
-
             # Update task ids in collection
-            tasks_to_delete = list(TaskCollectionTask.objects.filter(task_collection=collection).values())
-            TaskCollectionTask.objects.filter(task_collection=collection).delete()
-
+            tasks_to_delete = list(TaskCollectionTask.objects.filter(task_collection=collection).values('id'))
             old_task_ids = TaskCollectionTask.objects.filter(task_collection=collection)
             old_task_ids.delete()
 
-            data = []
-            for i, task in enumerate(request.data['tasks']):
-                task_id = task['id']
-                data.append({'task_collection': collection.id, 'task': task_id, 'order': i})
-            serializer = TaskCollectionTaskSerializer(data=data, many=True)
-            if serializer.is_valid():
-                serializer.save()
-                response['tasks'] = updated_tasks
-            else:
+            task_instances = [
+                TaskCollectionTask(task_collection=collection, task_id=task['id'], order=i)
+                for i, task in enumerate(request.data['tasks'])
+            ]
+
+            try:
+                TaskCollectionTask.objects.bulk_create(task_instances)
+            except Exception:
                 TaskCollectionTask.objects.bulk_create([TaskCollectionTask(**data) for data in tasks_to_delete])
+
+            tasks = Task.objects.filter(
+                id__in=TaskCollectionTask.objects.filter(task_collection=collection).values_list("task_id", flat=True)
+            ).select_related(
+                "author", "number_in_exam", "source", "actuality", "difficulty_level"
+            )
+
+
+            tasks_serializer = TaskSerializerForUser(tasks, many=True)
+            response['tasks'] = tasks_serializer.data
+
+
             return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:
             print(e)
@@ -136,12 +143,14 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'], url_path='generate-collection')
     def generate_collection(self, request):
         try:
-            print(request.data)
             cur_user_id = request.user.id
 
-            selected_tasks = []
+            selected_tasks_ids = []
             data = request.data
-            for number_info in data:
+            collection_data = {'name': data['name'], 'slug': data['slug'],
+                               'description': data['description'],
+                               'created_by': cur_user_id}
+            for number_info in data['generateParams']:
                 count = number_info['count']
                 number_id = number_info['number']['id']
                 difficulty_id = number_info['difficulty']
@@ -156,11 +165,11 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                     filters &= Q(author_id=author_id)
                 if actuality_id != '-':
                     filters &= Q(actuality_id=actuality_id)
-                tasks = Task.objects.filter(filters).order_by('?')[:count]
-                selected_tasks.extend(tasks)
 
-            selected_tasks_ids = [task.id for task in selected_tasks]
-            collection_data = {'name':'qqq', 'slug':'ggggg', 'description':'---', 'created_by':cur_user_id}
+                task_ids = Task.objects.filter(filters).values_list('id', flat=True)
+                selected_tasks_ids.extend(random.sample(list(task_ids), min(count, len(task_ids))))
+
+
             serializer = TaskCollectionCreateSerializer(data=collection_data)
 
             if serializer.is_valid():
@@ -172,10 +181,11 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                 if links_serializer.is_valid():
                     links_serializer.save()
                 user_serializer = TaskCollectionGetSerializer(created_collection)
+                queries = connection.queries
+                print(f"Количество запросов: {len(queries)}")
                 return Response(user_serializer.data, status=201)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(1, status=201)
         except Exception as e:
             print(e)
             return Response({
@@ -188,7 +198,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             cur_user_id = request.user.id
             coll_id = request.data['collection_id']
             cur_coll = TaskCollection.objects.filter(id=coll_id).get()
-            print(cur_coll.created_by.id, cur_user_id)
+
             if cur_coll.created_by.id != cur_user_id:
                 return Response(status=406)
             cur_coll.delete()
@@ -231,7 +241,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 score = 0
                 if str(task_id) in user_answers:
                     user_answer = user_answers[str(task_id)]
-                    print(user_answer, ok_answer)
+
                     if check_answer(user_answer, ok_answer):
                         score = 1
                         status = 'OK'

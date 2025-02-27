@@ -92,9 +92,3 @@ class TaskSerializerForUser(serializers.ModelSerializer):
         fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
                   'difficulty_level', 'actuality', 'time_update', 'time_create')
 
-class TaskSerializerForUser1(serializers.ModelSerializer):
-    author = TaskAuthorSerializer()
-    class Meta:
-        model = Task
-        fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
-                  'difficulty_level', 'actuality', 'time_update', 'time_create')
