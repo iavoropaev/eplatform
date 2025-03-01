@@ -19,6 +19,7 @@ import TeacherCourses from "./components/Profile/TeacherSection/Materials/Teache
 import ActivateInvitation from "./components/Class/ActivateInvitation";
 import ClassForTeacher from "./components/Class/ClassForTeacher";
 import CreateCourse from "./components/Course/CreateCourse/CreateCourse";
+import { ExamStatisticsPage } from "./components/ExamStatistics/ExamStatisticsPage";
 
 export const publicRoutes = [
   { path: "bank", Component: BankPage },
@@ -30,6 +31,10 @@ export const publicRoutes = [
   { path: "variant/:slug/", Component: ExamPage },
   { path: "variant/:slug/results/:solveType/", Component: ExamResultsPage },
   { path: "variant/:slug/results/", Component: ExamResultsPage },
+  {
+    path: "variant/:examSlug/all-results/:eSection/",
+    Component: ExamStatisticsPage,
+  },
 
   {
     path: "course/:courseId/",
@@ -52,7 +57,7 @@ export const authRoutes = [
   { path: "lk", Component: ProfilePage },
 
   { path: "class/activate-invitation/:token/", Component: ActivateInvitation },
-  { path: "class/:classId/", Component: ClassForTeacher },
+  { path: "class/:classId/:classSection/", Component: ClassForTeacher },
 
   { path: "edit-task/:taskId/", Component: CreateTaskPage },
   { path: "create-task/:taskId/", Component: CreateTaskPage },

@@ -10,7 +10,7 @@ class Class(models.Model):
                                    related_name='classes')
     name = models.CharField(max_length=100, blank=False)
 
-    students = models.ManyToManyField(AUTH_USER_MODEL, blank=True)
+    students = models.ManyToManyField(AUTH_USER_MODEL, blank=True, related_name='student_classes')
 
     # homeworks = models.ManyToManyField('Module', through='CourseModule', blank=True, related_name='courses')
 

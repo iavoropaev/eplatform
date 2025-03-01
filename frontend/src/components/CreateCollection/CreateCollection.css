@@ -26,10 +26,12 @@
 }
 .cc-task {
   display: flex;
+
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 50%;
+  /* flex-wrap: wrap; */
+  width: 70%;
   min-width: 300px;
 }
 
@@ -66,4 +68,11 @@
 .create-collection .arrow:active,
 .create-collection .del:active {
   color: red;
+}
+
+@media (max-width: 600px) {
+  .cc-task {
+    flex-direction: column;
+    width: 95%;
+  }
 }

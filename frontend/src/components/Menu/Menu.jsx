@@ -3,6 +3,7 @@ import "./Menu.css";
 
 const Menu = () => {
   const { section } = useParams();
+  console.log(section);
   return (
     <div className="menu-container">
       <div className="menu">

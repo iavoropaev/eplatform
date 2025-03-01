@@ -5,6 +5,8 @@ import TeacherSection from "./TeacherSection/TeacherSection";
 import { getMyClasses } from "../../server/class";
 import { useEffect } from "react";
 import { NavigateElement } from "./components/NavigateElement";
+import HistorySection from "./HistorySection/HistorySection";
+import MessagesSection from "./MessagesSection/MessagesSection";
 
 const Profile = () => {
   const { section } = useParams();
@@ -20,6 +22,8 @@ const Profile = () => {
       </div>
 
       {section === "teach" && <TeacherSection />}
+      {section === "history" && <HistorySection />}
+      {section === "dz" && <MessagesSection />}
     </div>
   );
 };

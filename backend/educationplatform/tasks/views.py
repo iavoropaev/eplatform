@@ -1,8 +1,7 @@
 import datetime
 import json
-import time
-
 import pytz
+
 from django.core.paginator import Paginator
 from django.db import connection
 from django.db.models import Count, Q
@@ -60,7 +59,6 @@ class TaskViewSet(viewsets.ModelViewSet):
     Params: authors, sources, topics, d_levels, period(day, week, month).''')
     @action(detail=False, methods=['post'])
     def filtered(self, request):
-        time.sleep(600)
         tasks = Task.objects.all().select_related(
             'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
         ).prefetch_related('bank_authors')
@@ -266,13 +264,11 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSolutionsSerializer
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
-                           'percent_ok_solves_by_task_id', 'send_solution']:
+        if self.action in ['my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
+                           'percent_ok_solves_by_task_id', 'send_solution', 'get_statuses']:
             permission_classes = [IsAuthenticated]
-            permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
-            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
     @extend_schema(description='Send solution for task.')
@@ -284,8 +280,9 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             user_answer = request.data['answer']
 
             task = Task.objects.values("answer", "answer_type").get(id=cur_task_id)
-            ok_answer_data = json.loads(task.answer)
-            ok_answer_type = task.answer_type
+
+            ok_answer_data = json.loads(task["answer"])
+            ok_answer_type = task["answer_type"]
             ok_answer = {'type': ok_answer_type, ok_answer_type: ok_answer_data}
 
             if cur_user_id:
@@ -306,6 +303,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 'status': sol_status
             })
         except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось обработать решение.',
                 'status': 'wa'

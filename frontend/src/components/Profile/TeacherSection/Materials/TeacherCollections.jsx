@@ -65,6 +65,16 @@ const TeacherCollections = () => {
               </button>
               <button
                 onClick={() => {
+                  window.open(
+                    `/variant/${col.slug}/all-results/history/`,
+                    "_blank"
+                  );
+                }}
+              >
+                Результаты
+              </button>
+              <button
+                onClick={() => {
                   window.open(`/update-collection/${col.slug}`, "_blank");
                 }}
               >

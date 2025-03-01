@@ -110,3 +110,16 @@ button:disabled {
   color: grey;
   font-size: 14px;
 }
+
+.navigate-div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 10px;
+}
+.navigate-el {
+  cursor: pointer;
+}

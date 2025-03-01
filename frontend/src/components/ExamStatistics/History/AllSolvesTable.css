@@ -1,0 +1,24 @@
+.all-solves-table {
+  margin: auto;
+  margin-top: 15px;
+  border-collapse: collapse;
+  border: 1px solid grey;
+  font-size: 14px;
+}
+
+.all-solves-table td,
+.all-solves-table th,
+.all-solves-table tr {
+  border: 1px solid grey;
+  padding: 3px;
+}
+
+.all-solves-table .user-name {
+  cursor: pointer;
+}
+.all-solves-table .user-name:hover {
+  text-decoration: underline;
+}
+/* .all-solves-table th {
+  padding: 5px;
+} */

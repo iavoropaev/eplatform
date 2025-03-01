@@ -4,9 +4,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from classes.models import Class, Invitation
+from classes.models import Class, Invitation, Message
 from classes.serializers import ClassSerializer, InvitationSerializer, ClassSerializerForTeacher, ClassCreateSerializer, \
-    MessageSerializer
+    MessageSerializer, MessageCreateSerializer
 
 
 class ClassesViewSet(viewsets.ModelViewSet):
@@ -17,7 +17,8 @@ class ClassesViewSet(viewsets.ModelViewSet):
         if self.action in []:
             permission_classes = [AllowAny]
         elif self.action in ['create_class', 'create_invitation', 'delete_invitation', 'create_message',
-                             'activate_invitation', 'get_my_classes', 'get_class_data']:
+                             'activate_invitation', 'get_my_classes', 'get_class_data', 'get-student-messages',
+                             'delete_message']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -33,9 +34,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             cur_class_id = request.GET.get('class_id')
             cur_class = Class.objects.filter(id=cur_class_id).get()
             serializer = ClassSerializerForTeacher(cur_class)
-            print('lesson', len(connection.queries))
             return Response(serializer.data)
-
         except Exception as e:
             print(e)
             return Response({
@@ -47,6 +46,17 @@ class ClassesViewSet(viewsets.ModelViewSet):
         cur_user_id = request.user.id
         classes = Class.objects.all().filter(created_by=cur_user_id)
         serializer = ClassSerializer(classes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='get-student-messages')
+    def get_student_messages(self, request):
+        cur_user_id = request.user.id
+        classes_id = list(request.user.student_classes.values_list('id', flat=True))
+        messages = Message.objects.select_related('mes_class').filter(mes_class_id__in=classes_id).order_by(
+            '-created_at')
+        print(messages)
+        serializer = MessageSerializer(messages, many=True)
+        print(f"Количество SQL-запросов: {len(connection.queries)}")
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'], url_path='create-class')
@@ -118,8 +128,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
             if class_.students.filter(id=cur_user_id).exists():
                 return Response({'Error': 'Вы уже добавлены в класс.'}, status=400)
             a = class_.students.add(cur_user_id)
-            print(a)
-
             return Response("ok")
 
         except Exception as e:
@@ -138,8 +146,9 @@ class ClassesViewSet(viewsets.ModelViewSet):
             if cur_user_id != cur_class.created_by.id:
                 return Response({'Error': 'Доступ запрещён.'}, status=406)
 
-            data = {'content': request.data['content'], 'mes_class':cur_class.id}
-            serializer = MessageSerializer(data=data)
+            data = {'content': request.data['content'], 'mes_class': cur_class.id}
+            print(data)
+            serializer = MessageCreateSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=201)
@@ -149,4 +158,22 @@ class ClassesViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось создать приглашение.',
-            })
+            }, status=400)
+
+    @action(detail=False, methods=['post'], url_path='delete-message')
+    def delete_message(self, request):
+        try:
+            cur_user_id = request.user.id
+            message_id = request.data['message_id']
+            message = Message.objects.filter(id=message_id).get()
+            author = message.mes_class.created_by.id
+            print(author)
+            if cur_user_id != author:
+                return Response({'Error': 'Доступ запрещён.'}, status=406)
+            message.delete()
+            return Response('deleted')
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось создать приглашение.',
+            }, status=400)

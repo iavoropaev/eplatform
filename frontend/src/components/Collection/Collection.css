@@ -1,11 +1,13 @@
 .collection-container {
-  padding-top: 20px;
-  padding-bottom: 50px;
+  padding-top: 15px;
+  padding-bottom: 30px;
 }
 
 .collection-container .play-container {
   text-align: center;
-  padding-right: 50px;
+  /* padding-right: 50px; */
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 .collection-container .play {
   cursor: pointer;
@@ -15,4 +17,8 @@
   border-radius: 5px;
   padding: 8px;
   user-select: none;
+}
+
+.collection-container .count-answers {
+  font-size: 20px;
 }

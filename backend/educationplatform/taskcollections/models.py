@@ -16,7 +16,7 @@ class TaskCollection(models.Model):
         return self.name
 
 class TaskCollectionTask(models.Model):
-    task_collection = models.ForeignKey(TaskCollection, on_delete=models.CASCADE)
+    task_collection = models.ForeignKey(TaskCollection, on_delete=models.CASCADE, related_name='taskcollectiontasks')
     task = models.ForeignKey('tasks.Task', on_delete=models.CASCADE, related_name='taskcollectiontasks')
     order = models.PositiveIntegerField()
 
@@ -25,7 +25,7 @@ class TaskCollectionTask(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return f"{self.task_collection.name} - {self.task.title} (Order: {self.order})"
+        return f"{self.task_collection.name} - {self.task.content[:15]} (Order: {self.order})"
 
 
 class TaskCollectionSolve(models.Model):

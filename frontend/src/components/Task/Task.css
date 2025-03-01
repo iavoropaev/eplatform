@@ -12,7 +12,7 @@ div.task-container {
   text-align: left;
   margin: auto;
   border: 1px solid grey;
-  min-width: 300px;
+  /* min-width: 300px; */
   overflow: hidden;
 }
 

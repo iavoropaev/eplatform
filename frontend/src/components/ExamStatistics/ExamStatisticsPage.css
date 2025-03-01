@@ -1,0 +1,30 @@
+.exam-stats-cont {
+  margin: auto;
+  margin-top: 15px;
+}
+.es-navigate {
+  display: flex;
+  gap: 15px;
+  margin: auto;
+  max-width: 80%;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid grey;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.es-navigate .element {
+  cursor: pointer;
+}
+
+.all-results-cont {
+  overflow: auto;
+}
+
+.all-results-cont .selects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}

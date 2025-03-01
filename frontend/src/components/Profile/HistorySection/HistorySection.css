@@ -1,0 +1,63 @@
+.exam-solutions-section {
+  margin: auto;
+  width: 80%;
+}
+
+.exam-solutions-section .exam-solutions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.exam-solutions-section .solution {
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: rgb(229, 249, 255);
+}
+.exam-solutions-section .solution-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px 10px;
+  flex-wrap: wrap;
+}
+.exam-solutions-section .solution-header button {
+  background-color: transparent;
+  border-radius: 3px;
+}
+
+.exam-solutions-section .score-name,
+.exam-solutions-section .but-date {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.exam-solutions-section .score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 30px;
+  min-height: 30px;
+
+  /* padding: 5px; */
+  border: 1px solid grey;
+  border-radius: 2px;
+  background-color: rgb(199, 252, 207);
+}
+
+.exam-solutions-section .sol-answers {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  text-align: center;
+  overflow: auto;
+}
+
+@media (max-width: 768px) {
+  .exam-solutions-section {
+    width: 100%;
+  }
+}

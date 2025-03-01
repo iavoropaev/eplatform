@@ -1,0 +1,28 @@
+.lk-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 15px;
+  padding-bottom: 20px;
+}
+
+.lk-messages .message {
+  border: 1px solid grey;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.lk-messages .message .message-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: rgb(223, 223, 223);
+}
+
+.lk-messages .message .message-header,
+.lk-messages .message .message-content {
+  padding: 10px;
+}
+.lk-messages .message .message-content {
+  background-color: white;
+}

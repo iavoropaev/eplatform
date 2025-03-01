@@ -59,7 +59,7 @@ const TeacherSection = () => {
                 className="class"
                 key={i}
                 onClick={() => {
-                  navigate(`/class/${cur_class.id}`);
+                  navigate(`/class/${cur_class.id}/messages/`);
                 }}
               >
                 {`${i + 1}. ${cur_class.name}`}
@@ -74,7 +74,7 @@ const TeacherSection = () => {
               e.preventDefault();
               const newClass = await createClass({ name: newClassName });
               console.log(newClass);
-              navigate(`/class/${newClass.id}/`);
+              navigate(`/class/${newClass.id}/messages/`);
               setNewClassName("");
             }}
           >

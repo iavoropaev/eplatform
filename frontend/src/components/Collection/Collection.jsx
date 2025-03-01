@@ -45,13 +45,29 @@ const Collection = () => {
   if (isError) {
     return <h2>Такой подборки не существует.</h2>;
   }
+
+  const goToExam = (
+    <div className="play-container">
+      <button
+        onClick={() => {
+          navigate(`./../../variant/${slug}`);
+          window.scrollTo(0, 0);
+        }}
+        className="play black-button"
+      >
+        Решать в формате варианта
+      </button>
+    </div>
+  );
+
   return (
     <div className="collection-container">
       <h1>{colName}</h1>
-      <p>
+
+      <p className="count-answers">
         Решено {countOk}/{tasks.length}.
       </p>
-
+      {goToExam}
       {tasks.map((task) => {
         return (
           <Task
@@ -62,17 +78,7 @@ const Collection = () => {
           />
         );
       })}
-      <div className="play-container">
-        <button
-          onClick={() => {
-            navigate(`./../../variant/${slug}`);
-            window.scrollTo(0, 0);
-          }}
-          className="play black-button"
-        >
-          Решать в формате варианта
-        </button>
-      </div>
+      {goToExam}
     </div>
   );
 };

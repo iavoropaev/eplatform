@@ -138,3 +138,40 @@ export const createMessage = async (data) => {
     return undefined;
   }
 };
+
+export const getUserMessages = async () => {
+  try {
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL + "class/get-student-messages/",
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const deleteMessage = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "class/delete-message/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
