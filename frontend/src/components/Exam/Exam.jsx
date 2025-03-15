@@ -11,9 +11,9 @@ import {
 } from "../../redux/slices/examSlice";
 import { sendExamSolutionToServer } from "../../server/exam";
 import "./Exam.css";
+import { NotAuthorized } from "../Utils/NotAuthorized";
 
 const Exam = () => {
-  //const jwt = localStorage.getItem("jwt_a");
   const navigate = useNavigate();
   const { slug } = useParams();
 
@@ -37,8 +37,13 @@ const Exam = () => {
         setError(true);
       }
     }
+
     fetchData();
   }, [dispatch, slug]);
+
+  useEffect(() => {
+    setStartTime(new Date());
+  }, []);
 
   if (isError) {
     return <h2>Такого варианта не существует.</h2>;
@@ -55,7 +60,10 @@ const Exam = () => {
 
   const handleSendExamBut = async () => {
     const now = new Date();
-    const duration = now.getSeconds() - startTime.getSeconds();
+    const duration = Math.min(
+      1000000,
+      Math.floor((now.getTime() - startTime.getTime()) / 1000)
+    );
     const data = {
       col_slug: slug,
       answers,
@@ -66,7 +74,6 @@ const Exam = () => {
     if (res) {
       navigate(`./results/`);
     }
-    console.log(res);
   };
 
   return (

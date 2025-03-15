@@ -67,6 +67,7 @@ class TaskNumberInExam(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, blank=False, null=False)
 
+    max_score = models.IntegerField(blank=False, null=False, default=1)
     subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='numbers')
 
     def __str__(self):
@@ -90,6 +91,8 @@ class TaskSubject(models.Model):
     exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False, related_name='subjects')
     authors = models.ManyToManyField('TaskAuthor', related_name='subjects')
     difficulty_levels = models.ManyToManyField('DifficultyLevel', related_name='subjects')
+
+    scale = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return self.name

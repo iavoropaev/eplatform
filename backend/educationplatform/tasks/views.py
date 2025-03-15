@@ -264,7 +264,9 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSolutionsSerializer
 
     def get_permissions(self):
-        if self.action in ['my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
+        if self.action in ['new_tasks', 'send_solution']:
+            permission_classes = [AllowAny]
+        elif self.action in ['my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
                            'percent_ok_solves_by_task_id', 'send_solution', 'get_statuses']:
             permission_classes = [IsAuthenticated]
         else:

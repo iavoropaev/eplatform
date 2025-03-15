@@ -8,22 +8,22 @@ from users.serializers import UserSerializer
 class TaskCollectionInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskCollection
-        fields = ['id', 'name', 'slug', 'description', 'time_create', 'time_update']
+        fields = ['id', 'name', 'slug', 'is_exam', 'description', 'time_create', 'time_update']
 
 
 class TaskCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskCollection
-        fields = ['id', 'name', 'slug', 'description', 'tasks', 'time_create', 'time_update']
+        fields = ['id', 'name', 'slug', 'is_exam', 'description', 'tasks', 'time_create', 'time_update']
 
 
 class TaskCollectionGetSerializer(serializers.ModelSerializer):
-    #tasks = TaskSerializerForUser(many=True)
-    #tasks = serializers.SerializerMethodField()
+    # tasks = TaskSerializerForUser(many=True)
+    # tasks = serializers.SerializerMethodField()
 
     class Meta:
         model = TaskCollection
-        fields = ['id', 'name', 'slug', 'description',  'time_create', 'time_update']
+        fields = ['id', 'name', 'slug', 'is_exam', 'description', 'time_create', 'time_update']
 
     # def get_tasks(self, collection):
     #     collection_tasks = collection.taskcollectiontasks.order_by('order')
@@ -34,7 +34,7 @@ class TaskCollectionGetSerializer(serializers.ModelSerializer):
 class TaskCollectionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskCollection
-        fields = ['id', 'name', 'slug', 'description', 'created_by', 'time_create', 'time_update']
+        fields = ['id', 'name', 'slug', 'is_exam', 'description', 'created_by', 'time_create', 'time_update']
 
 
 class TaskCollectionTaskSerializer(serializers.ModelSerializer):
@@ -43,11 +43,11 @@ class TaskCollectionTaskSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TaskCollectionTaskForUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TaskCollectionTask
-        fields = '__all__'
-        depth = 2
+# class TaskCollectionTaskForUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = TaskCollectionTask
+#         fields = '__all__'
+#         depth = 2
 
 
 class TaskCollectionSolveSerializer(serializers.ModelSerializer):
@@ -61,10 +61,12 @@ class TaskCollectionSolveForUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskCollectionSolve
-        fields = ['id', 'task_collection', 'score', 'duration', 'answers', 'time_create', ]
+        fields = ['id', 'task_collection', 'score', 'test_score', 'duration', 'answers', 'time_create', ]
+
 
 class TaskCollectionSolveForAllSolSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+
     class Meta:
         model = TaskCollectionSolve
-        fields = ['id', 'user', 'score', 'duration', 'answers', 'time_create' ]
+        fields = ['id', 'user', 'score', 'test_score', 'duration', 'answers', 'time_create']

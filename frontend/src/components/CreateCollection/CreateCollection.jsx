@@ -12,17 +12,19 @@ const CreateCollection = () => {
   const [colName, setColName] = useState("");
   const [colDescription, setColDescription] = useState("");
   const [colSlug, setColSlug] = useState("");
+  const [isExam, setExam] = useState(false);
 
   const saveCollection = async () => {
     const collection = await createCollection({
       slug: colSlug,
       name: colName,
       description: colDescription,
+      is_exam: isExam,
     });
     console.log(collection);
     navigate(`../update-collection/${collection.slug}/`);
   };
-
+  console.log(isExam);
   return (
     <div className="create-collection">
       <div>
@@ -59,6 +61,16 @@ const CreateCollection = () => {
           onChange={(e) => {
             setColSlug(e.target.value);
           }}
+        ></input>
+      </div>
+      <div>
+        <span>Это вариант? </span>
+        <input
+          checked={isExam}
+          onChange={(e) => {
+            setExam(e.target.checked);
+          }}
+          type="checkbox"
         ></input>
       </div>
       <div>

@@ -98,7 +98,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось создать приглашение.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['post'], url_path='delete-invitation')
     def delete_invitation(self, request):

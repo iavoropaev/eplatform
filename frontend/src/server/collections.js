@@ -88,7 +88,7 @@ export const getMyCollections = async () => {
 export const createCollection = async (data) => {
   try {
     const res = await axios.post(
-      process.env.REACT_APP_API_URL + "tasks-collections/",
+      process.env.REACT_APP_API_URL + "tasks-collections/create-collection/",
       data,
       {
         headers: headers,

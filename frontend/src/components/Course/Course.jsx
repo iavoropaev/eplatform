@@ -13,6 +13,7 @@ import {
 } from "../../redux/slices/courseSlice";
 import Lesson from "./Lesson/Lesson";
 import EditLesson from "./EditLesson/EditLesson";
+import { NotAuthorized } from "../Utils/NotAuthorized";
 
 const Course = () => {
   const { courseId, lesson, lessonId } = useParams();
@@ -44,7 +45,7 @@ const Course = () => {
       }
     }
     fetchData();
-  }, [dispatch, lessonId]);
+  }, [dispatch, navigate, lessonId, courseId]);
 
   if (!courseData?.id) {
     return <h1>Загрузка</h1>;

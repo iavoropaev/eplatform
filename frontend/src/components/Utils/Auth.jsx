@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import * as VKID from "@vkid/sdk";
 
-//import "./Auth.css";
+import "./Auth.css";
 
 const Auth = () => {
   VKID.Config.set({
@@ -31,11 +31,9 @@ const Auth = () => {
   }, []);
 
   return (
-    <>
-      <div className="vk">
-        <div id="VkIdSdkOneTap"></div>
-      </div>
-    </>
+    <div className="vk-auth">
+      <div id="VkIdSdkOneTap"></div>
+    </div>
   );
 };
 

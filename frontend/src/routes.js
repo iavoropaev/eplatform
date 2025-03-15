@@ -20,6 +20,7 @@ import ActivateInvitation from "./components/Class/ActivateInvitation";
 import ClassForTeacher from "./components/Class/ClassForTeacher";
 import CreateCourse from "./components/Course/CreateCourse/CreateCourse";
 import { ExamStatisticsPage } from "./components/ExamStatistics/ExamStatisticsPage";
+import { NotAuthorized } from "./components/Utils/NotAuthorized";
 
 export const publicRoutes = [
   { path: "bank", Component: BankPage },
@@ -36,6 +37,44 @@ export const publicRoutes = [
     Component: ExamStatisticsPage,
   },
 
+  { path: "test", Component: Test },
+
+  // Страница с авторизацией
+  { path: "lk/teach/my-tasks", Component: NotAuthorized },
+  { path: "lk/teach/my-variants", Component: NotAuthorized },
+  { path: "lk/teach/my-courses", Component: NotAuthorized },
+  { path: "lk/:section/", Component: NotAuthorized },
+  { path: "lk", Component: NotAuthorized },
+
+  { path: "class/activate-invitation/:token/", Component: NotAuthorized },
+  { path: "class/:classId/:classSection/", Component: NotAuthorized },
+
+  { path: "edit-task/:taskId/", Component: NotAuthorized },
+  { path: "create-task/:taskId/", Component: NotAuthorized },
+  { path: "create-task/", Component: NotAuthorized },
+
+  { path: "update-collection/:slug/", Component: NotAuthorized },
+  { path: "create-collection/", Component: NotAuthorized },
+  {
+    path: "generate-collection/:examSlug/:subjectSlug/",
+    Component: NotAuthorized,
+  },
+
+  { path: "edit-course/:courseId/", Component: NotAuthorized },
+  { path: "create-course/", Component: NotAuthorized },
+  {
+    path: "course/:courseId/",
+    Component: NotAuthorized,
+  },
+  {
+    path: "course/:courseId/:lesson/:lessonId/s/:sectionIndex/",
+    Component: NotAuthorized,
+  },
+
+  { path: "*", Component: NotFound },
+];
+
+export const authRoutes = [
   {
     path: "course/:courseId/",
     Component: CoursePage,
@@ -45,11 +84,6 @@ export const publicRoutes = [
     Component: CoursePage,
   },
 
-  { path: "test", Component: Test },
-  { path: "*", Component: NotFound },
-];
-
-export const authRoutes = [
   { path: "lk/teach/my-tasks", Component: TeacherTasks },
   { path: "lk/teach/my-variants", Component: TeacherCollections },
   { path: "lk/teach/my-courses", Component: TeacherCourses },

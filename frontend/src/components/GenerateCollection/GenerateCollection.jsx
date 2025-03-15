@@ -116,7 +116,7 @@ const GenerateCollection = () => {
           }}
         ></input>
         <input
-          placeholder="Название"
+          placeholder="Слаг"
           value={collectionSlug}
           onChange={(e) => {
             setCollectionSlug(e.target.value);

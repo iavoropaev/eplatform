@@ -1,9 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { AllExamResults } from "./History/AllExamResults";
-import { getAllSolutionsForExam } from "../../server/exam";
+import { getAllSolutionsForExam, getStatsForExam } from "../../server/exam";
 import { useEffect, useState } from "react";
 import "./ExamStatisticsPage.css";
 import { getMyClasses } from "../../server/class";
+import { ExamStatistics } from "./Stats/ExamStatistics";
 
 export const ExamStatisticsPage = () => {
   const navigate = useNavigate();
@@ -19,10 +20,12 @@ export const ExamStatisticsPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await getAllSolutionsForExam(examSlug, selectedClass);
-      if (res) {
-        setColData(res.col_info);
-        setSolvesData(res.solves);
+      const solves = await getAllSolutionsForExam(examSlug, selectedClass);
+      const stats = await getStatsForExam(examSlug, selectedClass);
+      if (solves && stats) {
+        setColData(solves.col_info);
+        setSolvesData(solves.solves);
+        setStatsData(stats);
       } else {
         setSolvesData([]);
       }
@@ -44,7 +47,7 @@ export const ExamStatisticsPage = () => {
   // if (!solvesData || !colData) {
   //   return <h2>Загрузка...</h2>;
   // }
-  console.log(solvesData);
+  console.log(solvesData, statsData);
   return (
     <div className="exam-stats-cont">
       {/* <h2>{colData.name}</h2> */}
@@ -70,6 +73,7 @@ export const ExamStatisticsPage = () => {
           allClasses={allClasses}
         />
       )}
+      {eSection === "stats" && <ExamStatistics statsData={statsData} />}
     </div>
   );
 };

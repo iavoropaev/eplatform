@@ -28,3 +28,8 @@
   gap: 10px;
   justify-content: center;
 }
+
+.charts {
+  overflow-y: hidden;
+  overflow-x: auto;
+}

@@ -1,9 +1,16 @@
+from sys import modules
+
 from django.db import models
 from educationplatform.settings import AUTH_USER_MODEL
+from tasks.models import TaskSubject
+
 
 class TaskCollection(models.Model):
     name = models.CharField(max_length=100, blank=False)
     slug = models.SlugField(max_length=100, blank=False, unique=True)
+
+    subject = models.ForeignKey(TaskSubject, on_delete=models.PROTECT, blank=False, null=False)
+    is_exam = models.BooleanField(blank=False, null=False, default=False)
     description = models.CharField(blank=True)
     is_public = models.BooleanField(default=False)
     tasks = models.ManyToManyField('tasks.Task', through='TaskCollectionTask', related_name='collections', blank=True)
@@ -32,9 +39,11 @@ class TaskCollectionSolve(models.Model):
     task_collection = models.ForeignKey('TaskCollection', on_delete=models.PROTECT, blank=False)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False)
 
+    duration = models.IntegerField(blank=False)
     answers = models.JSONField(blank=False)
     score = models.IntegerField(blank=False)
-    duration = models.IntegerField(blank=False)
+    test_score = models.IntegerField(blank=True, null=True)
+
 
     time_create = models.DateTimeField(auto_now_add=True)
     # answers -> [{task_id:1, score:2, status:'ok',

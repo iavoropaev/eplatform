@@ -15,7 +15,7 @@ const Profile = () => {
     <div className="lk">
       <h2>Личный кабинет</h2>
       <div className="lk-navigate">
-        <NavigateElement path="dz" name="Домашние задания" />
+        <NavigateElement path="dz" name="Сообщения" />
         <NavigateElement path="history" name="История" />
         <NavigateElement path="stat" name="Статистика" />
         <NavigateElement path="teach" name=" Для учителей" />

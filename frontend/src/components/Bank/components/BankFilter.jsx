@@ -64,7 +64,7 @@ const BankFilter = ({
         {numbers && numbers.length > 0 && (
           <Option
             optionName={"numbers"}
-            nameForUsers={"Номер ЕГЭ"}
+            nameForUsers={"Номер"}
             options={numbers}
             selected={selectedFilters["numbers"]}
             setSelect={getSelectFromFilter}

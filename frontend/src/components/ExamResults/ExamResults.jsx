@@ -12,7 +12,8 @@ const ExamResults = () => {
 
   const [colName, setColName] = useState("");
   const [answers, setAnswers] = useState([]);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(undefined);
+  const [testScore, setTestScore] = useState(undefined);
   const [duration, setDuration] = useState(0);
   const [solData, setSolData] = useState("");
 
@@ -21,9 +22,11 @@ const ExamResults = () => {
       const realSolveType = solveType ? solveType : "last";
       const solve = await getExamSolution(slug, realSolveType);
       if (solve) {
+        console.log(solve);
         setColName(solve.task_collection.name);
         setAnswers(solve.answers);
         setScore(solve.score);
+        setTestScore(solve.test_score);
         setDuration(solve.duration);
         setSolData(solve.time_create);
       }
@@ -38,6 +41,7 @@ const ExamResults = () => {
       navigate(`./${event.target.value}/`);
     }
   };
+
   return (
     <div className="exam-results">
       <h2>{colName}</h2>
@@ -49,6 +53,7 @@ const ExamResults = () => {
         </select>
       </div>
       <p>Баллы {score}</p>
+      {testScore && <p>Тестовый балл {testScore}</p>}
       <p>Времени потрачено {duration}</p>
       <div className="results-table-cont">
         <ExamSolutionTable answers={answers} />

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setDescription,
+  setExam,
   setName,
   setSlug,
   setTasks,
@@ -28,6 +29,8 @@ const UpdateCollection = () => {
   const colDescription = useSelector(
     (state) => state.createCollection.description
   );
+  const isExam = useSelector((state) => state.createCollection.isExam);
+
   const colSlug = useSelector((state) => state.createCollection.slug);
 
   const [newTaskId, setNewTaskId] = useState("");
@@ -36,9 +39,11 @@ const UpdateCollection = () => {
     async function fetchData() {
       const collection = await getCollectionBySlug(slug);
       if (collection) {
+        console.log(collection);
         dispatch(setTasks(collection.tasks));
         dispatch(setName(collection.name));
         dispatch(setDescription(collection.description));
+        dispatch(setExam(collection.is_exam));
       } else {
         setError(true);
       }
@@ -86,12 +91,15 @@ const UpdateCollection = () => {
       name: colName,
       description: colDescription,
       tasks: tasksForServer,
+      is_exam: isExam,
     });
 
     if (collection) {
+      console.log(collection);
       dispatch(setTasks(collection.tasks));
       dispatch(setName(collection.name));
       dispatch(setDescription(collection.description));
+      dispatch(setExam(collection.is_exam));
     } else {
       setError(true);
     }
@@ -142,6 +150,16 @@ const UpdateCollection = () => {
             dispatch(setDescription(e.target.value));
           }}
         ></textarea>
+      </div>
+      <div>
+        <span>Это вариант? </span>
+        <input
+          checked={isExam}
+          onChange={(e) => {
+            dispatch(setExam(e.target.checked));
+          }}
+          type="checkbox"
+        ></input>
       </div>
       {addTaskById}
 

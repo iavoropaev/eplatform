@@ -1,8 +1,10 @@
 import json
 import random
+from collections import Counter
+from math import ceil
 
 from django.db import connection
-from django.db.models import Q
+from django.db.models import Q, Count, Max, Sum
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -58,21 +60,23 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
         response['tasks'] = tasks
         return Response(response)
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], url_path='create-collection')
     def create_collection(self, request):
         try:
             cur_user_id = request.user.id
             data = request.data | {'created_by': cur_user_id}
+            print(data)
             serializer = TaskCollectionCreateSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data)
+                return Response(serializer.data, status=201)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось создать подборку.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['get'])
     def get_collections(self, request):
@@ -139,7 +143,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось обновить подборку.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['post'], url_path='generate-collection')
     def generate_collection(self, request):
@@ -217,7 +221,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['send_solution', 'get_solution', 'get_my_solutions', 'delete-solution',
-                           'get_all_solutions_for_exam']:
+                           'get_all_solutions_for_exam', 'get-exam-statistics']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -260,12 +264,24 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                                         "ok_answer": ok_answer,
                                         "score": score,
                                         'status': status})
-
+            scale = collection.subject.scale
+            if collection.is_exam and scale:
+                if str(total_score) in scale:
+                    test_score = scale[str(total_score)]
+                else:
+                    if int(scale[-1]) < total_score:
+                        test_score = 100
+                    else:
+                        test_score = 0
+            else:
+                test_score = None
+            print(scale, test_score)
             solve = TaskCollectionSolve(
                 task_collection_id=collection.id,
                 user_id=cur_user_id,
                 answers=answers_summary,
                 score=total_score,
+                test_score=test_score,
                 duration=duration
             )
             solve.save()
@@ -281,7 +297,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['get'], url_path='get-solution')
     def get_solution(self, request):
@@ -307,7 +323,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['get'], url_path='get-my-solutions')
     def get_my_solutions(self, request):
@@ -323,7 +339,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['get'], url_path='get-my-student-solutions')
     def get_my_student_solutions(self, request):
@@ -341,7 +357,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({
                 'Error': 'Не удалось обработать запрос.',
-            })
+            }, status=400)
 
     @action(detail=False, methods=['get'], url_path='get-all-solutions-for-exam')
     def get_all_solutions_for_exam(self, request):
@@ -351,7 +367,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             col_slug = request.query_params.get('col_slug', None)
             class_id = request.query_params.get('class_id', None)
-            if class_id == '-1':
+            if class_id == '-':
                 class_id = None
 
             collection = TaskCollection.objects.filter(slug=col_slug).select_related('created_by').get()
@@ -374,6 +390,77 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             response = {'col_info': collection_info, "solves": solves}
             print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response(response, status=200)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось обработать запрос.',
+            }, status=400)
+
+    @action(detail=False, methods=['get'], url_path='get-exam-statistics')
+    def get_exam_statistics(self, request):
+        try:
+            user_id = request.user.id
+            is_staff = request.user.is_staff
+
+            col_slug = request.query_params.get('col_slug', None)
+            class_id = request.query_params.get('class_id', None)
+            if class_id == '-':
+                class_id = None
+
+            collection = TaskCollection.objects.filter(slug=col_slug).select_related('created_by').get()
+            if class_id:
+                cur_class = Class.objects.filter(id=class_id).select_related('created_by').get()
+            else:
+                cur_class = None
+
+            if cur_class and (cur_class.created_by.id != user_id) and (not is_staff):
+                return Response("Forbidden", status=406)
+            if (collection.created_by.id != user_id) and (not is_staff) and (not cur_class):
+                return Response("Forbidden", status=406)
+
+            collection_info = TaskCollectionInfoSerializer(collection).data
+
+            solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug)
+            if cur_class:
+                solves = solves.filter(user__in=cur_class.students.all())
+
+            tasks_ok = {}
+            tasks_all = {}
+            for user_solve in solves:
+                for i, user_answer in enumerate(user_solve.answers):
+                    name = f"{i}_{user_answer['number_in_exam']}"
+                    if user_answer['status'] == 'OK':
+                        tasks_ok[name] = tasks_ok.get(name, 0) + 1
+                    tasks_all[name] = tasks_all.get(name, 0) + 1
+
+            tasks_percent = {task_name: round(tasks_ok.get(task_name, 0) / tasks_all[task_name], 2) for task_name in
+                             tasks_all}
+            print(tasks_percent)
+            scale = collection.subject.scale
+            is_exam = collection.is_exam
+
+            if is_exam:
+                best_attempts = solves.values('user').annotate(best_score=Max('test_score'))
+            else:
+                best_attempts = solves.values('user').annotate(best_score=Max('score'))
+            score_distribution = dict(Counter(item['best_score'] for item in best_attempts))
+            if is_exam:
+                for first_score in scale:
+                    cur_test_score = scale[first_score]
+                    if cur_test_score not in score_distribution:
+                        score_distribution[cur_test_score] = 0
+            else:
+                total_max_first_score = collection.tasks.aggregate(total_score=Sum('number_in_exam__max_score'))[
+                    'total_score']
+                for first_score in range(total_max_first_score + 1):
+                    if first_score not in score_distribution:
+                        score_distribution[first_score] = 0
+
+            score_distribution = dict(sorted(score_distribution.items(), key=lambda item: int(item[0])))  # Sorting
+            print(score_distribution)
+
+            print(f"Количество SQL-запросов: {len(connection.queries)}")
+            return Response({'score_distribution': score_distribution, 'percent_distribution':tasks_percent}, status=200)
         except Exception as e:
             print(e)
             return Response({

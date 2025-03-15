@@ -22,3 +22,11 @@
 /* .all-solves-table th {
   padding: 5px;
 } */
+
+.all-solves-table .OK {
+  background-color: rgb(137, 252, 162);
+}
+
+.all-solves-table .WA {
+  background-color: rgb(255, 121, 121);
+}

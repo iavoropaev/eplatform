@@ -110,6 +110,28 @@ export const getAllSolutionsForExam = async (col_slug, class_id) => {
     return undefined;
   }
 };
+export const getStatsForExam = async (col_slug, class_id) => {
+  try {
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL +
+        "tasks-collections-solve/get-exam-statistics/",
+      {
+        params: {
+          col_slug: col_slug,
+          class_id: class_id,
+        },
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
 
 export const deleteSolution = async (data) => {
   try {
