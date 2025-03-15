@@ -44,8 +44,10 @@ const Course = () => {
         navigate(`/course/${courseId}/`);
       }
     }
-    fetchData();
-  }, [dispatch, navigate, lessonId, courseId]);
+    if (String(currentLesson?.id) !== lessonId) {
+      fetchData();
+    }
+  }, [dispatch, navigate, lessonId, courseId, currentLesson]);
 
   if (!courseData?.id) {
     return <h1>Загрузка</h1>;
