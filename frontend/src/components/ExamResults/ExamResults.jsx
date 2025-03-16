@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getExamSolution } from "../../server/exam";
 import ExamSolutionTable from "./components/ExamSolutionTable";
 import "./ExamResults.css";
+import { showError } from "../Utils/Notifications";
 
 const ExamResults = () => {
   const { slug, solveType } = useParams();
@@ -29,6 +30,8 @@ const ExamResults = () => {
         setTestScore(solve.test_score);
         setDuration(solve.duration);
         setSolData(solve.time_create);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();
@@ -57,7 +60,6 @@ const ExamResults = () => {
       <p>Времени потрачено {duration}</p>
       <div className="results-table-cont">
         <ExamSolutionTable answers={answers} />
-        {/* <ExamSolutionTable answers={answers} /> */}
       </div>
     </div>
   );

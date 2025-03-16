@@ -154,7 +154,8 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             data = request.data
             collection_data = {'name': data['name'], 'slug': data['slug'],
                                'description': data['description'],
-                               'created_by': cur_user_id}
+                               'created_by': cur_user_id,
+                               'subject':1}
             for number_info in data['generateParams']:
                 count = number_info['count']
                 number_id = number_info['number']['id']

@@ -8,6 +8,7 @@ const TaskFooter = ({
   handleSaveButton,
   handleCancelButton,
   hideAnswerBlock,
+  status,
 }) => {
   let defaultAnswer = "";
   if (taskData.answer_type === "table") {
@@ -32,16 +33,26 @@ const TaskFooter = ({
   const [answer, setAnswer] = useState(defaultAnswer);
   const [isAnswerSave, setAnswerSave] = useState(false);
 
-  const handleSendAnswer = () => {
-    handleSaveButton({
+  const handleSendAnswer = async () => {
+    const res = await handleSaveButton({
       taskId: taskData.id,
       answer: answer,
       type: taskData.answer_type,
     });
+    return res;
   };
 
   const isAnswerSaveReady = (taskAnswer ? true : false) | isAnswerSave;
   const curAnswerData = taskAnswer ? taskAnswer[taskAnswer.type] : answer;
+
+  let saveButText = "Проверить ответ";
+  console.log(status);
+  if (status === "wa" && isAnswerSave) {
+    saveButText = "Неправильно";
+  }
+  if (status === "ok" && isAnswerSave) {
+    saveButText = "Верно";
+  }
 
   return (
     <div className="task-footer">
@@ -58,12 +69,12 @@ const TaskFooter = ({
             <div className="buttons">
               <button
                 disabled={isAnswerSaveReady}
-                onClick={() => {
+                onClick={async () => {
                   handleSendAnswer();
                   setAnswerSave(true);
                 }}
               >
-                Проверить ответ
+                {saveButText}
               </button>
 
               <button

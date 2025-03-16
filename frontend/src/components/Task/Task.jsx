@@ -25,6 +25,7 @@ const Task = ({
           showCancelBut={showCancelBut}
           handleCancelButton={handleCancelButton}
           hideAnswerBlock={hideAnswerBlock}
+          status={status}
         />
       </div>
     </div>

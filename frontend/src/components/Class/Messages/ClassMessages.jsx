@@ -2,6 +2,7 @@ import { useState } from "react";
 import { formatDate } from "../../Utils/dates";
 import { useParams } from "react-router-dom";
 import { createMessage, deleteMessage } from "../../../server/class";
+import { showError, showOK } from "../../Utils/Notifications";
 
 export const ClassMessages = ({ classData, setClassData }) => {
   const { classId } = useParams();
@@ -19,6 +20,9 @@ export const ClassMessages = ({ classData, setClassData }) => {
         messages: [newMes, ...classData.messages],
       });
       setNewMessageContent("");
+      showOK("Сообщение отправлено!");
+    } else {
+      showError("Ошибка.");
     }
   };
 
@@ -33,6 +37,8 @@ export const ClassMessages = ({ classData, setClassData }) => {
           ...classData,
           messages: newMessages,
         });
+      } else {
+        showError("Ошибка.");
       }
     }
   };

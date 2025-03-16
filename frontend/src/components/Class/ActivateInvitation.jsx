@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { activateInvitation } from "../../server/class";
+import { showOK, showError } from "../Utils/Notifications";
 
 const ActivateInvitation = () => {
   const { token } = useParams();
@@ -9,10 +10,10 @@ const ActivateInvitation = () => {
     const res = await activateInvitation({ token: token });
 
     if (res) {
-      alert("Приглашение активировано.");
+      showOK("Приглашение активироано!");
       navigate("/");
     } else {
-      alert("Произошла ошибка.");
+      showError("Произошла ошибка.");
     }
   };
   return (

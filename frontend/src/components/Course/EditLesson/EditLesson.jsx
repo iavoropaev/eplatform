@@ -1,11 +1,10 @@
-import SectionMenu from "./../Lesson/components/SectionMenu";
-import SectionContent from "./../Lesson/components/SectionContent";
-import SectionTask from "./../Lesson/components/SectionTask";
 import { useNavigate, useParams } from "react-router-dom";
+
+import SectionMenu from "./../Lesson/components/SectionMenu";
+
 import {
   createSection,
   getSectionById,
-  sendSectionSolution,
   updateLesson,
 } from "../../../server/course";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,13 +15,14 @@ import {
   deleteSection,
   setCurrentLesson,
   swapTwoSections,
-  updateSolveStatus,
 } from "../../../redux/slices/courseSlice";
 import "./../Lesson/Lesson.css";
 import Task from "../../Task/Task";
 import { useState } from "react";
 import { getTaskById } from "../../../server/bank";
 import "./EditLesson.css";
+import { showError, showOK } from "../../Utils/Notifications";
+
 const EditLesson = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,9 +32,11 @@ const EditLesson = () => {
   const [addingTaskId, setAddingTaskId] = useState("");
   const [addingSectionId, setAddingSectionId] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [isSaving, setSaving] = useState(false);
 
   const currentLesson = useSelector((state) => state.course.currentLesson);
   const sectionsLength = currentLesson?.sections?.length;
+
   if (currentLesson === undefined) {
     return <p>Загрузка...</p>;
   }
@@ -71,6 +73,8 @@ const EditLesson = () => {
     if (createdSection) {
       dispatch(addSection(createdSection));
       setActiveSectionIndex(sectionsLength);
+    } else {
+      showError("Секция не добавлена.");
     }
   };
   const handleSectionsSwap = (type) => {
@@ -120,6 +124,8 @@ const EditLesson = () => {
           task: addingTaskData,
         })
       );
+    } else {
+      showError("Задача не добавлена.");
     }
     setAddingTaskId("");
   };
@@ -131,11 +137,14 @@ const EditLesson = () => {
       !currentLesson?.sections.some((s) => s.id === addingSectionData.id)
     ) {
       dispatch(addSection(addingSectionData));
+    } else {
+      showError("Секция не добавлена.");
     }
     setAddingSectionId("");
   };
 
   const handleSave = async () => {
+    setSaving(true);
     const preparedLesson = {
       ...currentLesson,
       sections: [
@@ -148,7 +157,11 @@ const EditLesson = () => {
 
     if (updatedLesson) {
       dispatch(setCurrentLesson(updatedLesson));
+      showOK("Сохранено.");
+    } else {
+      showError("Не сохранено.");
     }
+    setSaving(false);
   };
 
   if (isLoading) {
@@ -194,8 +207,12 @@ const EditLesson = () => {
           </div>
 
           <div className="save-return">
-            <button onClick={handleSave} className="black-button">
-              Сохранить
+            <button
+              onClick={handleSave}
+              className="black-button"
+              disabled={isSaving}
+            >
+              {isSaving ? "Сохранение..." : "Сохранить"}
             </button>
           </div>
           <button onClick={goOutFromEditing}>Вернуться</button>

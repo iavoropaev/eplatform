@@ -6,6 +6,7 @@ import { ClassStudents } from "./Students/ClassStudents";
 import "./ClassForTeacher.css";
 import { ClassNavigate } from "./Navigate/ClassNavigate";
 import { ClassVariants } from "./Variants/ClassVariants";
+import { showError } from "../Utils/Notifications";
 
 const ClassForTeacher = () => {
   const { classId, classSection } = useParams();
@@ -17,6 +18,8 @@ const ClassForTeacher = () => {
       const classData = await getClassbyId(classId);
       if (classData) {
         setClassData(classData);
+      } else {
+        showError("Не удалось загрузить.");
       }
     }
     fetchData();

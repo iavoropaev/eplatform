@@ -4,6 +4,7 @@ import { getCollectionBySlug } from "../../server/collections";
 import Task from "../Task/Task";
 import { getSolveStatuses, sendSolution } from "../../server/bank";
 import "./Collection.css";
+import { showError } from "../Utils/Notifications";
 
 const Collection = () => {
   const jwt = localStorage.getItem("jwt_a");
@@ -26,7 +27,11 @@ const Collection = () => {
         if (jwt) {
           const taskIds = collection["tasks"].map((task) => task.id);
           const idSolvedStatuses = await getSolveStatuses({ taskIds: taskIds });
-          setSolvedStatuses(idSolvedStatuses);
+          if (idSolvedStatuses) {
+            setSolvedStatuses(idSolvedStatuses);
+          } else {
+            showError("Ваши решения не загружены.");
+          }
         }
         setTasks(collection.tasks);
         setColName(collection.name);
@@ -40,7 +45,11 @@ const Collection = () => {
   const sendAnswerToServer = async ({ taskId, answer, type }) => {
     const readyAnswer = { type: type, [type]: answer };
     const res = await sendSolution({ taskId, answer: readyAnswer });
-    setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
+    if (res !== undefined) {
+      setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
+    } else {
+      showError("Решение не отправлено.");
+    }
   };
   if (isError) {
     return <h2>Такой подборки не существует.</h2>;

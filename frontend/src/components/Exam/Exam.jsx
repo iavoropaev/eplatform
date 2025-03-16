@@ -11,7 +11,6 @@ import {
 } from "../../redux/slices/examSlice";
 import { sendExamSolutionToServer } from "../../server/exam";
 import "./Exam.css";
-import { NotAuthorized } from "../Utils/NotAuthorized";
 
 const Exam = () => {
   const navigate = useNavigate();

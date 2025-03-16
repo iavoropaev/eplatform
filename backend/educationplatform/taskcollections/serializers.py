@@ -34,7 +34,7 @@ class TaskCollectionGetSerializer(serializers.ModelSerializer):
 class TaskCollectionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskCollection
-        fields = ['id', 'name', 'slug', 'is_exam', 'description', 'created_by', 'time_create', 'time_update']
+        fields = ['id', 'name', 'slug', 'is_exam', 'description', 'created_by', 'subject', 'time_create', 'time_update']
 
 
 class TaskCollectionTaskSerializer(serializers.ModelSerializer):

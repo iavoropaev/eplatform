@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LeftMenu from "./LeftMenu/LeftMenu";
-import "./Course.css";
+
 import {
   getCourseFromServerById,
   getLessonFromServerById,
@@ -13,7 +13,8 @@ import {
 } from "../../redux/slices/courseSlice";
 import Lesson from "./Lesson/Lesson";
 import EditLesson from "./EditLesson/EditLesson";
-import { NotAuthorized } from "../Utils/NotAuthorized";
+import "./Course.css";
+import { showError } from "../Utils/Notifications";
 
 const Course = () => {
   const { courseId, lesson, lessonId } = useParams();
@@ -30,6 +31,8 @@ const Course = () => {
       if (courseData) {
         console.log(courseData);
         dispatch(setCourseData(courseData));
+      } else {
+        showError("Курс не загружен.");
       }
     }
     fetchData();
@@ -41,10 +44,12 @@ const Course = () => {
       if (lessonData) {
         dispatch(setCurrentLesson(lessonData));
       } else {
+        showError("Урок не загружен.");
         navigate(`/course/${courseId}/`);
       }
     }
     if (String(currentLesson?.id) !== lessonId) {
+      console.log(lessonId);
       fetchData();
     }
   }, [dispatch, navigate, lessonId, courseId, currentLesson]);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMyStudentExamsSolutions } from "../../../server/exam";
 import { Solution } from "../../Profile/HistorySection/components/Solution";
+import { showError } from "../../Utils/Notifications";
 
 export const ClassVariants = ({ students }) => {
   const [selectedStudent, setSelectedStudent] = useState("-");
@@ -8,11 +9,12 @@ export const ClassVariants = ({ students }) => {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(selectedStudent);
       if (selectedStudent !== "-") {
         const solutions = await getMyStudentExamsSolutions(selectedStudent);
         if (solutions) {
           setSolutions(solutions);
+        } else {
+          showError("Ошибка.");
         }
       }
     }

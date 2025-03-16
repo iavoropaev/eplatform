@@ -74,11 +74,9 @@ export const getAllTasksFromServer = async ({
       console.log(res.data);
       return res.data;
     }
-    return [];
+    return undefined;
   } catch (error) {
-    alert("Не удалось загрузить задачи. Попробуйте позже.");
-    console.log(error);
-    return [];
+    return undefined;
   }
 };
 export const getMyTasks = async () => {
@@ -90,11 +88,9 @@ export const getMyTasks = async () => {
     if (res.status === 200) {
       return res.data;
     }
-    return [];
+    return undefined;
   } catch (error) {
-    alert("Не удалось загрузить задачи. Попробуйте позже.");
-    console.log(error);
-    return [];
+    return undefined;
   }
 };
 
@@ -105,14 +101,11 @@ export const getFilterData = async () => {
     });
 
     if (res.status === 200) {
-      //console.log(res.data);
       return res.data;
     }
-    return [];
+    return undefined;
   } catch (error) {
-    alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
-    return [];
+    return undefined;
   }
 };
 
@@ -129,11 +122,9 @@ export const getNumbers = async (examSlug, subjectSlug) => {
     if (res.status === 200) {
       return res.data.numbers;
     }
-    return [];
+    return undefined;
   } catch (error) {
-    alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
-    return [];
+    return undefined;
   }
 };
 
@@ -150,8 +141,6 @@ export const sendSolution = async ({ taskId, answer }) => {
     }
     return undefined;
   } catch (error) {
-    alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
     return undefined;
   }
 };
@@ -164,14 +153,12 @@ export const getSolveStatuses = async ({ taskIds }) => {
       data: { task_ids: taskIds },
       headers,
     });
-    console.log(res);
+
     if (res.status === 200) {
       return res.data;
     }
     return undefined;
   } catch (error) {
-    alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
     return undefined;
   }
 };
@@ -184,21 +171,19 @@ export const createTaskOnServer = async (data) => {
       url = `${process.env.REACT_APP_API_URL}tasks/${data.taskId}/`;
       method = "patch";
     }
-    console.log("to server", data);
+
     const res = await axios({
       url: url,
       method: method,
       data: data,
       headers,
     });
-    console.log(res);
+
     if (res.status === 200 || res.status === 201) {
       return res.data;
     }
     return undefined;
   } catch (error) {
-    alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
     return undefined;
   }
 };

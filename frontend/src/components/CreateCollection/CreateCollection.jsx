@@ -5,6 +5,7 @@ import { useState } from "react";
 import "./CreateCollection.css";
 import { createCollection } from "../../server/collections";
 import { setSlug } from "../../redux/slices/createCollectionSlice";
+import { showError } from "../Utils/Notifications";
 
 const CreateCollection = () => {
   const navigate = useNavigate();
@@ -21,10 +22,13 @@ const CreateCollection = () => {
       description: colDescription,
       is_exam: isExam,
     });
-    console.log(collection);
-    navigate(`../update-collection/${collection.slug}/`);
+    if (collection !== undefined) {
+      navigate(`../update-collection/${collection.slug}/`);
+    } else {
+      showError("Не удалось создать подборку.");
+    }
   };
-  console.log(isExam);
+
   return (
     <div className="create-collection">
       <div>

@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Task from "../../../Task/Task";
 import { getMyTasks } from "../../../../server/bank";
 import "./Materials.css";
+import { showError } from "../../../Utils/Notifications";
 const TeacherTasks = () => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
@@ -14,6 +15,8 @@ const TeacherTasks = () => {
       if (res) {
         setTasks(res.tasks);
         setCountAllTasks(res.count);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();

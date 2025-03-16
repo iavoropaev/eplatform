@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createModule, getModuleById } from "../../../server/course";
+import { showError } from "../../Utils/Notifications";
 
 const AddNewModule = ({ addModule }) => {
   const [addingModuleName, setAddingModuleName] = useState("");
@@ -13,9 +14,11 @@ const AddNewModule = ({ addModule }) => {
 
   const addModuleById = async (id) => {
     const module = await getModuleById(id);
-    console.log(module);
+
     if (module) {
       addModule(module);
+    } else {
+      showError("Ошибка.");
     }
     setAddingModuleId("");
   };

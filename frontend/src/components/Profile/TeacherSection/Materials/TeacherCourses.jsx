@@ -4,6 +4,7 @@ import Task from "../../../Task/Task";
 import { getMyCollections } from "../../../../server/collections";
 import { deleteCourse, getMyCourses } from "../../../../server/course";
 import "./Materials.css";
+import { showError } from "../../../Utils/Notifications";
 const TeacherCourses = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -13,6 +14,8 @@ const TeacherCourses = () => {
       const res = await getMyCourses();
       if (res) {
         setCourses(res);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();
@@ -32,6 +35,8 @@ const TeacherCourses = () => {
         });
 
         setCourses(newCourses);
+      } else {
+        showError("Ошибка.");
       }
     }
   };

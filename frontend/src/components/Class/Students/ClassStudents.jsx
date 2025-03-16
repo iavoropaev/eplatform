@@ -1,16 +1,18 @@
 import { useParams } from "react-router-dom";
 import { createInvitation, deleteInvitation } from "../../../server/class";
+import { showError } from "../../Utils/Notifications";
 
 export const ClassStudents = ({ classData, setClassData }) => {
   const { classId } = useParams();
 
   const handleDeleteBut = async (id, index) => {
-    console.log(id);
     const res = await deleteInvitation({ invitation_id: id });
     if (res) {
       const newInv = [...classData.invitations];
       newInv.splice(index, 1);
       setClassData({ ...classData, invitations: newInv });
+    } else {
+      showError("Ошибка");
     }
   };
 
@@ -21,6 +23,8 @@ export const ClassStudents = ({ classData, setClassData }) => {
         ...classData,
         invitations: [...classData.invitations, newInv],
       });
+    } else {
+      showError("Ошибка");
     }
   };
 

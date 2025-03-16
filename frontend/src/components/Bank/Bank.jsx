@@ -1,15 +1,15 @@
-import "./Bank.css";
-
-import Task from "../Task/Task";
 import { useEffect, useState } from "react";
+
 import {
   getAllTasksFromServer,
   getFilterData,
   getSolveStatuses,
   sendSolution,
 } from "../../server/bank";
-
 import BankFilter from "./components/BankFilter";
+import Task from "../Task/Task";
+import "./Bank.css";
+import { showError } from "../Utils/Notifications";
 
 const Bank = () => {
   const jwt = localStorage.getItem("jwt_a");
@@ -46,6 +46,7 @@ const Bank = () => {
   const [solvedStatuses, setSolvedStatuses] = useState({});
   const [isFind, setFind] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [isError, setError] = useState(false);
 
   const exam = filterData["exams"][selectedFilters["exam"]];
   const subject = exam["subjects"][selectedFilters["subject"]];
@@ -88,7 +89,11 @@ const Bank = () => {
   useEffect(() => {
     async function fetchData() {
       const data = await getFilterData();
-      setFilterData(data);
+      if (data) {
+        setFilterData(data);
+      } else {
+        setError(true);
+      }
     }
     fetchData();
   }, []);
@@ -104,21 +109,40 @@ const Bank = () => {
       actualities,
     });
 
-    if (jwt) {
-      const taskIds = tasksFromServer["tasks"].map((task) => task.id);
-      const idSolvedStatuses = await getSolveStatuses({ taskIds: taskIds });
-      setSolvedStatuses(idSolvedStatuses);
+    if (tasksFromServer !== undefined) {
+      if (jwt) {
+        const taskIds = tasksFromServer["tasks"].map((task) => task.id);
+        const idSolvedStatuses = await getSolveStatuses({ taskIds: taskIds });
+        if (idSolvedStatuses) {
+          setSolvedStatuses(idSolvedStatuses);
+        } else {
+          showError("Ваши решения не удалось загрузить.");
+        }
+      }
+      setTasks(tasksFromServer["tasks"]);
+      setLoading(false);
+      setFind(true);
+    } else {
+      setLoading(false);
+      setFind(false);
+      setTasks([]);
+      showError("Не удалось найти задачи.");
     }
-    setTasks(tasksFromServer["tasks"]);
-    setLoading(false);
-    setFind(true);
   };
 
   const sendAnswerToServer = async ({ taskId, answer, type }) => {
     const readyAnswer = { type: type, [type]: answer };
     const res = await sendSolution({ taskId, answer: readyAnswer });
-    setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
+    if (res !== undefined) {
+      setSolvedStatuses({ ...solvedStatuses, [taskId]: res.status });
+    } else {
+      showError("Не удалось обработать Ваше решение.");
+    }
   };
+
+  if (isError) {
+    return <h3>Произошла ошибка. Попробуйте позже.</h3>;
+  }
 
   return (
     <div className="bank">

@@ -6,6 +6,7 @@ import { sendSectionSolution } from "../../../server/course";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSolveStatus } from "../../../redux/slices/courseSlice";
 import "./Lesson.css";
+import { showError } from "../../Utils/Notifications";
 
 const Lesson = () => {
   const navigate = useNavigate();
@@ -46,7 +47,11 @@ const Lesson = () => {
       section_id: currentSectionData.id,
       user_answer: answer,
     });
-    dispatch(updateSolveStatus({ id: res.section, solve: res }));
+    if (res !== undefined) {
+      dispatch(updateSolveStatus({ id: res.section, solve: res }));
+    } else {
+      showError("Решение не отправлено.");
+    }
   };
   console.log(menuStatuses);
   return (

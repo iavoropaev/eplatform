@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import queryString from "query-string";
 import { getTokenByVKID } from "../../server/auth";
 
+import { toast } from "react-toastify";
 const Main = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,9 +48,9 @@ const Main = () => {
     navigate("./", { relative: "path" });
     window.location.reload();
   };
-
+  const showOK = (text) => toast.success(text);
   return (
-    <>
+    <div>
       <h1>Главная, {userName}</h1>
       {!isAuth && <Auth />}
 
@@ -84,8 +85,15 @@ const Main = () => {
           </NavLink>
         </div>
         <button onClick={logOut}>Выйти</button>
+        <button
+          onClick={() => {
+            showOK("!!!");
+          }}
+        >
+          Увед
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -5,9 +5,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   Label,
-  ResponsiveContainer,
 } from "recharts";
 
 export const ExamStatistics = ({ statsData }) => {

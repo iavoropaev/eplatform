@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import "./ExamStatisticsPage.css";
 import { getMyClasses } from "../../server/class";
 import { ExamStatistics } from "./Stats/ExamStatistics";
+import { showError } from "../Utils/Notifications";
 
 export const ExamStatisticsPage = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export const ExamStatisticsPage = () => {
         setStatsData(stats);
       } else {
         setSolvesData([]);
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();
@@ -39,18 +41,15 @@ export const ExamStatisticsPage = () => {
 
       if (classes) {
         setAllClasses(classes);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();
   }, []);
 
-  // if (!solvesData || !colData) {
-  //   return <h2>Загрузка...</h2>;
-  // }
-  console.log(solvesData, statsData);
   return (
     <div className="exam-stats-cont">
-      {/* <h2>{colData.name}</h2> */}
       <div className="es-navigate">
         <div
           className={"element" + (eSection === "history" ? " active" : "")}

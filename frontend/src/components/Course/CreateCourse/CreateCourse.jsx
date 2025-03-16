@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./CreateCourse.css";
 import { createCourse } from "../../../server/course";
+import { showError } from "../../Utils/Notifications";
 
 const CreateCourse = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const CreateCourse = () => {
       console.log(course);
       navigate(`../edit-course/${course.id}/`);
     } else {
-      alert("Произошла ошибка");
+      showError("Произошла ошибка");
     }
   };
 

@@ -16,13 +16,10 @@ export const getCollectionBySlug = async (slug) => {
     );
 
     if (res.status === 200) {
-      //console.log(res.data);
       return res.data;
     }
     return undefined;
   } catch (error) {
-    //alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
     return undefined;
   }
 };
@@ -37,13 +34,10 @@ export const updateCollection = async (data) => {
     );
 
     if (res.status === 201) {
-      //console.log(res.data);
       return res.data;
     }
     return undefined;
   } catch (error) {
-    //alert("Не удалось загрузить. Попробуйте позже.");
-    console.log(error);
     return undefined;
   }
 };
@@ -62,7 +56,6 @@ export const getCollections = async () => {
     }
     return undefined;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 };
@@ -80,7 +73,6 @@ export const getMyCollections = async () => {
     }
     return undefined;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 };
@@ -100,7 +92,6 @@ export const createCollection = async (data) => {
     }
     return undefined;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 };
@@ -120,7 +111,6 @@ export const deleteCollection = async (data) => {
     }
     return undefined;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 };
@@ -140,7 +130,6 @@ export const generateCollection = async (data) => {
     }
     return undefined;
   } catch (error) {
-    console.log(error);
     return undefined;
   }
 };

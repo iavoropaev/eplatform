@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  createLesson,
   getCourseFromServerById,
   getLessonNameOnlyByIdFromServer,
   updateCourse,
@@ -10,6 +9,7 @@ import "./UpdateCourse.css";
 import SwapAndDelete from "../Utils/SwapAndDelete";
 import AddNewLesson from "./components/AddNewLesson";
 import AddNewModule from "./components/AddNewModule";
+import { showError, showOK } from "../Utils/Notifications";
 
 const UpdateCourse = () => {
   const { courseId } = useParams();
@@ -21,6 +21,8 @@ const UpdateCourse = () => {
       const courseData = await getCourseFromServerById(courseId);
       if (courseData) {
         setCourseData(courseData);
+      } else {
+        showError("Ошибка загрузки курса.");
       }
     }
     fetchData();
@@ -56,7 +58,6 @@ const UpdateCourse = () => {
 
   // Lesson navigation
   const swapLessons = (indMod, i, j) => {
-    console.log(indMod, i, j);
     if (indMod >= 0 && indMod < courseData.modules.length) {
       const lessons = courseData.modules[indMod].lessons;
       const length = lessons.length;
@@ -76,7 +77,7 @@ const UpdateCourse = () => {
   const eraseLesson = (indMod, i) => {
     if (indMod >= 0 && indMod < courseData.modules.length) {
       const lessons = courseData.modules[indMod].lessons;
-      if (i >= 0 && i < courseData.modules.length) {
+      if (i >= 0 && i < lessons.length) {
         const newLessons = [...lessons];
         newLessons.splice(i, 1);
         const newModules = [...courseData.modules];
@@ -107,6 +108,8 @@ const UpdateCourse = () => {
           lessons: newLessons,
         };
         setCourseData({ ...courseData, modules: newModules });
+      } else {
+        showError("Урок не добавлен.");
       }
     }
   };
@@ -121,9 +124,13 @@ const UpdateCourse = () => {
   const handleSaveButton = async () => {
     setSaving(true);
     const updatedCourseData = await updateCourse(courseData);
-    setCourseData(updatedCourseData);
+    if (updatedCourseData) {
+      setCourseData(updatedCourseData);
+      showOK("Сохранено!");
+    } else {
+      showError("Не сохранено.");
+    }
     setSaving(false);
-    console.log(updatedCourseData);
   };
   if (courseData === undefined) {
     return <></>;

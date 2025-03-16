@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { deleteSolution, getMyExamsSolutions } from "../../../server/exam";
 import { Solution } from "./components/Solution";
 import "./HistorySection.css";
+import { showError } from "../../Utils/Notifications";
 
 const HistorySection = () => {
   const [examSolutions, setExamSolutions] = useState([]);
@@ -11,6 +12,8 @@ const HistorySection = () => {
       const solutions = await getMyExamsSolutions();
       if (solutions) {
         setExamSolutions(solutions);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();
@@ -22,6 +25,8 @@ const HistorySection = () => {
       if (res) {
         const newSolutions = examSolutions.filter((sol) => sol.id !== id);
         setExamSolutions(newSolutions);
+      } else {
+        showError("Ошибка.");
       }
     }
   };

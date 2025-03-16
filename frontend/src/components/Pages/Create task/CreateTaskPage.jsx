@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import "./CreateTaskPage.css";
 import CreateTask from "../../CreateTask/CreateTask";
 import { useEffect, useState } from "react";
@@ -66,6 +67,8 @@ const CreateTaskPage = () => {
     setSelectedTaskAuthor(-1);
     setSelectedActuality(-1);
   };
+  const notify = (text) => toast.success(text);
+  const showError = (text) => toast.error(text);
 
   useEffect(() => {
     async function fetchData() {
@@ -125,24 +128,6 @@ const CreateTaskPage = () => {
     }
   }, [taskId, filterData, countSave]);
 
-  const handleShowText = () => {
-    setShowSaveText(true);
-    setTimeout(() => {
-      setShowSaveText(false);
-    }, 1000);
-  };
-  useEffect(() => {
-    let timer;
-    if (showSaveText) {
-      timer = setTimeout(() => {
-        setShowSaveText(false);
-      }, 5000);
-    }
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [showSaveText]);
-
   const saveTaskOnServer = async () => {
     const newTask = await createTaskOnServer({
       content: editorContent,
@@ -157,9 +142,11 @@ const CreateTaskPage = () => {
       actuality: selectedActuality !== -1 ? selectedActuality : null,
     });
     if (newTask !== undefined) {
-      handleShowText();
+      notify("Задача сохранена!");
       setCountSave(countSave + 1);
       navigate(`../edit-task/${newTask.id}/`);
+    } else {
+      showError("Задача не сохранена.");
     }
   };
 

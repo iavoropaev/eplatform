@@ -1,24 +1,22 @@
-import slugify from "slugify";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setDescription,
   setExam,
   setName,
-  setSlug,
   setTasks,
 } from "../../redux/slices/createCollectionSlice";
 import { useEffect, useState } from "react";
 import { getTaskById } from "../../server/bank";
-import Task from "../Task/Task";
-import "./CreateCollection.css";
+
 import {
   getCollectionBySlug,
   updateCollection,
 } from "../../server/collections";
 import "./CreateCollection.css";
 import TasksList from "./components/TasksList";
-
+import { showOK, showError } from "../Utils/Notifications";
+import "./CreateCollection.css";
 const UpdateCollection = () => {
   const { slug } = useParams();
   const [isError, setError] = useState(false);
@@ -49,7 +47,7 @@ const UpdateCollection = () => {
       }
     }
     fetchData();
-  }, [slug, dispatch]);
+  }, [dispatch, slug]);
 
   const handleAddTaskByIdBut = async () => {
     const id = Number(newTaskId);
@@ -58,7 +56,12 @@ const UpdateCollection = () => {
       const task = await getTaskById(id);
       if (task !== undefined) {
         dispatch(setTasks([...tasks, task]));
+        showOK("Задача добавлена!");
+      } else {
+        showError("Задача не добавлена.");
       }
+    } else {
+      showError("Задача не добавлена.");
     }
     setNewTaskId("");
   };
@@ -100,8 +103,9 @@ const UpdateCollection = () => {
       dispatch(setName(collection.name));
       dispatch(setDescription(collection.description));
       dispatch(setExam(collection.is_exam));
+      showOK("Сохранено!");
     } else {
-      setError(true);
+      showError("Подборка не обновлена.");
     }
   };
 

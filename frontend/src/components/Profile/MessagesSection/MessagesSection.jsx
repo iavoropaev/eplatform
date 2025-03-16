@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getUserMessages } from "../../../server/class";
 import { formatDate } from "../../Utils/dates";
 import "./MessagesSection.css";
+import { showError } from "../../Utils/Notifications";
 const MessagesSection = () => {
   const { section } = useParams();
   const [messages, setMessages] = useState([]);
@@ -13,6 +14,8 @@ const MessagesSection = () => {
       const messages = await getUserMessages();
       if (messages) {
         setMessages(messages);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();

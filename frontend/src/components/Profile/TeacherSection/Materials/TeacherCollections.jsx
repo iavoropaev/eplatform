@@ -6,6 +6,7 @@ import {
   getMyCollections,
 } from "../../../../server/collections";
 import "./Materials.css";
+import { showError } from "../../../Utils/Notifications";
 const TeacherCollections = () => {
   const navigate = useNavigate();
   const [collections, setCollections] = useState([]);
@@ -16,6 +17,8 @@ const TeacherCollections = () => {
       if (res) {
         setCollections(res);
         console.log(res);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();
@@ -36,6 +39,8 @@ const TeacherCollections = () => {
         });
 
         setCollections(newCol);
+      } else {
+        showError("Ошибка.");
       }
     }
   };

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { createClass, getMyClasses } from "../../../server/class";
 import "./TeacherSection.css";
+import { showError } from "../../Utils/Notifications";
 
 const TeacherSection = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ const TeacherSection = () => {
       const classes = await getMyClasses();
       if (classes) {
         setClasses(classes);
+      } else {
+        showError("Ошибка загрузки.");
       }
     }
     fetchData();

@@ -6,6 +6,7 @@ import "./GenerateCollection.css";
 import { GenerateCollSelect } from "./components/GenerateCollSelect";
 import { SubjectSelect } from "./components/SubjectSelect";
 import { generateCollection } from "../../server/collections";
+import { showError } from "../Utils/Notifications";
 const GenerateCollection = () => {
   const navigate = useNavigate();
 
@@ -42,7 +43,11 @@ const GenerateCollection = () => {
   useEffect(() => {
     async function fetchData() {
       const data = await getFilterData();
-      setFilterData(data);
+      if (data) {
+        setFilterData(data);
+      } else {
+        showError("Ошибка загрузки.");
+      }
     }
     fetchData();
   }, []);
@@ -92,6 +97,8 @@ const GenerateCollection = () => {
     console.log(res);
     if (res) {
       navigate(`/update-collection/${res.slug}/`);
+    } else {
+      showError("Ошибка.");
     }
   };
   console.log("!!!", actualities);

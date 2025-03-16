@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createLesson } from "../../../server/course";
+import { showError } from "../../Utils/Notifications";
 
 const AddNewLesson = ({ addLesson, indMod }) => {
   const [addingLessonName, setAddingLessonName] = useState("");
@@ -9,6 +10,8 @@ const AddNewLesson = ({ addLesson, indMod }) => {
     const createdLesson = await createLesson({ name: addingLessonName });
     if (createdLesson) {
       addLesson(indMod, createdLesson.id);
+    } else {
+      showError("Ошибка.");
     }
     setAddingLessonName("");
   };

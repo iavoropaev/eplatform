@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./components/Pages/Main";
 import MainLayout from "./layouts/redux/MainLayout";
 import { adminRoutes, authRoutes, publicRoutes } from "./routes";
-
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 
 function App() {
@@ -36,6 +36,7 @@ function App() {
             })}
           </Route>
         </Routes>
+        <ToastContainer autoClose={2000} position="bottom-right" />
       </div>
     </BrowserRouter>
   );
