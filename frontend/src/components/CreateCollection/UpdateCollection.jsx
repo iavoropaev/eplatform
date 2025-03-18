@@ -4,6 +4,7 @@ import {
   setDescription,
   setExam,
   setName,
+  setSubject,
   setTasks,
 } from "../../redux/slices/createCollectionSlice";
 import { useEffect, useState } from "react";
@@ -17,9 +18,11 @@ import "./CreateCollection.css";
 import TasksList from "./components/TasksList";
 import { showOK, showError } from "../Utils/Notifications";
 import "./CreateCollection.css";
+
 const UpdateCollection = () => {
   const { slug } = useParams();
   const [isError, setError] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.createCollection.tasks);
@@ -28,7 +31,12 @@ const UpdateCollection = () => {
     (state) => state.createCollection.description
   );
   const isExam = useSelector((state) => state.createCollection.isExam);
-
+  const subjectName = useSelector(
+    (state) => state.createCollection?.subject?.name
+  );
+  const examName = useSelector(
+    (state) => state.createCollection?.subject?.exam?.name
+  );
   const colSlug = useSelector((state) => state.createCollection.slug);
 
   const [newTaskId, setNewTaskId] = useState("");
@@ -42,9 +50,11 @@ const UpdateCollection = () => {
         dispatch(setName(collection.name));
         dispatch(setDescription(collection.description));
         dispatch(setExam(collection.is_exam));
+        dispatch(setSubject(collection.subject));
       } else {
         setError(true);
       }
+      setLoading(false);
     }
     fetchData();
   }, [dispatch, slug]);
@@ -129,11 +139,17 @@ const UpdateCollection = () => {
     </div>
   );
 
+  if (isLoading) {
+    return <></>;
+  }
+
   if (isError) {
     return <h2>Подборка не найдена.</h2>;
   }
   return (
     <div className="create-collection">
+      <div>{`Экзамен: ${examName}.`}</div>
+      <div>{`Предмет: ${subjectName}.`}</div>
       <div>
         <span>Название коллекции </span>
         <input

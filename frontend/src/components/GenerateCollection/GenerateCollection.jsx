@@ -4,9 +4,10 @@ import { getFilterData } from "../../server/bank";
 import { useEffect, useState } from "react";
 import "./GenerateCollection.css";
 import { GenerateCollSelect } from "./components/GenerateCollSelect";
-import { SubjectSelect } from "./components/SubjectSelect";
+import { SubjectSelect } from "../Utils/SubjectSelect/SubjectSelect";
 import { generateCollection } from "../../server/collections";
 import { showError } from "../Utils/Notifications";
+
 const GenerateCollection = () => {
   const navigate = useNavigate();
 
@@ -33,8 +34,7 @@ const GenerateCollection = () => {
   const activeSubject = activeExam?.subjects?.filter(
     (subj) => subj?.slug === subjectSlug
   )[0];
-  const subjects = activeExam?.subjects;
-  //   const sources = activeSubject["sources"];
+
   const numbers = activeSubject?.numbers;
   const authors = activeSubject?.authors;
   const difficulty_levels = activeExam?.dif_levels;
@@ -90,6 +90,7 @@ const GenerateCollection = () => {
     const data = {
       name: collectionName,
       slug: collectionSlug,
+      subject: activeSubject.id,
       description: collectionDiscr,
       generateParams,
     };
@@ -101,7 +102,8 @@ const GenerateCollection = () => {
       showError("Ошибка.");
     }
   };
-  console.log("!!!", actualities);
+
+  const canSave = collectionName && collectionSlug && activeSubject;
 
   if (!filterData) {
     return <></>;
@@ -138,7 +140,7 @@ const GenerateCollection = () => {
           }}
         ></textarea>
       </div>
-      <SubjectSelect filterData={filterData} subjects={subjects} />
+      <SubjectSelect />
 
       <table className="gen-col-table">
         <thead>
@@ -264,7 +266,11 @@ const GenerateCollection = () => {
         </tbody>
       </table>
 
-      <button onClick={handleGenerateBut} className="black-button">
+      <button
+        onClick={handleGenerateBut}
+        className="black-button"
+        disabled={!canSave}
+      >
         Сгенерировать
       </button>
     </div>

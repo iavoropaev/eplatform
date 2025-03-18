@@ -1,12 +1,14 @@
 from django.db import models
 from educationplatform.settings import AUTH_USER_MODEL
+from tasks.models import TaskSubject
 
 
 class Course(models.Model):
     created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,  related_name='created_courses')
     name = models.CharField(max_length=100, blank=False)
-    #slug = models.CharField(max_length=100, blank=False, unique=True)
     description = models.CharField(blank=True)
+    subject = models.ForeignKey(TaskSubject, on_delete=models.PROTECT, blank=False, null=False)
+    is_public = models.BooleanField(default=False)
 
     users = models.ManyToManyField(AUTH_USER_MODEL, blank=True)
     modules = models.ManyToManyField('Module', through='CourseModule', blank=True, related_name='courses')

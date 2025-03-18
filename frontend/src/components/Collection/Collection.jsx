@@ -59,7 +59,7 @@ const Collection = () => {
     <div className="play-container">
       <button
         onClick={() => {
-          navigate(`./../../variant/${slug}`);
+          navigate(`./../../variant/${slug}/`);
           window.scrollTo(0, 0);
         }}
         className="play black-button"

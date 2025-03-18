@@ -42,11 +42,12 @@ export const updateCollection = async (data) => {
   }
 };
 
-export const getCollections = async () => {
+export const getCollections = async (subjectSlug) => {
   try {
     const res = await axios.get(
       process.env.REACT_APP_API_URL + "tasks-collections/get_collections/",
       {
+        params: { subject_slug: subjectSlug },
         headers: headers,
       }
     );

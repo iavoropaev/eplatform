@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { getCollections } from "../../server/collections";
 import { useNavigate, useParams } from "react-router-dom";
-import "./CollectionCatalog.css";
 import { SubjectSelect } from "../Utils/SubjectSelect/SubjectSelect";
 import { showError } from "../Utils/Notifications";
-import { getFilterData } from "../../server/bank";
+import { getCoursesBySubject } from "../../server/course";
+import "./CourseCatalog.css";
 
-const CollectionCatalog = () => {
+const CourseCatalog = () => {
   const navigate = useNavigate();
   const { examSlug, subjectSlug } = useParams();
-  const [collections, setCollections] = useState([]);
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      const collectionsFromServer = await getCollections(subjectSlug);
-      if (collectionsFromServer) {
-        setCollections(collectionsFromServer);
+      const coursesFromServer = await getCoursesBySubject(subjectSlug);
+      if (coursesFromServer) {
+        setCourses(coursesFromServer);
+      } else {
+        showError("Ошибка загрузки курсов.");
       }
     }
     fetchData();
@@ -23,19 +24,19 @@ const CollectionCatalog = () => {
 
   return (
     <div className="coll-cat-container">
-      <h1>Каталог подборок</h1>
+      <h1>Каталог курсов</h1>
       <SubjectSelect />
       <div className="col-list">
-        {collections.map((col) => {
+        {courses.map((course) => {
           return (
             <div
               className="col-item"
-              key={col.slug}
+              key={course.id}
               onClick={() => {
-                navigate(`/collection/${col.slug}/`);
+                navigate(`/course/${course.id}/`);
               }}
             >
-              <span>{col.name}</span>
+              <span>{course.name}</span>
             </div>
           );
         })}
@@ -44,4 +45,4 @@ const CollectionCatalog = () => {
   );
 };
 
-export default CollectionCatalog;
+export default CourseCatalog;

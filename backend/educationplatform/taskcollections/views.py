@@ -48,7 +48,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=self.request.user)
 
     def retrieve(self, request, *args, **kwargs):
-        queryset = TaskCollection.objects
+        queryset = TaskCollection.objects.select_related("subject", "subject__exam")
 
         obj = get_object_or_404(queryset, slug=kwargs["slug"])
         serializer = self.get_serializer(obj)
@@ -58,6 +58,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                                                        'task__difficulty_level', 'task__actuality').order_by('order')
         tasks = [TaskSerializerForUser(task.task).data for task in links]
         response['tasks'] = tasks
+        print(f"Количество SQL-запросов: {len(connection.queries)}")
         return Response(response)
 
     @action(detail=False, methods=['post'], url_path='create-collection')
@@ -80,7 +81,8 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def get_collections(self, request):
-        queryset = TaskCollection.objects.all().filter(is_public=True)
+        subject_slug = request.query_params.get('subject_slug', None)
+        queryset = TaskCollection.objects.all().filter(is_public=True, subject__slug=subject_slug)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -155,7 +157,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             collection_data = {'name': data['name'], 'slug': data['slug'],
                                'description': data['description'],
                                'created_by': cur_user_id,
-                               'subject':1}
+                               'subject': data['subject']}
             for number_info in data['generateParams']:
                 count = number_info['count']
                 number_id = number_info['number']['id']
@@ -461,7 +463,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             print(score_distribution)
 
             print(f"Количество SQL-запросов: {len(connection.queries)}")
-            return Response({'score_distribution': score_distribution, 'percent_distribution':tasks_percent}, status=200)
+            return Response({'score_distribution': score_distribution, 'percent_distribution': tasks_percent},
+                            status=200)
         except Exception as e:
             print(e)
             return Response({

@@ -21,25 +21,34 @@ import ClassForTeacher from "./components/Class/ClassForTeacher";
 import CreateCourse from "./components/Course/CreateCourse/CreateCourse";
 import { ExamStatisticsPage } from "./components/ExamStatistics/ExamStatisticsPage";
 import { NotAuthorized } from "./components/Utils/NotAuthorized";
+import CourseCatalog from "./components/CourseCatalog/CourseCatalog";
 
 export const publicRoutes = [
   { path: "bank", Component: BankPage },
   { path: "variants", Component: Variants },
 
-  { path: "collections/:slug/", Component: CollectionPage },
-  { path: "collections/", Component: CollectionCatalogPage },
-
-  { path: "variant/:slug/", Component: ExamPage },
-  { path: "variant/:slug/results/:solveType/", Component: ExamResultsPage },
-  { path: "variant/:slug/results/", Component: ExamResultsPage },
+  { path: "collection/:slug/", Component: CollectionPage },
   {
-    path: "variant/:examSlug/all-results/:eSection/",
-    Component: ExamStatisticsPage,
+    path: "collections/:examSlug/:subjectSlug/",
+    Component: CollectionCatalogPage,
+  },
+
+  {
+    path: "courses/:examSlug/:subjectSlug/",
+    Component: CourseCatalog,
   },
 
   { path: "test", Component: Test },
 
   // Страница с авторизацией
+  { path: "variant/:slug/", Component: NotAuthorized },
+  { path: "variant/:slug/results/:solveType/", Component: NotAuthorized },
+  { path: "variant/:slug/results/", Component: NotAuthorized },
+  {
+    path: "variant/:examSlug/all-results/:eSection/",
+    Component: NotAuthorized,
+  },
+
   { path: "lk/teach/my-tasks", Component: NotAuthorized },
   { path: "lk/teach/my-variants", Component: NotAuthorized },
   { path: "lk/teach/my-courses", Component: NotAuthorized },
@@ -106,6 +115,14 @@ export const authRoutes = [
 
   { path: "edit-course/:courseId/", Component: UpdateCourse },
   { path: "create-course/", Component: CreateCourse },
+
+  { path: "variant/:slug/", Component: ExamPage },
+  { path: "variant/:slug/results/:solveType/", Component: ExamResultsPage },
+  { path: "variant/:slug/results/", Component: ExamResultsPage },
+  {
+    path: "variant/:examSlug/all-results/:eSection/",
+    Component: ExamStatisticsPage,
+  },
 ];
 
 export const adminRoutes = [];

@@ -16,7 +16,7 @@ from courses.models import Course, Section, SectionSolve, Module, Lesson, Course
 from courses.serializers import CourseSerializer, SectionSolveSerializer, ModuleSerializer, LessonSerializer, \
     LessonOnlyNameSerializer, CourseModuleSerializer, ModuleAllFieldsSerializer, ModuleLessonSerializer, \
     LessonAllFieldsSerializer, SectionAllFieldsSerializer, LessonSectionSerializer, SectionSerializer, \
-    CourseCreateSerializer
+    CourseCreateSerializer, CourseInfoSerializer
 from courses.utils import get_lesson_data_with_solves, create_empty_section
 from tasks.utils import check_answer
 
@@ -26,7 +26,7 @@ class CoursesViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
 
     def get_permissions(self):
-        if self.action in ['all']:
+        if self.action in ['all', 'get_courses_by_subject']:
             permission_classes = [AllowAny]
         elif self.action in ['data', 'send_solution', 'solved_sections', 'get_lesson',
                              'get_lesson_name', 'get_module_with_lessons', 'get_section', 'my_courses']:
@@ -54,6 +54,13 @@ class CoursesViewSet(viewsets.ModelViewSet):
         cur_user_id = request.user.id
         courses = Course.objects.all().filter(created_by=cur_user_id).values('id', 'name', 'description')
         return Response(courses, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='get-courses-by-subject')
+    def get_courses_by_subject(self, request):
+        subject_slug = request.query_params.get('subject_slug', None)
+        queryset = Course.objects.filter(is_public=True, subject__slug=subject_slug)
+        serializer = CourseInfoSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(description='Get course.')
     @action(detail=True, methods=['get'])

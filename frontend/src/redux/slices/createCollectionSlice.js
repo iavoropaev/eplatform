@@ -5,6 +5,7 @@ const initialState = {
   name: "",
   description: "",
   slug: "",
+  subject: "",
   isExam: false,
 };
 
@@ -27,6 +28,9 @@ const createCollectionSlice = createSlice({
     setExam: (state, action) => {
       return { ...state, isExam: action.payload };
     },
+    setSubject: (state, action) => {
+      return { ...state, subject: action.payload };
+    },
   },
 });
 
@@ -35,5 +39,6 @@ export const setName = createCollectionSlice.actions.setName;
 export const setDescription = createCollectionSlice.actions.setDescription;
 export const setSlug = createCollectionSlice.actions.setSlug;
 export const setExam = createCollectionSlice.actions.setExam;
+export const setSubject = createCollectionSlice.actions.setSubject;
 
 export default createCollectionSlice.reducer;

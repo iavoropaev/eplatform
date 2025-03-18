@@ -48,7 +48,7 @@ const Course = () => {
         navigate(`/course/${courseId}/`);
       }
     }
-    if (String(currentLesson?.id) !== lessonId) {
+    if (String(currentLesson?.id) !== lessonId && lessonId !== undefined) {
       console.log(lessonId);
       fetchData();
     }

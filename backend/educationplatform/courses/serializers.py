@@ -66,6 +66,11 @@ class CourseSerializer(serializers.ModelSerializer):
         return ModuleSerializer(modules, many=True).data
 
 
+class CourseInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('id', 'name', 'description')
+
 class CourseCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course

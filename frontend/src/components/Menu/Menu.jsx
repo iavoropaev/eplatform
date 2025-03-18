@@ -17,8 +17,11 @@ const Menu = () => {
           {/* <NavLink to="/create-collection/">Создать подборку</NavLink>
           <NavLink to="/update-collection/1/">Обновить подборку</NavLink>
           <NavLink to="/collections/1/">Подборка</NavLink> */}
-          <NavLink end to="/collections/">
+          <NavLink end to="/collections/ege/ege_inf/">
             Подборки
+          </NavLink>
+          <NavLink end to="/courses/ege/ege_inf/">
+            Курсы
           </NavLink>
 
           <NavLink to="/lk/teach/" className={section ? "active" : ""}>

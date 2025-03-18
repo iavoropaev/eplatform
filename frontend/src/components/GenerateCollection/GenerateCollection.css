@@ -17,6 +17,10 @@
 }
 
 .gen-col .exam-subject-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
   margin-top: 15px;
   margin-bottom: 15px;
 }
