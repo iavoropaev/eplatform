@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { formatDate } from "../../Utils/dates";
-import { useParams } from "react-router-dom";
-import { createMessage, deleteMessage } from "../../../server/class";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  createMessage,
+  deleteClass,
+  deleteMessage,
+} from "../../../server/class";
 import { showError, showOK } from "../../Utils/Notifications";
 
 export const ClassMessages = ({ classData, setClassData }) => {
+  const navigate = useNavigate();
   const { classId } = useParams();
 
   const [newMessageContent, setNewMessageContent] = useState("");
@@ -43,6 +48,18 @@ export const ClassMessages = ({ classData, setClassData }) => {
     }
   };
 
+  const handleDelClassBut = async () => {
+    if (window.confirm("Вы уверены, что хотите удалить класс?")) {
+      const res = await deleteClass({ class_id: classId });
+      if (res !== undefined) {
+        navigate("/");
+        showOK("Класс удалён.");
+      } else {
+        showError("Не удалось удалить класс.");
+      }
+    }
+  };
+
   return (
     <div className="messages-cont">
       <h3>Сообщения</h3>
@@ -66,7 +83,7 @@ export const ClassMessages = ({ classData, setClassData }) => {
         {classData?.messages.map((mes) => {
           console.log(mes);
           return (
-            <div className="message">
+            <div className="message" key={mes.id}>
               <div className="message-header">
                 <span>{formatDate(mes.created_at)}</span>
                 <div
@@ -87,6 +104,12 @@ export const ClassMessages = ({ classData, setClassData }) => {
             </div>
           );
         })}
+      </div>
+      <div className="class-delete">
+        <details>
+          <summary>Удаление класса</summary>
+          <button onClick={handleDelClassBut}>Удалить класс</button>
+        </details>
       </div>
     </div>
   );

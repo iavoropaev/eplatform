@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from classes.models import Class, Invitation, Message
 from classes.serializers import ClassSerializer, InvitationSerializer, ClassSerializerForTeacher, ClassCreateSerializer, \
     MessageSerializer, MessageCreateSerializer
+from users.models import User
 
 
 class ClassesViewSet(viewsets.ModelViewSet):
@@ -18,7 +19,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         elif self.action in ['create_class', 'create_invitation', 'delete_invitation', 'create_message',
                              'activate_invitation', 'get_my_classes', 'get_class_data', 'get-student-messages',
-                             'delete_message']:
+                             'delete_message', 'delete_class']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -74,6 +75,48 @@ class ClassesViewSet(viewsets.ModelViewSet):
             print(e)
             return Response({
                 'Error': 'Не удалось создать класс.',
+            }, status=400)
+
+    @action(detail=False, methods=['post'], url_path='delete-class')
+    def delete_class(self, request):
+        try:
+            cur_user_id = request.user.id
+            is_admin = request.user.is_staff
+            cur_class_id = request.data['class_id']
+
+            cur_class = Class.objects.get(id=cur_class_id)
+            if is_admin or (cur_class.created_by.id == cur_user_id):
+                cur_class.delete()
+                return Response('deleted', 200)
+            else:
+                return Response(status=403)
+
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось удалить класс.',
+            }, status=400)
+
+    @action(detail=False, methods=['post'], url_path='exclude-user-from-class')
+    def exclude_user_from_class(self, request):
+        try:
+            cur_user_id = request.user.id
+            is_admin = request.user.is_staff
+            cur_class_id = request.data['class_id']
+            excluded_user_id = request.data['excluded_user_id']
+
+            cur_class = Class.objects.get(id=cur_class_id)
+            if is_admin or (cur_class.created_by.id == cur_user_id):
+                excluded_user = User.objects.get(id=excluded_user_id)
+                cur_class.students.remove(excluded_user)
+                return Response('Excluded', 200)
+            else:
+                return Response(status=403)
+
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось исключить ученика из класса.',
             }, status=400)
 
     @action(detail=False, methods=['post'], url_path='create-invitation')

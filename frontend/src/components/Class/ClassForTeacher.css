@@ -82,3 +82,20 @@
   font-size: 12px;
   border-radius: 2px;
 }
+
+.teacher-class .class-delete {
+  margin-top: 15px;
+}
+.teacher-class .class-delete button {
+  margin-top: 5px;
+}
+
+.teacher-class .del-student {
+  color: grey;
+  padding: 0px;
+  background-color: transparent;
+  border: 0px;
+}
+.teacher-class .del-student:hover {
+  color: red;
+}

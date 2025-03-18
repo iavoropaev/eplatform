@@ -1,8 +1,16 @@
 import { useParams } from "react-router-dom";
-import { createInvitation, deleteInvitation } from "../../../server/class";
+import {
+  createInvitation,
+  deleteInvitation,
+  excludeUserFromClass,
+} from "../../../server/class";
 import { showError } from "../../Utils/Notifications";
 
-export const ClassStudents = ({ classData, setClassData }) => {
+export const ClassStudents = ({
+  classData,
+  setClassData,
+  handleStudentDelBut,
+}) => {
   const { classId } = useParams();
 
   const handleDeleteBut = async (id, index) => {
@@ -34,9 +42,19 @@ export const ClassStudents = ({ classData, setClassData }) => {
       <div>
         {classData?.students.map((student, i) => {
           return (
-            <div key={i}>{`${i + 1}. ${student.first_name} ${
-              student.last_name
-            }`}</div>
+            <div key={i}>
+              <span>{`${i + 1}. ${student.first_name} ${
+                student.last_name
+              } `}</span>
+              <button
+                className="del-student"
+                onClick={() => {
+                  handleStudentDelBut(student.id);
+                }}
+              >
+                ⨉
+              </button>
+            </div>
           );
         })}
       </div>

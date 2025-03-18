@@ -175,3 +175,41 @@ export const deleteMessage = async (data) => {
     return undefined;
   }
 };
+
+export const deleteClass = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "class/delete-class/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+export const excludeUserFromClass = async (data) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "class/exclude-user-from-class/",
+      data,
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
