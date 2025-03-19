@@ -26,7 +26,7 @@ export const sendExamSolutionToServer = async (data) => {
   }
 };
 
-export const getExamSolution = async (col_slug, sol_type) => {
+export const getExamSolution = async (col_slug, sol_type, sol_id) => {
   try {
     const res = await axios.get(
       process.env.REACT_APP_API_URL + "tasks-collections-solve/get-solution/",
@@ -35,6 +35,7 @@ export const getExamSolution = async (col_slug, sol_type) => {
         params: {
           col_slug: col_slug,
           sol_type: sol_type,
+          sol_id: sol_id,
         },
       }
     );

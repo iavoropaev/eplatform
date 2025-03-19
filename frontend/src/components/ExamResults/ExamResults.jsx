@@ -6,7 +6,7 @@ import "./ExamResults.css";
 import { showError } from "../Utils/Notifications";
 
 const ExamResults = () => {
-  const { slug, solveType } = useParams();
+  const { slug, solveType, attemptId } = useParams();
   const navigate = useNavigate();
   console.log(solveType);
   //const [solveType, setSolveType] = useState("last");
@@ -21,7 +21,7 @@ const ExamResults = () => {
   useEffect(() => {
     async function fetchData() {
       const realSolveType = solveType ? solveType : "last";
-      const solve = await getExamSolution(slug, realSolveType);
+      const solve = await getExamSolution(slug, realSolveType, attemptId);
       if (solve) {
         console.log(solve);
         setColName(solve.task_collection.name);

@@ -278,7 +278,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                         test_score = 0
             else:
                 test_score = None
-            print(scale, test_score)
+
             solve = TaskCollectionSolve(
                 task_collection_id=collection.id,
                 user_id=cur_user_id,
@@ -306,24 +306,32 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     def get_solution(self, request):
         try:
             user_id = request.user.id
+            is_staff = request.user.is_staff
             col_slug = request.query_params.get('col_slug', None)
             sol_type = request.query_params.get('sol_type', None)
+            sol_id = request.query_params.get('sol_id', None)
 
-            solve = TaskCollectionSolve.objects.all().filter(user__id=user_id, task_collection__slug=col_slug)
-            if sol_type == 'last':
-                solve = solve.order_by('time_create').last()
+            solves = TaskCollectionSolve.objects.all().filter(task_collection__slug=col_slug)
+            if sol_id:
+                solve = solves.get(id=sol_id)
+                collection = solve.task_collection
+                if not (collection.created_by.id == user_id or solve.user.id == user_id or is_staff):
+                    return Response(status=403)
+            elif sol_type == 'last':
+                solve = solves.filter(user__id=user_id).order_by('time_create').last()
             elif sol_type == 'first':
-                solve = solve.order_by('time_create').first()
+                solve = solves.filter(user__id=user_id).order_by('time_create').first()
             elif sol_type == 'best':
-                solve = solve.order_by('-score', '-time_create').first()
+                solve = solves.filter(user__id=user_id).order_by('-score', '-time_create').first()
             else:
-                solve = solve.first()
+                solve = solves.filter(user__id=user_id).first()
 
             serializer = TaskCollectionSolveForUserSerializer(solve, many=False)
             data = serializer.data
 
             return Response(data, status=200)
         except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)

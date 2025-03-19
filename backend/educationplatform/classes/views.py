@@ -19,7 +19,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         elif self.action in ['create_class', 'create_invitation', 'delete_invitation', 'create_message',
                              'activate_invitation', 'get_my_classes', 'get_class_data', 'get-student-messages',
-                             'delete_message', 'delete_class']:
+                             'delete_message', 'delete_class', 'get_student_classes']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -46,6 +46,14 @@ class ClassesViewSet(viewsets.ModelViewSet):
     def get_my_classes(self, request):
         cur_user_id = request.user.id
         classes = Class.objects.all().filter(created_by=cur_user_id)
+        serializer = ClassSerializer(classes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='get-student-classes')
+    def get_student_classes(self, request):
+        cur_user_id = request.user.id
+        cur_user = User.objects.all().get(id=cur_user_id)
+        classes = cur_user.student_classes
         serializer = ClassSerializer(classes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -104,9 +112,11 @@ class ClassesViewSet(viewsets.ModelViewSet):
             is_admin = request.user.is_staff
             cur_class_id = request.data['class_id']
             excluded_user_id = request.data['excluded_user_id']
+            if excluded_user_id == -1:
+                excluded_user_id = cur_user_id
 
             cur_class = Class.objects.get(id=cur_class_id)
-            if is_admin or (cur_class.created_by.id == cur_user_id):
+            if is_admin or (cur_class.created_by.id == cur_user_id) or (cur_user_id == excluded_user_id):
                 excluded_user = User.objects.get(id=excluded_user_id)
                 cur_class.students.remove(excluded_user)
                 return Response('Excluded', 200)

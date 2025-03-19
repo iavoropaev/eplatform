@@ -18,7 +18,7 @@ import TeacherCollections from "./components/Profile/TeacherSection/Materials/Te
 import TeacherCourses from "./components/Profile/TeacherSection/Materials/TeacherCourses";
 import ActivateInvitation from "./components/Class/ActivateInvitation";
 import ClassForTeacher from "./components/Class/ClassForTeacher";
-import CreateCourse from "./components/Course/CreateCourse/CreateCourse";
+import CreateCourse from "./components/CreateCourse/CreateCourse";
 import { ExamStatisticsPage } from "./components/ExamStatistics/ExamStatisticsPage";
 import { NotAuthorized } from "./components/Utils/NotAuthorized";
 import CourseCatalog from "./components/CourseCatalog/CourseCatalog";
@@ -117,6 +117,10 @@ export const authRoutes = [
   { path: "create-course/", Component: CreateCourse },
 
   { path: "variant/:slug/", Component: ExamPage },
+  {
+    path: "variant/:slug/results/:solveType/:attemptId/",
+    Component: ExamResultsPage,
+  },
   { path: "variant/:slug/results/:solveType/", Component: ExamResultsPage },
   { path: "variant/:slug/results/", Component: ExamResultsPage },
   {

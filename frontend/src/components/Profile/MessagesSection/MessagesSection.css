@@ -26,3 +26,20 @@
 .lk-messages .message .message-content {
   background-color: white;
 }
+
+.lk-messages-section .class-item {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  font-size: 16px;
+}
+.lk-messages-section .del-student {
+  color: grey;
+  padding: 0px;
+  background-color: transparent;
+  border: 0px;
+  font-size: 15px;
+}
+.lk-messages-section .del-student:hover {
+  color: red;
+}

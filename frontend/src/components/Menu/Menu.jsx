@@ -1,7 +1,8 @@
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import "./Menu.css";
 
 const Menu = () => {
+  const location = useLocation();
   const { section } = useParams();
   console.log(section);
   return (
@@ -17,10 +18,22 @@ const Menu = () => {
           {/* <NavLink to="/create-collection/">Создать подборку</NavLink>
           <NavLink to="/update-collection/1/">Обновить подборку</NavLink>
           <NavLink to="/collections/1/">Подборка</NavLink> */}
-          <NavLink end to="/collections/ege/ege_inf/">
+          <NavLink
+            end
+            to="/collections/ege/ege_inf/"
+            className={({ isActive }) =>
+              location.pathname.startsWith("/collections") ? "active" : ""
+            }
+          >
             Подборки
           </NavLink>
-          <NavLink end to="/courses/ege/ege_inf/">
+          <NavLink
+            end
+            to="/courses/ege/ege_inf/"
+            className={({ isActive }) =>
+              location.pathname.startsWith("/courses") ? "active" : ""
+            }
+          >
             Курсы
           </NavLink>
 

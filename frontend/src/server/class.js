@@ -26,6 +26,23 @@ export const getClassbyId = async (classId) => {
   }
 };
 
+export const getStudentClasses = async () => {
+  try {
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL + "class/get-student-classes/",
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
 export const getMyClasses = async () => {
   try {
     const res = await axios.get(

@@ -56,14 +56,14 @@ const TeacherCollections = () => {
             key={col.id}
             className="collection"
             onClick={() => {
-              window.open(`/collections/${col.slug}`, "_blank");
+              window.open(`/collection/${col.slug}`, "_blank");
             }}
           >
             <div>{col.name}</div>
             <div className="buttons">
               <button
                 onClick={() => {
-                  window.open(`/collections/${col.slug}`, "_blank");
+                  window.open(`/collection/${col.slug}/`, "_blank");
                 }}
               >
                 Смотреть
@@ -80,7 +80,7 @@ const TeacherCollections = () => {
               </button>
               <button
                 onClick={() => {
-                  window.open(`/update-collection/${col.slug}`, "_blank");
+                  window.open(`/update-collection/${col.slug}/`, "_blank");
                 }}
               >
                 Редактировать

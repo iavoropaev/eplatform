@@ -15,3 +15,9 @@
 .create-course button {
   padding: 6px;
 }
+
+.create-course .subject-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
