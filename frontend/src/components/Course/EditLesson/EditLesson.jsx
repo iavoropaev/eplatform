@@ -22,6 +22,7 @@ import { useState } from "react";
 import { getTaskById } from "../../../server/bank";
 import "./EditLesson.css";
 import { showError, showOK } from "../../Utils/Notifications";
+import { TinyMCE } from "../../../components/Utils/TinyMCE";
 
 const EditLesson = () => {
   const navigate = useNavigate();
@@ -95,11 +96,11 @@ const EditLesson = () => {
       }
     }
   };
-  const handleContentChange = (e) => {
+  const handleContentChange = (text) => {
     dispatch(
       changeSectionContent({
         index: intSectionIndex,
-        content: e.target.value,
+        content: text,
       })
     );
   };
@@ -220,7 +221,11 @@ const EditLesson = () => {
 
         <div className="content-cont">
           <p>Теория</p>
-          {<textarea value={content} onChange={handleContentChange}></textarea>}
+          {/* {<textarea value={content} onChange={handleContentChange}></textarea>} */}
+          <TinyMCE
+            editorContent={content}
+            setEditorContent={handleContentChange}
+          />
         </div>
 
         <div className="task-cont">

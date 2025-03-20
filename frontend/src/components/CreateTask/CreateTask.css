@@ -56,3 +56,7 @@
 .create-task .save-button {
   text-align: center;
 }
+
+.create-task .editor {
+  max-width: 80%;
+}

@@ -1,17 +1,11 @@
 import { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
-const TinyMCE = ({ editorContent, setEditorContent }) => {
+export const TinyMCE = ({ editorContent, setEditorContent }) => {
   const editorRef = useRef(null);
 
   const handleEditorChange = (newContent) => {
     setEditorContent(newContent);
-  };
-
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
   };
 
   return (
@@ -25,9 +19,7 @@ const TinyMCE = ({ editorContent, setEditorContent }) => {
         onEditorChange={handleEditorChange}
         init={{
           file_picker_types: "file image media",
-          // automatic_uploads: true,
-          images_upload_url: "http://127.0.0.1:8000/api/v1/upload-file/",
-          height: 500,
+          images_upload_url: process.env.REACT_APP_API_URL + "upload-file/",
           menubar: true,
           plugins: [
             "advlist",
@@ -46,32 +38,28 @@ const TinyMCE = ({ editorContent, setEditorContent }) => {
             "table",
             "preview",
             "help",
-            "wordcount",
             "codesample", // !
+            "autoresize", // !
           ],
           toolbar:
             "undo redo | blocks | " +
+            "code codesample | " +
             "bold italic forecolor | alignleft aligncenter " +
             "alignright alignjustify | bullist numlist outdent indent | " +
-            "removeformat | help",
+            "removeformat | help | ",
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-
-          //   menu: {
-          //     edit: { title: "Edit", items: "undo, redo, selectall" },
-          //   },
+          codesample_languages: [{ text: "Python", value: "python" }],
+          codesample_default_language: "python",
+          elementpath: false,
+          help_accessibility: false,
+          promotion: false,
+          autoresize_bottom_margin: 10,
+          autoresize_overflow_padding: 10,
+          autoresize_on_init: true,
+          content_style: "body { font-size: 15px; }",
         }}
       />
-      {/* <button onClick={log}>Log editor content</button>
-      <button
-        onClick={() => {
-          setEditorContent("Тык");
-        }}
-      >
-        Поменять
-      </button> */}
     </div>
   );
 };
-
-export default TinyMCE;

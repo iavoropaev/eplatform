@@ -1,12 +1,17 @@
 import requests
 from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.utils import extend_schema
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 
 from educationplatform.settings import VK_APP_TOKEN, VK_APP_VERSION, VK_LINK_EXCHANGE_SILENT_TOKEN, \
     VK_LINK_GET_USER_INFO
+from users.models import User, TgInvitation
+from users.serializers import TgInvitationSerializer
 
 
 @extend_schema(description='Authorization via VK ID.')
@@ -62,3 +67,37 @@ def auth_by_vk(request):
         return Response({
             'error': 'Authorization failed.',
         }, status=406)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_tg_invitation(request):
+    try:
+        cur_user_id = request.user.id
+        user = User.objects.get(id=cur_user_id)
+
+        invitation = TgInvitation.objects.create(user=user)
+        serializer = TgInvitationSerializer(invitation)
+
+        return Response(serializer.data, status=200)
+    except Exception as e:
+        print(e)
+        return Response({
+            'Error': 'Не удалось создать приглашение.',
+        }, status=400)
+
+
+@api_view(['POST'])
+def activate_tg_invitation(request):
+    try:
+        print('start')
+        cur_user_id = request.user.id
+        print(cur_user_id)
+        print(request.data)
+
+        return Response("23", status=200)
+    except Exception as e:
+        print(e)
+        return Response({
+            'Error': 'Не удалось создать приглашение.',
+        }, status=400)

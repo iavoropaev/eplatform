@@ -40,6 +40,7 @@
 }
 .teacher-class .message .content {
   overflow: auto;
+  padding: 15px;
 }
 .teacher-class .message > div {
   padding: 10px;

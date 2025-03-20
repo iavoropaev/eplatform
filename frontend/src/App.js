@@ -3,6 +3,7 @@ import Main from "./components/Pages/Main";
 import MainLayout from "./layouts/redux/MainLayout";
 import { adminRoutes, authRoutes, publicRoutes } from "./routes";
 import { ToastContainer } from "react-toastify";
+
 import "./App.css";
 
 function App() {

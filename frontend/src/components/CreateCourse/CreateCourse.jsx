@@ -1,4 +1,3 @@
-import slugify from "slugify";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 

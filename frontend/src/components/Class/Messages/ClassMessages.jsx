@@ -7,6 +7,7 @@ import {
   deleteMessage,
 } from "../../../server/class";
 import { showError, showOK } from "../../Utils/Notifications";
+import { TinyMCE } from "../../Utils/TinyMCE";
 
 export const ClassMessages = ({ classData, setClassData }) => {
   const navigate = useNavigate();
@@ -66,14 +67,10 @@ export const ClassMessages = ({ classData, setClassData }) => {
       <details className="new-message">
         <summary>Отправить новое сообщение</summary>
         <div className="new-message">
-          <div>
-            <textarea
-              value={newMessageContent}
-              onChange={(e) => {
-                setNewMessageContent(e.target.value);
-              }}
-            ></textarea>
-          </div>
+          <TinyMCE
+            editorContent={newMessageContent}
+            setEditorContent={setNewMessageContent}
+          />
 
           <button onClick={handleNewMesBut}>Отправить</button>
         </div>

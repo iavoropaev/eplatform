@@ -1,7 +1,7 @@
 import TaskTags from "./components/TaskTags";
 import Answer from "../Utils/Answer/Answer";
 import { CustomSelect } from "../Utils/CustomSelect";
-import TinyMCE from "../Utils/TinyMCE";
+import { TinyMCE } from "../Utils/TinyMCE";
 import { CheckBoxes } from "../Utils/CheckBoxes";
 import "./CreateTask.css";
 

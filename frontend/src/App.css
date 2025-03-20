@@ -123,3 +123,14 @@ button:disabled {
 .navigate-el {
   cursor: pointer;
 }
+
+pre[class*="language-"] {
+  background-color: #f7f7f7;
+  border-radius: 5px;
+  border: 1px solid rgb(206, 206, 206);
+  margin: 20px;
+  font-size: 13px;
+}
+.token.operator {
+  background-color: transparent;
+}

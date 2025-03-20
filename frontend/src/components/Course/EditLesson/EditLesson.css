@@ -27,14 +27,14 @@
   text-align: left;
   color: grey;
 }
-.lesson-container .content-cont textarea {
+/* .lesson-container .content-cont textarea {
   box-sizing: border-box;
   margin-top: 5px;
   width: 100%;
   max-width: 100%;
   min-width: 100%;
   height: 150px;
-}
+} */
 
 .lesson-container .task-cont {
   text-align: left;
@@ -63,7 +63,10 @@
   gap: 5px;
 }
 
-.lesson-container .add-section button {
-  border-radius: 3px;
-  padding: 5px;
+.lesson-container .editor {
+  margin-top: 5px;
+}
+
+.lesson-container .tox-tinymce {
+  border-radius: 5px;
 }
