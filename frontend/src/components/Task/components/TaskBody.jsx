@@ -1,7 +1,9 @@
+import HighlightedContent from "../../Utils/HighlightedContent";
+
 const TaskBody = ({ taskData }) => {
   return (
     <div className="task-body innerhtml">
-      <div dangerouslySetInnerHTML={{ __html: taskData.content }}></div>
+      <HighlightedContent content={taskData.content} />
     </div>
   );
 };

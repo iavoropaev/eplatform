@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { NavigateElement } from "./components/NavigateElement";
 import HistorySection from "./HistorySection/HistorySection";
 import MessagesSection from "./MessagesSection/MessagesSection";
+import Settings from "./Settings/Settings";
+import { Achievements } from "./Achievements/Achievements";
 
 const Profile = () => {
   const { section } = useParams();
@@ -18,12 +20,16 @@ const Profile = () => {
         <NavigateElement path="dz" name="Сообщения" />
         <NavigateElement path="history" name="История" />
         <NavigateElement path="stat" name="Статистика" />
-        <NavigateElement path="teach" name=" Для учителей" />
+        <NavigateElement path="achievements" name="Достижения" />
+        <NavigateElement path="teach" name="Для учителей" />
+        <NavigateElement path="settings" name="Настройки" />
       </div>
 
       {section === "teach" && <TeacherSection />}
       {section === "history" && <HistorySection />}
       {section === "dz" && <MessagesSection />}
+      {section === "settings" && <Settings />}
+      {section === "achievements" && <Achievements />}
     </div>
   );
 };

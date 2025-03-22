@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import User, TgInvitation
+from users.models import User, TgInvitation, Achievement
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,3 +13,9 @@ class TgInvitationSerializer(serializers.ModelSerializer):
         model = TgInvitation
         fields = ('id', 'inv_token', 'user')
         read_only_fields = ['inv_token']
+
+
+class AchievementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Achievement
+        fields = ('id', 'name', 'description')

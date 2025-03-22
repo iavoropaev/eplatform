@@ -12,7 +12,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from educationplatform.settings import DOMEN
+from educationplatform.settings import DOMAIN
 from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, \
     TaskNumberInExam, \
     TaskExam, Actuality
@@ -478,7 +478,7 @@ def upload_file(request):
         fp = UploadFiles(file=file)
         fp.save()
         return Response({
-            'location': f'{DOMEN}media/{fp.file}',
+            'location': f'{DOMAIN}media/{fp.file}',
         }, status=200)
     except:
         return Response({

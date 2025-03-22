@@ -1,0 +1,14 @@
+.settings-section .tg details {
+  margin-top: 5px;
+}
+.settings-section .tg .warning {
+  color: red;
+}
+
+.settings-section .logout {
+  margin-top: 30px;
+}
+
+.settings-section .logout button {
+  margin-top: 5px;
+}

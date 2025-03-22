@@ -18,7 +18,7 @@ const HistorySection = () => {
     }
     fetchData();
   }, []);
-  console.log(examSolutions);
+
   const handleDelete = async (id) => {
     if (window.confirm("Удалить это решение?")) {
       const res = await deleteSolution({ solution_id: id });

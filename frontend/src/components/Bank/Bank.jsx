@@ -100,6 +100,7 @@ const Bank = () => {
 
   const handleFindButtonClick = async () => {
     setLoading(true);
+    setTasks([]);
     const tasksFromServer = await getAllTasksFromServer({
       numbers,
       authors,

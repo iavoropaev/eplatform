@@ -24,7 +24,7 @@ const TeacherSection = () => {
   return (
     <div className="lk-teach">
       <div>
-        <h3>Материалы</h3>
+        <h2>Материалы</h2>
 
         <p className="grey-text">Мои материалы</p>
         <div className="my-materilas">
@@ -52,8 +52,9 @@ const TeacherSection = () => {
           </NavLink>
         </div>
       </div>
+
       <div>
-        <h3>Классы</h3>
+        <h2>Классы</h2>
         <div>
           <p className="grey-text">Мои классы</p>
           <div className="class-cont">

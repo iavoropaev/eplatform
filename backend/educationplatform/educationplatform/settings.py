@@ -23,7 +23,8 @@ if os.path.exists(dotenv_path):
 else:
     config = {}
 
-DOMEN = config.get('DOMEN')
+DOMAIN = config.get('DOMAIN')
+BOT_TOKEN = config.get('BOT_TOKEN')
 VK_APP_TOKEN = config.get('VK_APP_TOKEN')
 VK_APP_VERSION = config.get('VK_APP_VERSION')
 VK_LINK_EXCHANGE_SILENT_TOKEN = config.get('VK_LINK_EXCHANGE_SILENT_TOKEN')

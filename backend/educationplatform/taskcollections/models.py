@@ -1,6 +1,7 @@
 from django.db import models
 from educationplatform.settings import AUTH_USER_MODEL
 from tasks.models import TaskSubject
+from users.models import Achievement
 
 
 class TaskCollection(models.Model):
@@ -19,6 +20,7 @@ class TaskCollection(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class TaskCollectionTask(models.Model):
     task_collection = models.ForeignKey(TaskCollection, on_delete=models.CASCADE, related_name='taskcollectiontasks')
@@ -41,7 +43,7 @@ class TaskCollectionSolve(models.Model):
     answers = models.JSONField(blank=False)
     score = models.IntegerField(blank=False)
     test_score = models.IntegerField(blank=True, null=True)
-
+    achievements = models.ManyToManyField(Achievement, related_name='solves', blank=True)
 
     time_create = models.DateTimeField(auto_now_add=True)
     # answers -> [{task_id:1, score:2, status:'ok',

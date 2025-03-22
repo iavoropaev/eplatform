@@ -10,6 +10,7 @@ from courses.views import CoursesViewSet, EditCourseViewSet
 from taskcollections.views import TaskCollectionViewSet, TaskCollectionSolveViewSet
 from tasks.views import TaskViewSet, upload_file, TaskInfoViewSet, FilterForTaskViewSet, NumbersViewSet, \
     TaskSolutionsViewSet
+from users.views import AchievementViewSet
 
 router = routers.SimpleRouter()
 router.register(r'tasks', TaskViewSet)
@@ -25,6 +26,8 @@ router.register(r'courses', CoursesViewSet)
 router.register(r'edit-course', EditCourseViewSet, basename='edit-course')
 
 router.register(r'class', ClassesViewSet)
+
+router.register(r'achievements', AchievementViewSet, basename='achievements')
 
 urlpatterns = [
                   path('admin/', admin.site.urls),

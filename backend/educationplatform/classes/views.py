@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from classes.models import Class, Invitation, Message
 from classes.serializers import ClassSerializer, InvitationSerializer, ClassSerializerForTeacher, ClassCreateSerializer, \
     MessageSerializer, MessageCreateSerializer
+from educationplatform.settings import BOT_TOKEN
+from educationplatform.utils import send_message_to_tg
 from users.models import User
 
 
@@ -200,10 +202,18 @@ class ClassesViewSet(viewsets.ModelViewSet):
                 return Response({'Error': 'Доступ запрещён.'}, status=406)
 
             data = {'content': request.data['content'], 'mes_class': cur_class.id}
-            print(data)
+
             serializer = MessageCreateSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
+                for student in cur_class.students.all():
+                    try:
+                        if not (student.tg_id is None):
+                            print(student, student.tg_id)
+                            send_message_to_tg(student.tg_id, 'Получено новое сообщение.')
+                            send_message_to_tg(student.tg_id, f"<b>Текст сообщения:</b>\n{request.data['content']}")
+                    except Exception as e:
+                        ...
                 return Response(serializer.data, status=201)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

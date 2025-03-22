@@ -20,9 +20,10 @@ from taskcollections.serializers import TaskCollectionSerializer, TaskCollection
     TaskCollectionSolveForAllSolSerializer
 from rest_framework.response import Response
 
-from tasks.models import Task
+from tasks.models import Task, TaskSolutions
 from tasks.serializers import TaskSerializerForUser
 from tasks.utils import check_answer
+from users.models import Achievement
 
 
 class TaskCollectionViewSet(viewsets.ModelViewSet):
@@ -66,7 +67,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
         try:
             cur_user_id = request.user.id
             data = request.data | {'created_by': cur_user_id}
-            print(data)
+
             serializer = TaskCollectionCreateSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
@@ -243,12 +244,15 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             answers_summary = []
             total_score = 0
-            for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name'):
+            max_score = 0
+            for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name',
+                                                      'number_in_exam__max_score'):
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
-                print(task_id, ok_answer_type, task['answer'])
+                max_task_score = task['number_in_exam__max_score']
                 ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task['answer'])}
                 score = 0
+                max_score += max_task_score
                 if str(task_id) in user_answers:
                     user_answer = user_answers[str(task_id)]
 
@@ -279,6 +283,29 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             else:
                 test_score = None
 
+            # achievements
+            achievements_names = []
+            if collection.is_public:
+                # 100%
+                if total_score == max_score:
+                    achievements_names.append('100%')
+                # Первопроходец
+                if total_score * 2 >= 0:
+                    count_50p_attempts = TaskCollectionSolve.objects.filter(task_collection=collection.id,
+                                                                            score__gte=max_score / 2).count()
+                    if count_50p_attempts == 0:
+                        achievements_names.append('Первопроходец')
+                # Решатель
+                count_user_50p_attempts = (TaskCollectionSolve.objects.filter(user=cur_user_id,
+                                                                              task_collection__is_public=True,
+                                                                              score__gte=max_score / 2)
+                                           .values('task_collection').distinct().count())
+                if count_user_50p_attempts == 10:
+                    achievements_names.append('Решатель')
+            for achievement_name in achievements_names:
+                achievement = Achievement.objects.get(name=achievement_name)
+                achievement.users.add(request.user)
+
             solve = TaskCollectionSolve(
                 task_collection_id=collection.id,
                 user_id=cur_user_id,
@@ -288,6 +315,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 duration=duration
             )
             solve.save()
+            achievements = Achievement.objects.filter(name__in=achievements_names)
+            solve.achievements.add(*achievements)
 
             serializer = TaskCollectionSolveSerializer(solve, many=False)
             data = serializer.data
@@ -340,7 +369,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     def get_my_solutions(self, request):
         try:
             user_id = request.user.id
-            solves = TaskCollectionSolve.objects.select_related('task_collection').filter(user__id=user_id).order_by(
+            solves = TaskCollectionSolve.objects.select_related('task_collection').prefetch_related('achievements').filter(user__id=user_id).order_by(
                 '-time_create')
 
             serializer = TaskCollectionSolveForUserSerializer(solves, many=True)
@@ -357,7 +386,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
         try:
             user_id = request.user.id
             student_id = request.query_params.get('student_id', None)
-            print(student_id)
+
             solves = TaskCollectionSolve.objects.select_related('task_collection').filter(user__id=student_id).order_by(
                 '-time_create')
 
@@ -446,7 +475,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             tasks_percent = {task_name: round(tasks_ok.get(task_name, 0) / tasks_all[task_name], 2) for task_name in
                              tasks_all}
-            print(tasks_percent)
+
             scale = collection.subject.scale
             is_exam = collection.is_exam
 
@@ -468,7 +497,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                         score_distribution[first_score] = 0
 
             score_distribution = dict(sorted(score_distribution.items(), key=lambda item: int(item[0])))  # Sorting
-            print(score_distribution)
+
 
             print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response({'score_distribution': score_distribution, 'percent_distribution': tasks_percent},

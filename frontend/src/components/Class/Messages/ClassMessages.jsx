@@ -8,6 +8,7 @@ import {
 } from "../../../server/class";
 import { showError, showOK } from "../../Utils/Notifications";
 import { TinyMCE } from "../../Utils/TinyMCE";
+import HighlightedContent from "../../Utils/HighlightedContent";
 
 export const ClassMessages = ({ classData, setClassData }) => {
   const navigate = useNavigate();
@@ -78,7 +79,6 @@ export const ClassMessages = ({ classData, setClassData }) => {
 
       <div className="messages">
         {classData?.messages.map((mes) => {
-          console.log(mes);
           return (
             <div className="message" key={mes.id}>
               <div className="message-header">
@@ -93,11 +93,9 @@ export const ClassMessages = ({ classData, setClassData }) => {
                 </div>
               </div>
               <hr></hr>
-              <div
-                className="content"
-                key={mes.id}
-                dangerouslySetInnerHTML={{ __html: mes.content }}
-              ></div>
+              <div className="content">
+                <HighlightedContent content={mes.content} />
+              </div>
             </div>
           );
         })}

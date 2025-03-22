@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from taskcollections.models import TaskCollection, TaskCollectionSolve, TaskCollectionTask
 from tasks.serializers import TaskSubjectNameSerializer
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, AchievementSerializer
 
 
 class TaskCollectionInfoSerializer(serializers.ModelSerializer):
@@ -51,10 +51,11 @@ class TaskCollectionSolveSerializer(serializers.ModelSerializer):
 
 class TaskCollectionSolveForUserSerializer(serializers.ModelSerializer):
     task_collection = TaskCollectionInfoSerializer(many=False)
+    achievements = AchievementSerializer(many=True)
 
     class Meta:
         model = TaskCollectionSolve
-        fields = ['id', 'task_collection', 'score', 'test_score', 'duration', 'answers', 'time_create', ]
+        fields = ['id', 'task_collection', 'score', 'test_score', 'duration', 'answers', 'achievements', 'time_create']
 
 
 class TaskCollectionSolveForAllSolSerializer(serializers.ModelSerializer):

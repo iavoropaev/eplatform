@@ -9,6 +9,7 @@ import {
 import { formatDate } from "../../Utils/dates";
 import "./MessagesSection.css";
 import { showError, showOK } from "../../Utils/Notifications";
+import HighlightedContent from "../../Utils/HighlightedContent";
 const MessagesSection = () => {
   const { section } = useParams();
   const [messages, setMessages] = useState([]);
@@ -91,11 +92,10 @@ const MessagesSection = () => {
                   <span>{formatDate(mes.created_at)}</span>
                 </div>
                 <hr></hr>
-                <div
-                  className="message-content"
-                  key={mes.id}
-                  dangerouslySetInnerHTML={{ __html: mes.content }}
-                ></div>
+
+                <div className="message-content" key={mes.id}>
+                  <HighlightedContent content={mes.content} />
+                </div>
               </div>
             );
           })}

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateSolveStatus } from "../../../redux/slices/courseSlice";
 import "./Lesson.css";
 import { showError } from "../../Utils/Notifications";
+import HighlightedContent from "../../Utils/HighlightedContent";
 
 const Lesson = () => {
   const navigate = useNavigate();
@@ -70,7 +71,12 @@ const Lesson = () => {
           setActiveSectionIndex={setActiveSectionIndex}
         />
 
-        {content && <SectionContent content={content} />}
+        {/* {content && <SectionContent content={content} />} */}
+        {content && (
+          <div className="section-content">
+            <HighlightedContent content={content} />
+          </div>
+        )}
 
         {taskData && (
           <SectionTask

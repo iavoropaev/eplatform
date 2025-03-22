@@ -56,7 +56,7 @@ export const TinyMCE = ({ editorContent, setEditorContent }) => {
           promotion: false,
           autoresize_bottom_margin: 10,
           autoresize_overflow_padding: 10,
-          autoresize_on_init: true,
+          // autoresize_on_init: true,
           content_style: "body { font-size: 15px; }",
         }}
       />
