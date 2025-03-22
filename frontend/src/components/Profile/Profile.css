@@ -24,3 +24,9 @@
   cursor: pointer;
   user-select: none;
 }
+
+@media (max-width: 600px) {
+  .lk {
+    width: 90%;
+  }
+}

@@ -47,3 +47,9 @@
 .teacher-materials .collection button:hover {
   background-color: rgb(235, 235, 235);
 }
+
+@media (max-width: 600px) {
+  .teacher-materials .collection {
+    width: 85%;
+  }
+}

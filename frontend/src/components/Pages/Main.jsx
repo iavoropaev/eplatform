@@ -68,7 +68,7 @@ const Main = () => {
           <NavLink end to="/variant/1/">
             Вариант
           </NavLink>
-          <NavLink to="/collections/1/">Подборка</NavLink>
+          <NavLink to="/collection/1/">Подборка</NavLink>
           <NavLink to="/create-collection/">Создать подборку</NavLink>
           <NavLink to="/update-collection/1/">Обновить подборку</NavLink>
           <NavLink end to="/generate-collection/ege/ege_inf/">

@@ -87,3 +87,10 @@
 .gen-col-table .count-but:active {
   color: rgb(127, 47, 255);
 }
+
+@media (max-width: 600px) {
+  .gen-col {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+}

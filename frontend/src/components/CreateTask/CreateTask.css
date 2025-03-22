@@ -60,3 +60,9 @@
 .create-task .editor {
   max-width: 80%;
 }
+
+@media (max-width: 600px) {
+  .create-task .editor {
+    max-width: 100%;
+  }
+}

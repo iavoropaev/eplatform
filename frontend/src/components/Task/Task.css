@@ -165,3 +165,9 @@ div.task-container > .wa .answer {
   cursor: pointer;
   user-select: none;
 }
+
+@media (max-width: 600px) {
+  .task {
+    width: 90%;
+  }
+}

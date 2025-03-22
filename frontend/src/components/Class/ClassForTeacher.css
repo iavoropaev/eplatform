@@ -72,12 +72,16 @@
   gap: 8px;
   align-items: start;
   margin-left: 15px;
+  overflow: auto;
+  padding-bottom: 20px;
 }
 .teacher-class .invitation {
   color: grey;
   display: flex;
   gap: 10px;
+  align-items: center;
 }
+
 .teacher-class .invitation button {
   padding: 4px;
   font-size: 12px;
@@ -103,4 +107,10 @@
 
 .teacher-class .editor {
   margin-bottom: 5px;
+}
+
+@media (max-width: 600px) {
+  .teacher-class {
+    width: 90%;
+  }
 }

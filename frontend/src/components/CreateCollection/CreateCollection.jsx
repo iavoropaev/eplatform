@@ -66,7 +66,7 @@ const CreateCollection = () => {
   console.log(activeExam, subjects);
   return (
     <div className="create-collection">
-      <div>
+      <div className="subject-select">
         <select value={examId} onChange={handleChangeExam}>
           <option value="-" disabled>
             Выберите экзамен

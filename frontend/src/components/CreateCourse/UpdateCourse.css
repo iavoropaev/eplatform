@@ -65,6 +65,7 @@
 }
 .edit-course .add-module {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 30px;
@@ -109,4 +110,10 @@
 }
 .edit-course input:focus {
   background-color: rgb(255, 246, 236);
+}
+
+@media (max-width: 600px) {
+  .edit-course .modules {
+    width: 90%;
+  }
 }

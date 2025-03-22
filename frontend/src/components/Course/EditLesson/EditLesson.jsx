@@ -171,7 +171,7 @@ const EditLesson = () => {
 
   return (
     <div className="lesson-container edit-les-cont">
-      <h2>Редактирование</h2>
+      {/* <h2>Редактирование</h2> */}
       <div className="lesson">
         <p className="lesson-name">{currentLesson.name}</p>
 

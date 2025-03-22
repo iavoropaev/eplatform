@@ -16,3 +16,12 @@
 .count-find {
   text-align: right;
 }
+
+@media (max-width: 600px) {
+  .bank {
+    width: 90%;
+  }
+  .bank .task {
+    width: 95%;
+  }
+}

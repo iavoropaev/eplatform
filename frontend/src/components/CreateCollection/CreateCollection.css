@@ -70,7 +70,18 @@
   color: red;
 }
 
+.create-collection .subject-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
 @media (max-width: 600px) {
+  .create-collection {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
   .cc-task {
     flex-direction: column;
     width: 95%;

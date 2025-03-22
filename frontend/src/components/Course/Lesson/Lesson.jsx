@@ -71,7 +71,6 @@ const Lesson = () => {
           setActiveSectionIndex={setActiveSectionIndex}
         />
 
-        {/* {content && <SectionContent content={content} />} */}
         {content && (
           <div className="section-content">
             <HighlightedContent content={content} />
