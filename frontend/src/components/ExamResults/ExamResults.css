@@ -12,6 +12,25 @@
   gap: 50px;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 15px;
+  padding-bottom: 15px;
 }
 .exam-results .results-table-cont table {
+}
+
+.exam-results .achievements {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.exam-results .ach-item {
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: rgb(132, 255, 130);
+  cursor: pointer;
 }

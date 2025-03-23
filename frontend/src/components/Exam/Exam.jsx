@@ -11,6 +11,7 @@ import {
 } from "../../redux/slices/examSlice";
 import { sendExamSolutionToServer } from "../../server/exam";
 import "./Exam.css";
+import { showError, showOK } from "../Utils/Notifications";
 
 const Exam = () => {
   const navigate = useNavigate();
@@ -68,10 +69,14 @@ const Exam = () => {
       answers,
       duration,
     };
-    console.log(answers);
     const res = await sendExamSolutionToServer(data);
     if (res) {
-      navigate(`./results/`);
+      if (res?.solution?.achievements?.length > 0) {
+        showOK("Получено достижение!");
+      }
+      navigate(`./results/id/${res?.solution?.id}/`);
+    } else {
+      showError("Ошибка.");
     }
   };
 

@@ -257,7 +257,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                     user_answer = user_answers[str(task_id)]
 
                     if check_answer(user_answer, ok_answer):
-                        score = 1
+                        score = max_task_score
                         status = 'OK'
                     else:
                         status = 'WA'
@@ -287,6 +287,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             achievements_names = []
             if collection.is_public:
                 # 100%
+                print(total_score, max_score)
                 if total_score == max_score:
                     achievements_names.append('100%')
                 # Первопроходец
@@ -302,6 +303,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                                            .values('task_collection').distinct().count())
                 if count_user_50p_attempts == 10:
                     achievements_names.append('Решатель')
+            
             for achievement_name in achievements_names:
                 achievement = Achievement.objects.get(name=achievement_name)
                 achievement.users.add(request.user)

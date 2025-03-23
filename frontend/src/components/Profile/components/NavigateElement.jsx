@@ -4,13 +4,13 @@ export const NavigateElement = ({ path, name }) => {
   const { section } = useParams();
   const navigate = useNavigate();
   return (
-    <div
+    <button
       className={section === path ? "el active" : "el"}
       onClick={() => {
         navigate(`./../${path}/`);
       }}
     >
       {name}
-    </div>
+    </button>
   );
 };
