@@ -5,9 +5,13 @@ export const NavigateElement = ({ path, name }) => {
   const navigate = useNavigate();
   return (
     <button
-      className={section === path ? "el active" : "el"}
+      className={path.startsWith(section) ? "el active" : "el"}
       onClick={() => {
-        navigate(`./../${path}/`);
+        if (path === "stats/-/-") {
+          navigate(`/lk/stats/-/-/`);
+        } else {
+          navigate(`/lk/${path}/`);
+        }
       }}
     >
       {name}

@@ -134,6 +134,24 @@ export const getStatsForExam = async (col_slug, class_id) => {
   }
 };
 
+export const getSolvesExamStatisticsBySubject = async (subject_slug) => {
+  try {
+    const params = { subject_slug };
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL +
+        "tasks-collections-solve/solves-statistics-by-subject/",
+      { params, headers: headers }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
 export const deleteSolution = async (data) => {
   try {
     const res = await axios.post(

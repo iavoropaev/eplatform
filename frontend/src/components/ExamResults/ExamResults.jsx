@@ -37,7 +37,7 @@ const ExamResults = () => {
       }
     }
     fetchData();
-  }, [slug, solveType]);
+  }, [slug, solveType, attemptId]);
 
   const handleResTypeChange = (event) => {
     if (solveType === "id") {

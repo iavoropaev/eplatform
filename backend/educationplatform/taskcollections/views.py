@@ -4,7 +4,7 @@ from collections import Counter
 from math import ceil
 
 from django.db import connection
-from django.db.models import Q, Count, Max, Sum
+from django.db.models import Q, Count, Max, Sum, Avg
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -371,7 +371,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     def get_my_solutions(self, request):
         try:
             user_id = request.user.id
-            solves = TaskCollectionSolve.objects.select_related('task_collection').prefetch_related('achievements').filter(user__id=user_id).order_by(
+            solves = TaskCollectionSolve.objects.select_related('task_collection').prefetch_related(
+                'achievements').filter(user__id=user_id).order_by(
                 '-time_create')
 
             serializer = TaskCollectionSolveForUserSerializer(solves, many=True)
@@ -460,7 +461,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             if (collection.created_by.id != user_id) and (not is_staff) and (not cur_class):
                 return Response("Forbidden", status=406)
 
-            collection_info = TaskCollectionInfoSerializer(collection).data
+            # collection_info = TaskCollectionInfoSerializer(collection).data
 
             solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug)
             if cur_class:
@@ -494,12 +495,12 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             else:
                 total_max_first_score = collection.tasks.aggregate(total_score=Sum('number_in_exam__max_score'))[
                     'total_score']
-                for first_score in range(total_max_first_score + 1):
-                    if first_score not in score_distribution:
-                        score_distribution[first_score] = 0
+                if total_max_first_score is not None:
+                    for first_score in range(total_max_first_score + 1):
+                        if first_score not in score_distribution:
+                            score_distribution[first_score] = 0
 
-            score_distribution = dict(sorted(score_distribution.items(), key=lambda item: int(item[0])))  # Sorting
-
+            score_distribution = dict(sorted(score_distribution.items(), key=lambda item: int(item[0])))
 
             print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response({'score_distribution': score_distribution, 'percent_distribution': tasks_percent},
@@ -509,6 +510,114 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
+
+    @action(detail=False, methods=['get'], url_path='solves-statistics-by-subject')
+    def solves_statistics_by_subject(self, request):
+        try:
+            subject_slug = request.query_params.get('subject_slug')
+            if not subject_slug:
+                return Response('Предмет не указан.', status=400)
+
+            avg_score = (
+                TaskCollectionSolve.objects
+                .filter(
+                    user=request.user,
+                    task_collection__is_public=True,
+                    task_collection__is_exam=True,
+                    task_collection__subject__slug=subject_slug,
+                )
+                .values('task_collection')
+                .annotate(best_score=Max('test_score'))
+                .aggregate(avg_score=Avg('best_score'))
+            )['avg_score']
+
+            max_score = TaskCollectionSolve.objects.filter(
+                user=request.user,
+                task_collection__is_public=True,
+                task_collection__is_exam=True,
+                task_collection__subject__slug=subject_slug,
+            ).aggregate(max_score=Max('test_score'))['max_score']
+
+            last_solve = (
+                TaskCollectionSolve.objects
+                .filter(
+                    user=request.user,
+                    task_collection__is_public=True,
+                    task_collection__is_exam=True,
+                    task_collection__subject__slug=subject_slug,
+                )
+                .order_by('-time_create')
+                .first()
+            )
+            last_score = last_solve.test_score if last_solve else None
+
+            score_100_count = (
+                TaskCollectionSolve.objects
+                .filter(
+                    user=request.user,
+                    task_collection__is_public=True,
+                    task_collection__is_exam=True,
+                    task_collection__subject__slug=subject_slug,
+                )
+                .values('task_collection')
+                .annotate(best_score=Max('test_score'))
+                .filter(best_score=100)
+                .count()
+            )
+
+            score_90_99_count = (
+                TaskCollectionSolve.objects
+                .filter(
+                    user=request.user,
+                    task_collection__is_public=True,
+                    task_collection__is_exam=True,
+                    task_collection__subject__slug=subject_slug,
+                )
+                .values('task_collection')
+                .annotate(best_score=Max('test_score'))
+                .filter(best_score__gte=90, best_score__lte=99)
+                .count()
+            )
+
+            score_80_89_count = (
+                TaskCollectionSolve.objects
+                .filter(
+                    user=request.user,
+                    task_collection__is_public=True,
+                    task_collection__is_exam=True,
+                    task_collection__subject__slug=subject_slug,
+                )
+                .values('task_collection')
+                .annotate(best_score=Max('test_score'))
+                .filter(best_score__gte=80, best_score__lte=89)
+                .count()
+            )
+
+            score_60_79_count = (
+                TaskCollectionSolve.objects
+                .filter(
+                    user=request.user,
+                    task_collection__is_public=True,
+                    task_collection__is_exam=True,
+                    task_collection__subject__slug=subject_slug,
+                )
+                .values('task_collection')
+                .annotate(best_score=Max('test_score'))
+                .filter(best_score__gte=80, best_score__lte=89)
+                .count()
+            )
+
+            return Response({'avg_score': avg_score,
+                             'max_score': max_score,
+                             'last_score': last_score,
+                             'score_100_count': score_100_count,
+                             'score_90_99_count': score_90_99_count,
+                             'score_80_89_count': score_80_89_count,
+                             'score_60_79_count': score_60_79_count
+                             })
+        except Exception as e:
+            print(e)
+            return Response(status=400)
 
     @action(detail=False, methods=['post'], url_path='delete-solution')
     def delete_solution(self, request):

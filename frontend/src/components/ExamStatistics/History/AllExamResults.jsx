@@ -19,29 +19,28 @@ export const AllExamResults = ({
     return Array.from(map.values());
   };
 
-  let sortedAttempts = solvesData;
+  let sortedAttempts = [...solvesData];
+
   if (whatAttempt === "first") {
     sortedAttempts = sortedAttempts.sort(
       (a, b) => Date.parse(a.time_create) - Date.parse(b.time_create)
     );
   }
+
   if (whatAttempt === "last" || whatAttempt === "all") {
     sortedAttempts = sortedAttempts.sort(
       (a, b) => -Date.parse(a.time_create) + Date.parse(b.time_create)
     );
   }
+
   if (whatAttempt === "best") {
-    sortedAttempts = sortedAttempts.sort(
-      (a, b) => -Date.parse(a.score) + Date.parse(b.score)
-    );
+    sortedAttempts = sortedAttempts.sort((a, b) => -a.score + b.score);
   }
 
   let filteredSolvesData = [...sortedAttempts];
   if (!(whatAttempt === "all")) {
     filteredSolvesData = eraseDuplicates(filteredSolvesData);
   }
-
-  console.log(filteredSolvesData);
 
   return (
     <div className="all-results-cont">

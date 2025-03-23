@@ -4,13 +4,16 @@ import pytz
 
 from django.core.paginator import Paginator
 from django.db import connection
-from django.db.models import Count, Q
+from django.db.models import Count, Q, OuterRef, Subquery, BooleanField, ExpressionWrapper, FloatField, F, Exists, \
+    Value, Case, When
+from django.db.models.functions import Coalesce
 from drf_spectacular.utils import extend_schema
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from urllib3 import request
 
 from educationplatform.settings import DOMAIN
 from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, \
@@ -44,8 +47,8 @@ class TaskViewSet(viewsets.ModelViewSet):
         try:
             task_id = request.data['task_id']
             task = Task.objects.select_related(
-            'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
-        ).filter(id=task_id).first()
+                'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
+            ).filter(id=task_id).first()
             if (task.created_by != request.user) and (not request.user.is_staff):
                 return Response('Доступ запрещен.', status=status.HTTP_403_FORBIDDEN)
 
@@ -212,13 +215,13 @@ class TaskViewSet(viewsets.ModelViewSet):
 
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'])
-    def delete_all(self, request, *args, **kwargs):
-        Task.objects.all().delete()
-        return Response(
-            {"message": "All objects have been deleted."},
-            status=status.HTTP_204_NO_CONTENT
-        )
+    # @action(detail=False, methods=['post'])
+    # def delete_all(self, request, *args, **kwargs):
+    #     Task.objects.all().delete()
+    #     return Response(
+    #         {"message": "All objects have been deleted."},
+    #         status=status.HTTP_204_NO_CONTENT
+    #     )
 
 
 class TaskInfoViewSet(viewsets.ViewSet):
@@ -267,7 +270,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
         if self.action in ['new_tasks', 'send_solution']:
             permission_classes = [AllowAny]
         elif self.action in ['my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
-                           'percent_ok_solves_by_task_id', 'send_solution', 'get_statuses']:
+                             'percent_ok_solves_by_task_id', 'send_solution', 'get_statuses']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -410,6 +413,61 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             return Response({
                 'Error': 'Не удалось получить процент.'
             }, status=406)
+
+    @action(detail=False, methods=['get'], url_path='solves-statistics-by-subject')
+    def solves_statistics_by_subject(self, request):
+        try:
+            subject_slug = request.query_params.get('subject_slug')
+            if not subject_slug:
+                return Response('Предмет не указан.', status=400)
+
+            first_attempt = (
+                TaskSolutions.objects
+                .filter(task=OuterRef('pk'), user=request.user)
+                .order_by('date')
+                .values('is_ok_solution')[:1]
+            )
+
+            total_sub = (
+                Task.objects
+                .filter(number_in_exam=OuterRef('pk'), tasksolutions__user=request.user)
+                .values('number_in_exam')
+                .annotate(cnt=Count('pk', distinct=True))
+                .values('cnt')
+            )
+
+            solved_sub = (
+                Task.objects
+                .filter(number_in_exam=OuterRef('pk'))
+                .annotate(first_is_ok=Subquery(first_attempt, output_field=BooleanField()))
+                .filter(first_is_ok=True)
+                .values('number_in_exam')
+                .annotate(cnt=Count('pk'))
+                .values('cnt')
+            )
+
+            qs = (
+                TaskNumberInExam.objects
+                .filter(subject__slug=subject_slug)
+                .annotate(
+                    total_tried_tasks=Coalesce(Subquery(total_sub), Value(0)),
+                    solved_tasks=Coalesce(Subquery(solved_sub), Value(0))
+                )
+                .annotate(
+                    percent=Case(
+                        When(total_tried_tasks=0, then=Value(0.0)),
+                        default=ExpressionWrapper(
+                            100 * F('solved_tasks') / F('total_tried_tasks'),
+                            output_field=FloatField()
+                        )
+                    )
+                ).values('id', 'name', 'total_tried_tasks', 'solved_tasks', 'percent')
+            )
+            res = list(qs)
+            res.sort(key=lambda x: int(x['name'].replace('-', ' ').split()[1]))
+            return Response(res)
+        except Exception as e:
+            return Response(status=400)
 
 
 class FilterForTaskViewSet(viewsets.ModelViewSet):

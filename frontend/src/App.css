@@ -134,3 +134,29 @@ pre[class*="language-"] {
 .token.operator {
   background-color: transparent;
 }
+
+/* Table */
+table {
+  border-collapse: collapse;
+  border: 1px solid grey;
+}
+table th {
+  background-color: rgb(206, 206, 206);
+  padding: 10px;
+  border: 1px solid grey;
+  text-align: center;
+}
+table td {
+  border: 1px solid grey;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+table td table {
+  margin: auto;
+}
+table td table td {
+  padding: 2px;
+  border: 0px;
+}

@@ -3,7 +3,6 @@ from django.contrib import admin
 from .models import Task, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, TaskExam, TaskNumberInExam, \
     TaskSubject, TaskBankAuthor, Actuality, TaskAuthor, UploadFiles
 
-#admin.site.register(Task)
 admin.site.register(TaskAuthor)
 admin.site.register(TaskSource)
 admin.site.register(DifficultyLevel)

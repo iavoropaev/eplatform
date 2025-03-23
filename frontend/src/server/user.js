@@ -23,3 +23,21 @@ export const getMyAchievements = async () => {
     return undefined;
   }
 };
+
+export const getSolvesStatisticsBySubject = async (subject_slug) => {
+  try {
+    const params = { subject_slug };
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL +
+        "tasks-solutions/solves-statistics-by-subject/",
+      { params, headers: headers }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};

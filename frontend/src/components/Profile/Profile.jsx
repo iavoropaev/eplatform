@@ -9,6 +9,7 @@ import HistorySection from "./HistorySection/HistorySection";
 import MessagesSection from "./MessagesSection/MessagesSection";
 import Settings from "./Settings/Settings";
 import { Achievements } from "./Achievements/Achievements";
+import { StatisticsSection } from "./StatisticsSection/StatisticsSection";
 
 const Profile = () => {
   const { section } = useParams();
@@ -19,7 +20,7 @@ const Profile = () => {
       <div className="lk-navigate">
         <NavigateElement path="dz" name="Сообщения" />
         <NavigateElement path="history" name="История" />
-        <NavigateElement path="stat" name="Статистика" />
+        <NavigateElement path="stats/-/-" name="Статистика" />
         <NavigateElement path="achievements" name="Достижения" />
         <NavigateElement path="teach" name="Для учителей" />
         <NavigateElement path="settings" name="Настройки" />
@@ -30,6 +31,7 @@ const Profile = () => {
       {section === "dz" && <MessagesSection />}
       {section === "settings" && <Settings />}
       {section === "achievements" && <Achievements />}
+      {section === "stats" && <StatisticsSection />}
     </div>
   );
 };

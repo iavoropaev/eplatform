@@ -1,0 +1,16 @@
+.stats-section .numbers-stats-section h3 {
+  text-align: center;
+}
+.stats-section .numbers-stats-section table {
+  margin: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.stats-section .tables-cont {
+  display: flex;
+  gap: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 15px;
+}

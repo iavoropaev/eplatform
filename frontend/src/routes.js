@@ -96,6 +96,7 @@ export const authRoutes = [
   { path: "lk/teach/my-tasks", Component: TeacherTasks },
   { path: "lk/teach/my-variants", Component: TeacherCollections },
   { path: "lk/teach/my-courses", Component: TeacherCourses },
+  { path: "lk/:section/:examSlug/:subjectSlug/", Component: ProfilePage },
   { path: "lk/:section/", Component: ProfilePage },
   { path: "lk", Component: ProfilePage },
 
