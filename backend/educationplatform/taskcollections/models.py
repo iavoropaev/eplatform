@@ -21,6 +21,10 @@ class TaskCollection(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Подборка задач"
+        verbose_name_plural = "Подборки задач"
+
 
 class TaskCollectionTask(models.Model):
     task_collection = models.ForeignKey(TaskCollection, on_delete=models.CASCADE, related_name='taskcollectiontasks')
@@ -30,6 +34,8 @@ class TaskCollectionTask(models.Model):
     class Meta:
         unique_together = ('task_collection', 'task')
         ordering = ['order']
+        verbose_name = "Связь задач и подборок"
+        verbose_name_plural = "Связи задач и подборок"
 
     def __str__(self):
         return f"{self.task_collection.name} - {self.task.content[:15]} (Order: {self.order})"
@@ -46,8 +52,7 @@ class TaskCollectionSolve(models.Model):
     achievements = models.ManyToManyField(Achievement, related_name='solves', blank=True)
 
     time_create = models.DateTimeField(auto_now_add=True)
-    # answers -> [{task_id:1, score:2, status:'ok',
-    # user_answer:{type:'text', data:'1234'},
-    # ok_answer: {type: 'text', data: '1234'},
-    # }]
-    # All answers. Include empty.
+
+    class Meta:
+        verbose_name = "Решение подборки задач"
+        verbose_name_plural = "Решения подборок задач"

@@ -4,7 +4,8 @@ from tasks.models import TaskSubject
 
 
 class Course(models.Model):
-    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,  related_name='created_courses')
+    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,
+                                   related_name='created_courses')
     name = models.CharField(max_length=100, blank=False)
     description = models.CharField(blank=True)
     subject = models.ForeignKey(TaskSubject, on_delete=models.PROTECT, blank=False, null=False)
@@ -18,6 +19,10 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Курс"
+        verbose_name_plural = "Курсы"
 
 
 class Module(models.Model):
@@ -33,6 +38,10 @@ class Module(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Модуль"
+        verbose_name_plural = "Модули"
+
 
 class Lesson(models.Model):
     created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=False,
@@ -46,6 +55,10 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Урок"
+        verbose_name_plural = "Уроки"
 
 
 class Section(models.Model):
@@ -63,6 +76,10 @@ class Section(models.Model):
     def __str__(self):
         return self.content[:20]
 
+    class Meta:
+        verbose_name = "Секция"
+        verbose_name_plural = "Секции"
+
 
 class SectionSolve(models.Model):
     section = models.ForeignKey('Section', on_delete=models.PROTECT, blank=False, null=False)
@@ -75,6 +92,10 @@ class SectionSolve(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Решение секции"
+        verbose_name_plural = "Решения секций"
+
 
 # Connections
 class LessonSection(models.Model):
@@ -86,6 +107,8 @@ class LessonSection(models.Model):
     class Meta:
         unique_together = ('lesson', 'section')
         ordering = ['order']
+        verbose_name = "Связь уроков и секций"
+        verbose_name_plural = "Связи уроков и секций"
 
     def __str__(self):
         return f"{self.lesson.name} - {self.section.content} (Order: {self.order})"
@@ -99,6 +122,8 @@ class CourseModule(models.Model):
     class Meta:
         unique_together = ('course', 'module')
         ordering = ['order']
+        verbose_name = "Связь курса и урока"
+        verbose_name_plural = "Связи курсов и уроков"
 
     def __str__(self):
         return f"{self.course.name} - {self.module.name} (Order: {self.order})"
@@ -112,6 +137,8 @@ class ModuleLesson(models.Model):
     class Meta:
         unique_together = ('module', 'lesson')
         ordering = ['order']
+        verbose_name = "Связь модуля и урока"
+        verbose_name_plural = "Связи модулей и уроков"
 
     def __str__(self):
         return f"{self.module.name} - {self.lesson.name} (Order: {self.order})"

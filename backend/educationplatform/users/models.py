@@ -22,6 +22,10 @@ class TgInvitation(models.Model):
     def __str__(self):
         return str(self.user.vk_domain)
 
+    class Meta:
+        verbose_name = "ТГ приглашение"
+        verbose_name_plural = "ТГ приглашения"
+
 
 class Achievement(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -30,4 +34,8 @@ class Achievement(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    class Meta:
+        verbose_name = "Достижение"
+        verbose_name_plural = "Достижения"
 

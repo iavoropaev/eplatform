@@ -27,7 +27,11 @@ class Task(models.Model):
     time_update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.id} {self.content[:10]}'
+        return f'{self.id} | {self.created_by.last_name} | {self.content[:10]}'
+
+    class Meta:
+        verbose_name = "Задача"
+        verbose_name_plural = "Задачи"
 
 
 class TaskAuthor(models.Model):
@@ -37,11 +41,21 @@ class TaskAuthor(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Автор задачи"
+        verbose_name_plural = "Авторы задач"
+
+
 class Actuality(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Актуальность задачи"
+        verbose_name_plural = "Актуальности задач"
+
 
 class TaskSource(models.Model):
     name = models.CharField(max_length=100)
@@ -49,12 +63,21 @@ class TaskSource(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Источник задачи"
+        verbose_name_plural = "Источники задач"
+
 
 class DifficultyLevel(models.Model):
     name = models.CharField(max_length=100)
     exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False, related_name='dif_levels')
+
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Сложность задач"
+        verbose_name_plural = "Сложности задач"
 
 
 class TaskTopic(models.Model):
@@ -62,6 +85,11 @@ class TaskTopic(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Тема задачи"
+        verbose_name_plural = "Темы задач"
+
 
 class TaskNumberInExam(models.Model):
     name = models.CharField(max_length=100)
@@ -73,6 +101,10 @@ class TaskNumberInExam(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Номер задач в экзамене"
+        verbose_name_plural = "Номера задач в экзамене"
+
 
 class TaskBankAuthor(models.Model):
     name = models.CharField(max_length=100)
@@ -81,7 +113,11 @@ class TaskBankAuthor(models.Model):
     subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='sources')
 
     def __str__(self):
-        return self.name
+        return f'{self.name} - {self.subject.name} - {self.subject.exam.name}'
+
+    class Meta:
+        verbose_name = "Автор банка задач"
+        verbose_name_plural = "Авторы банка задач"
 
 
 class TaskSubject(models.Model):
@@ -97,6 +133,10 @@ class TaskSubject(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Предмет"
+        verbose_name_plural = "Предметы"
+
 
 class TaskExam(models.Model):
     name = models.CharField(max_length=100)
@@ -104,6 +144,10 @@ class TaskExam(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = "Экзамен"
+        verbose_name_plural = "Экзамены"
 
 
 class TaskSolutions(models.Model):
@@ -116,6 +160,14 @@ class TaskSolutions(models.Model):
     def __str__(self):
         return f'{self.task_id} {self.user} {self.is_ok_solution}'
 
+    class Meta:
+        verbose_name = "Решение задачи"
+        verbose_name_plural = "Решения задач"
+
 
 class UploadFiles(models.Model):
     file = models.FileField(upload_to='uploads')
+
+    class Meta:
+        verbose_name = "Файл"
+        verbose_name_plural = "Файлы"

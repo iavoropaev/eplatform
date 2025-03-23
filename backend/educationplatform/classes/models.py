@@ -20,14 +20,26 @@ class Class(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Класс"
+        verbose_name_plural = "Классы"
+
 
 class Invitation(models.Model):
     token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     inv_class = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="invitations")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Приглашение"
+        verbose_name_plural = "Приглашения"
+
 
 class Message(models.Model):
     content = models.CharField(max_length=10000)
     mes_class = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="messages")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Сообщение"
+        verbose_name_plural = "Сообщения"
