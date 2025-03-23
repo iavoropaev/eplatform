@@ -303,7 +303,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                                            .values('task_collection').distinct().count())
                 if count_user_50p_attempts == 10:
                     achievements_names.append('Решатель')
-            
+
             for achievement_name in achievements_names:
                 achievement = Achievement.objects.get(name=achievement_name)
                 achievement.users.add(request.user)
