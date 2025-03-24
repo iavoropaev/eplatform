@@ -55,19 +55,8 @@
   width: 100%;
 }
 
-.create-collection .arrow,
-.create-collection .del {
-  font-size: 30px;
-  cursor: pointer;
-  padding: 1px;
-  user-select: none;
-}
-.create-collection .del {
+.create-collection .delete {
   padding-right: 5px;
-}
-.create-collection .arrow:active,
-.create-collection .del:active {
-  color: red;
 }
 
 .create-collection .subject-select {

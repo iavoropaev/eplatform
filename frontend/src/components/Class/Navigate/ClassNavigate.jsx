@@ -5,26 +5,28 @@ export const ClassNavigate = ({}) => {
   const { classSection } = useParams();
   return (
     <div className="navigate-div">
-      <div
+      <button
         onClick={() => {
           navigate("./../messages/");
         }}
         className={
-          "navigate-el " + (classSection === "messages" ? "active" : "")
+          "navigate-el navigate-button " +
+          (classSection === "messages" ? "active" : "")
         }
       >
         Сообщения
-      </div>
-      <div
+      </button>
+      <button
         onClick={() => {
           navigate("./../variants/");
         }}
         className={
-          "navigate-el " + (classSection === "variants" ? "active" : "")
+          "navigate-el navigate-button " +
+          (classSection === "variants" ? "active" : "")
         }
       >
         Варианты
-      </div>
+      </button>
     </div>
   );
 };

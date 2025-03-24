@@ -146,7 +146,7 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
           }}
           isCreating={true}
         />
-        {taskData.answerType == "text" && (
+        {taskData.answerType === "text" && (
           <div className="text-answer-explanation">
             <p>
               При проверке ответа регистр учитывается. Если правильный ответ

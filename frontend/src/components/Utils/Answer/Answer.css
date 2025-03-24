@@ -27,7 +27,7 @@
   outline: none;
   box-shadow: none;
 }
-.task-answer .text-answer input {
+.create-task .task-answer .text-answer input {
   width: 250px;
 }
 

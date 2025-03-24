@@ -29,9 +29,12 @@
   align-items: center;
 }
 .bank-filter .source,
-.subject {
+.bank-filter .subject {
   flex: 1;
   gap: 15px 15px;
+}
+.bank-filter .navigate-button {
+  font-size: 1rem;
 }
 
 .bank-filter .filter-row {
@@ -39,19 +42,12 @@
   background-color: white;
   border: 1px solid grey;
   padding: 10px;
-  margin-top: 15px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   gap: 15px;
   align-items: start;
   flex-wrap: wrap;
-}
-.bank-filter .filter-row span {
-  border-radius: 1dvh;
-  border: 1px solid grey;
-  padding: 2px 7px 2px 7px;
-  font-size: 1.5dvh;
-  color: grey;
 }
 
 .bank-filter .active {
@@ -71,19 +67,22 @@
 }
 
 .bank-filter .tag,
-.filter-option {
+.bank-filter .filter-option {
   user-select: none;
 }
 .bank-filter .filter-option {
   background-color: rgb(245, 245, 245);
   background-color: transparent;
   color: grey;
-  /* padding: 5px; */
-  font-size: 12px;
+
+  font-size: 0.8rem;
 }
 .bank-filter .option {
   text-align: center;
-  padding: 3px 8px 3px 8px;
+  padding: 5px 10px 5px 10px;
+}
+.bank-filter .tag .option {
+  font-size: 0.9rem;
 }
 .bank-filter .tag .option:hover {
   cursor: pointer;

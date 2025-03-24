@@ -11,7 +11,7 @@ const TasksList = ({ tasks, swap, delTaskByIndex }) => {
                 onClick={() => {
                   delTaskByIndex(i);
                 }}
-                className="del"
+                className="delete"
               >
                 ⨉
               </span>

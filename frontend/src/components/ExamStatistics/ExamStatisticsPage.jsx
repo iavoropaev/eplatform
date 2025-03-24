@@ -51,18 +51,24 @@ export const ExamStatisticsPage = () => {
   return (
     <div className="exam-stats-cont">
       <div className="es-navigate">
-        <div
-          className={"element" + (eSection === "history" ? " active" : "")}
+        <button
+          className={
+            "element navigate-button " +
+            (eSection === "history" ? " active " : "")
+          }
           onClick={() => navigate(`/variant/${examSlug}/all-results/history/`)}
         >
           Все результаты
-        </div>
-        <div
-          className={"element" + (eSection === "stats" ? " active" : "")}
+        </button>
+        <button
+          className={
+            "element navigate-button " +
+            (eSection === "stats" ? " active " : "")
+          }
           onClick={() => navigate(`/variant/${examSlug}/all-results/stats/`)}
         >
           Статистика
-        </div>
+        </button>
       </div>
       {eSection === "history" && (
         <AllExamResults

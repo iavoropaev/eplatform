@@ -15,7 +15,7 @@
   background-color: #eaeaea;
   padding: 3px 7px 3px 7px;
   border-radius: 10px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   border: 1px solid grey;
 }
 
@@ -60,12 +60,12 @@ button:active {
 
 textarea {
   padding: 5px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .arrow,
 .delete {
-  font-size: 25px;
+  font-size: 1.7rem;
   cursor: pointer;
   user-select: none;
   color: grey;
@@ -79,9 +79,6 @@ textarea {
   color: rgb(54, 255, 57);
 }
 
-.delete {
-  font-size: 20px;
-}
 .delete:active {
   color: red;
 }
@@ -138,19 +135,13 @@ pre[class*="language-"] {
 /* Table */
 table {
   border-collapse: collapse;
-  border: 1px solid grey;
 }
 table th {
   background-color: rgb(206, 206, 206);
   padding: 10px;
-  border: 1px solid grey;
-  text-align: center;
 }
 table td {
-  border: 1px solid grey;
   padding: 8px;
-  text-align: center;
-  vertical-align: middle;
 }
 
 table td table {
@@ -159,6 +150,13 @@ table td table {
 table td table td {
   padding: 2px;
   border: 0px;
+}
+.table,
+.table th,
+.table td {
+  border: 1px solid grey;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .navigate-button {
