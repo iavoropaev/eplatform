@@ -1,6 +1,6 @@
 const TextAnswer = ({ answer, setAnswer, disabled }) => {
   return (
-    <div className="answer">
+    <div className="answer text-answer">
       <input
         disabled={disabled}
         onChange={(e) => {

@@ -45,6 +45,7 @@
 }
 .answer-table td {
   border: 1px solid grey;
+  padding: 0px;
 }
 
 .answer-table input {

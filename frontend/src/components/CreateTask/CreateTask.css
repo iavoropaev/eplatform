@@ -44,7 +44,7 @@
 }
 
 .create-task .answer {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .create-task select {
   margin-bottom: 5px;
@@ -59,6 +59,10 @@
 
 .create-task .editor {
   max-width: 80%;
+}
+
+.create-task .text-answer-explanation {
+  color: grey;
 }
 
 @media (max-width: 600px) {

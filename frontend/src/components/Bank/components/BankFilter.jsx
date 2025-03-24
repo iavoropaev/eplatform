@@ -17,11 +17,17 @@ const BankFilter = ({
 
   const subjects = activeExam["subjects"];
   const sources = activeSubject["sources"];
-  const numbers = activeSubject["numbers"];
+  const numbersNotSorted = activeSubject["numbers"];
+  const numbers = numbersNotSorted?.sort((a, b) => {
+    const getNumber = (name) => parseInt(name.replace(/\D/g, ""), 10);
+    return getNumber(a.name) - getNumber(b.name);
+  });
+
   const authors = activeSubject["authors"];
   const difficulty_levels = activeExam["dif_levels"];
   const actualities = filterData["actualities"];
 
+  console.log(numbers);
   return (
     <div className="bank-filter">
       <div className="choise-row">

@@ -464,9 +464,10 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 ).values('id', 'name', 'total_tried_tasks', 'solved_tasks', 'percent')
             )
             res = list(qs)
-            res.sort(key=lambda x: int(x['name'].replace('-', ' ').split()[1]))
+            res.sort(key=lambda x: int(''.join(c for c in x['name'] if c.isdigit())))
             return Response(res)
         except Exception as e:
+            print(e)
             return Response(status=400)
 
 

@@ -1,10 +1,9 @@
 import json
 import random
 from collections import Counter
-from math import ceil
 
 from django.db import connection
-from django.db.models import Q, Count, Max, Sum, Avg
+from django.db.models import Q, Max, Sum, Avg
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -20,7 +19,7 @@ from taskcollections.serializers import TaskCollectionSerializer, TaskCollection
     TaskCollectionSolveForAllSolSerializer
 from rest_framework.response import Response
 
-from tasks.models import Task, TaskSolutions
+from tasks.models import Task
 from tasks.serializers import TaskSerializerForUser
 from tasks.utils import check_answer
 from users.models import Achievement

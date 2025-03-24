@@ -146,6 +146,19 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
           }}
           isCreating={true}
         />
+        {taskData.answerType == "text" && (
+          <div className="text-answer-explanation">
+            <p>
+              При проверке ответа регистр учитывается. Если правильный ответ
+              "ДОМ", то ответ "дом" будет считаться неправильным.
+            </p>
+            <p>
+              Чтобы добавить несколько правильных ответов – разделите их с
+              помощью символа вертикальной черты | (без пробелов). Например,
+              12|13|14.
+            </p>
+          </div>
+        )}
       </div>
       <div className="save-button">
         <button onClick={handleSaveButton} className="black-button">

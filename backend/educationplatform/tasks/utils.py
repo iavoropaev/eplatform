@@ -1,12 +1,26 @@
+import re
+
+
 def check_answer(user_answer, true_answer):
     print(user_answer, true_answer)
     is_ok = True
 
     if true_answer['type'] == 'open_answer':
-        return user_answer['open_answer'] != ''
+        return user_answer['open_answer'].strip() != ''
 
     if true_answer['type'] == 'text':
-        return str(user_answer['text']).strip() == str(true_answer['text']).strip()
+        user_text = str(user_answer.get('text', '')).strip()
+        true_text = str(true_answer.get('text', '')).strip()
+
+        if user_text == true_text:
+            return True
+        try:
+            if re.fullmatch(true_text, user_text):
+                return True
+        except re.error:
+            return False
+        return False
+
 
     if true_answer['type'] == 'choice':
         true_choice = true_answer['choice']
