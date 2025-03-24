@@ -17,6 +17,7 @@
 
 .results-table td table {
   margin: auto;
+  border: 0px;
 }
 .results-table td table td {
   padding: 2px;

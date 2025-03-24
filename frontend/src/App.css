@@ -160,3 +160,12 @@ table td table td {
   padding: 2px;
   border: 0px;
 }
+
+.navigate-button {
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 15px;
+}

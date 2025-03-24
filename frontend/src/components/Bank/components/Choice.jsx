@@ -5,15 +5,17 @@ const Choice = ({ data, setSelect, name, selectedId }) => {
     <>
       {data.map((item, i) => {
         return (
-          <span
+          <button
             onClick={(e) => {
               setSelect(name, i);
             }}
-            className={i === selectedId ? "active" : ""}
+            className={
+              i === selectedId ? "active navigate-button" : "navigate-button"
+            }
             key={i}
           >
             {item.name}
-          </span>
+          </button>
         );
       })}
     </>

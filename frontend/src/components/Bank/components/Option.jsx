@@ -24,14 +24,14 @@ const Option = ({ options, nameForUsers, optionName, selected, setSelect }) => {
 
   return (
     <div>
-      <span
+      <button
         className="filter-option"
         onClick={() => {
           changeShow();
         }}
       >
         {nameForUsers}
-      </span>
+      </button>
       {show && (
         <div className="tag">
           {options.map((item, i) => {
