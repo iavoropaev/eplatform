@@ -59,7 +59,7 @@
     color: rgb(108, 255, 108);
   }
   .menu-container {
-    position: initial;
+    /* position: initial; */
     height: initial;
   }
 
