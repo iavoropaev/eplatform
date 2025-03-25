@@ -1,28 +1,32 @@
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import "./Menu.css";
+import { useState } from "react";
+import { IoMenu } from "react-icons/io5";
 
 const Menu = () => {
   const location = useLocation();
   const { section } = useParams();
+  const [isOpen, setIsOpen] = useState(false);
+  const isClose = isOpen ? "" : " closed";
+
   console.log(section);
   return (
     <div className="menu-container">
       <div className="menu">
-        <nav>
+        <IoMenu className="menu-but" onClick={() => setIsOpen(() => !isOpen)} />
+        <nav className={isOpen ? "nav-links" : "nav-links"}>
           <NavLink to="/" end>
             Главная
           </NavLink>
-          <NavLink to="/bank/">Банк задач</NavLink>
-          {/* <NavLink to="/create-task/">Добавить задачу</NavLink> */}
-          {/* <NavLink to="/test/">Тест</NavLink> */}
-          {/* <NavLink to="/create-collection/">Создать подборку</NavLink>
-          <NavLink to="/update-collection/1/">Обновить подборку</NavLink>
-          <NavLink to="/collections/1/">Подборка</NavLink> */}
+          <NavLink to="/bank/" className={isClose}>
+            Банк задач
+          </NavLink>
           <NavLink
             end
             to="/collections/ege/ege_inf/"
-            className={({ isActive }) =>
-              location.pathname.startsWith("/collections") ? "active" : ""
+            className={({}) =>
+              (location.pathname.startsWith("/collections") ? "active" : "") +
+              isClose
             }
           >
             Подборки
@@ -30,14 +34,18 @@ const Menu = () => {
           <NavLink
             end
             to="/courses/ege/ege_inf/"
-            className={({ isActive }) =>
-              location.pathname.startsWith("/courses") ? "active" : ""
+            className={({}) =>
+              (location.pathname.startsWith("/courses") ? "active" : "") +
+              isClose
             }
           >
             Курсы
           </NavLink>
 
-          <NavLink to="/lk/teach/" className={section ? "active" : ""}>
+          <NavLink
+            to="/lk/teach/"
+            className={(section ? "active" : "") + isClose}
+          >
             ЛК
           </NavLink>
         </nav>

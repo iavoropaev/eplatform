@@ -5,3 +5,9 @@
   /* padding: 10px; */
   height: 100%;
 }
+
+@media (max-width: 768px) {
+  .content {
+    padding-top: 0px;
+  }
+}
