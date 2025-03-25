@@ -202,15 +202,16 @@ const CreateTaskPage = () => {
   console.log("SB", selectedBanks);
   return (
     <>
-      <div className="container">
-        {taskId && loadStatus !== -1 && (
+      {taskId && loadStatus !== -1 && (
+        <div className="container">
           <div>
             <button onClick={goToPrevTask}>Предыдущая</button>
             <button onClick={goToNewTask}>Новая</button>
             <button onClick={goToNextTask}>Следующая</button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
       <CreateTask
         taskId={taskId}
         taskData={taskData}

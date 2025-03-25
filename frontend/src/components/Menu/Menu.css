@@ -1,13 +1,13 @@
 .menu-container {
   box-sizing: border-box;
   background-color: #393939;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
-  height: 50px;
-  min-height: 50px;
-  padding: 7px;
+  /* height: 50px; */
+  /* min-height: 50px; */
+  padding: 10px;
   padding-left: 10px;
   padding-right: 10px;
   z-index: 1000;
@@ -27,6 +27,7 @@
   color: rgb(231, 231, 231);
   text-decoration: None;
   text-align: left;
+  user-select: none;
 }
 
 .menu-container .active {
@@ -46,17 +47,28 @@
 .menu-but {
   display: none;
   cursor: pointer;
+  padding: 0px;
+  color: white;
+  background-color: transparent;
+  border: 0px;
+}
+.menu-but svg {
   min-width: 1.5rem;
   min-height: 1.5rem;
-  color: white;
 }
 
-@media (max-width: 768px) {
+/* Firefox inner border hack */
+button::-moz-focus-inner {
+  border: 0;
+}
+
+@media (max-width: 600px) {
   .menu-but {
     display: initial;
   }
   .menu-but:hover {
     color: rgb(108, 255, 108);
+    background-color: transparent;
   }
   .menu-container {
     /* position: initial; */

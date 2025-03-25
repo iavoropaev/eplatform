@@ -5,10 +5,11 @@ import "./MainLayout.css";
 const MainLayout = () => {
   return (
     <>
-      <Menu />
-
       <div className="content">
-        <Outlet />
+        <Menu />
+        <div className="content-container">
+          <Outlet />
+        </div>
       </div>
     </>
   );

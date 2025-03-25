@@ -6,14 +6,17 @@ import { IoMenu } from "react-icons/io5";
 const Menu = () => {
   const location = useLocation();
   const { section } = useParams();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const isClose = isOpen ? "" : " closed";
 
   console.log(section);
   return (
     <div className="menu-container">
       <div className="menu">
-        <IoMenu className="menu-but" onClick={() => setIsOpen(() => !isOpen)} />
+        <button className="menu-but" onClick={() => setIsOpen(() => !isOpen)}>
+          <IoMenu />
+        </button>
+
         <nav className={isOpen ? "nav-links" : "nav-links"}>
           <NavLink to="/" end>
             Главная
