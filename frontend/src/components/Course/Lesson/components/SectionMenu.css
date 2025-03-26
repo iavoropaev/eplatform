@@ -17,6 +17,8 @@
 
   cursor: pointer;
   border: 1px solid grey;
+
+  font-size: 0.9rem;
 }
 .course-container .lesson .plus {
   background-color: rgb(138, 255, 140);

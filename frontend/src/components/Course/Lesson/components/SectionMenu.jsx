@@ -22,7 +22,7 @@ const SectionMenu = ({
           solveStatus;
 
         return (
-          <div
+          <button
             className={className}
             key={index}
             onClick={() => {
@@ -30,7 +30,7 @@ const SectionMenu = ({
             }}
           >
             {index + 1}
-          </div>
+          </button>
         );
       })}
       {addButton && (
