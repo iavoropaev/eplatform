@@ -8,13 +8,12 @@ body,
 #root,
 .App {
   margin: 0;
-  /* height: 100%; */
-  height: -webkit-fill-available;
-  min-height: 100vh;
 }
 
-body {
-  overflow: hidden;
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {

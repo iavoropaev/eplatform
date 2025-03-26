@@ -5,7 +5,7 @@ import "./MainLayout.css";
 const MainLayout = () => {
   return (
     <>
-      <div className="content">
+      <div className="main-container">
         <Menu />
         <div className="content-container">
           <Outlet />

@@ -54,6 +54,14 @@ const Course = () => {
     }
   }, [dispatch, navigate, lessonId, courseId, currentLesson]);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden"; // Отключить скролл
+
+    return () => {
+      document.body.style.overflow = ""; // Восстановить, когда компонент размонтируется
+    };
+  }, []);
+
   if (!courseData?.id) {
     return <h2>Загрузка</h2>;
   }

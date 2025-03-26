@@ -1,11 +1,12 @@
 .menu-container {
   box-sizing: border-box;
   background-color: #393939;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  min-height: fit-content;
+  height: 50px;
+  max-height: 50px;
   padding: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -13,7 +14,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
 .menu-container .menu {
@@ -21,6 +21,7 @@
   text-align: center;
   align-items: center;
   min-height: 28px;
+  overflow: auto;
 }
 .menu-container a {
   color: black;
@@ -28,6 +29,8 @@
   text-decoration: None;
   text-align: left;
   user-select: none;
+  padding-bottom: 5px;
+  white-space: nowrap;
 }
 
 .menu-container .active {
@@ -38,10 +41,13 @@
 }
 .menu-container .nav-links {
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   justify-content: flex-start;
   align-items: flex-start;
   gap: 10px 20px;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .menu-but {
