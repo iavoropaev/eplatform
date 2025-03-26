@@ -56,6 +56,7 @@
 
 .lesson-container .add-section {
   text-align: left;
+  padding-bottom: 50px;
 }
 .lesson-container .add-section form {
   display: flex;

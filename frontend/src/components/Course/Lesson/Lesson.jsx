@@ -79,7 +79,6 @@ const Lesson = () => {
             <HighlightedContent content={content} />
           </div>
         )}
-
         {taskData && (
           <SectionTask
             taskData={taskData}
@@ -87,7 +86,6 @@ const Lesson = () => {
             solveFromServer={solveFromServer}
           />
         )}
-
         {!taskData && (
           <div className="save-text-section">
             <button
