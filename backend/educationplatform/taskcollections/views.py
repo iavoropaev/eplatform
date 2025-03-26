@@ -36,9 +36,9 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
         return TaskCollectionSerializer
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'post', 'get_collections']:
+        if self.action in ['list', 'retrieve', 'get_collections']:
             permission_classes = [AllowAny]
-        elif self.action in ['create_collection', 'update_collection', 'generate_collection']:
+        elif self.action in ['create_collection', 'update_collection', 'generate_collection', 'my_collections']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -223,8 +223,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     serializer_class = TaskCollectionSolveSerializer
 
     def get_permissions(self):
-        if self.action in ['send_solution', 'get_solution', 'get_my_solutions', 'delete-solution',
-                           'get_all_solutions_for_exam', 'get-exam-statistics']:
+        if self.action in ['send_solution', 'get_solution', 'get_my_solutions', 'delete_solution',
+                           'get_all_solutions_for_exam', 'get_exam_statistics', 'solves_statistics_by_subject']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]

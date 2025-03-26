@@ -24,7 +24,7 @@ const CourseCatalog = () => {
 
   return (
     <div className="coll-cat-container">
-      <h1>Каталог курсов</h1>
+      <h2>Каталог курсов</h2>
       <SubjectSelect />
       <div className="col-list">
         {courses.map((course) => {

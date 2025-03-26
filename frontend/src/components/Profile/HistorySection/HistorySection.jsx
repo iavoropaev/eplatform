@@ -33,7 +33,7 @@ const HistorySection = () => {
 
   return (
     <div className="exam-solutions-section">
-      <h2>Решённые варианты</h2>
+      <h3>Решённые варианты</h3>
       <div className="exam-solutions">
         {examSolutions.map((sol) => {
           return (
@@ -46,6 +46,7 @@ const HistorySection = () => {
             />
           );
         })}
+        {examSolutions?.length === 0 && <p>Решений пока нет.</p>}
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ const CollectionCatalog = () => {
 
   return (
     <div className="coll-cat-container">
-      <h1>Каталог подборок</h1>
+      <h2>Каталог подборок</h2>
       <SubjectSelect />
       <div className="col-list">
         {collections.map((col) => {

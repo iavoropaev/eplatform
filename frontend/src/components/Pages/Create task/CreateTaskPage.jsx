@@ -201,7 +201,7 @@ const CreateTaskPage = () => {
   };
   console.log("SB", selectedBanks);
   return (
-    <>
+    <div>
       {taskId && loadStatus !== -1 && (
         <div className="container">
           <div>
@@ -229,7 +229,7 @@ const CreateTaskPage = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 export default CreateTaskPage;

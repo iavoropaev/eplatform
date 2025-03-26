@@ -71,8 +71,9 @@ class CoursesViewSet(viewsets.ModelViewSet):
             course = Course.objects.filter(id=cur_course_id).get()
 
             course_serializer = CourseSerializer(course, many=False)
-            #print(len(connection.queries))
-            return Response(course_serializer.data)
+            data = course_serializer.data
+            data['is_author'] = cur_user_id == course.created_by.id
+            return Response(data)
         except Exception as e:
             print(e)
             return Response({

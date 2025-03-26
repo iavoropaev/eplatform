@@ -40,13 +40,13 @@ export const StatisticsSection = () => {
 
   return (
     <div className="stats-section">
-      <h2>Моя статистика</h2>
+      <h3>Моя статистика</h3>
       <SubjectSelect />
 
       <div className="numbers-stats-section">
         {numberStats !== undefined && numberStats.length > 0 && (
           <>
-            <h2>Статистика по номерам</h2>
+            <h3>Статистика по номерам</h3>
             <table className="table">
               <thead>
                 <tr>
@@ -75,10 +75,10 @@ export const StatisticsSection = () => {
         )}
       </div>
 
-      <div>
+      <div className="exams-stats">
         {collectionStats !== undefined && (
           <>
-            <h2>Статистика по вариантам</h2>
+            <h3>Статистика по вариантам</h3>
             <div className="tables-cont">
               <table className="table">
                 <thead>

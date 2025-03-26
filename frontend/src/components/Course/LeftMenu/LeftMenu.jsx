@@ -40,21 +40,25 @@ const LeftMenu = () => {
                 <p className="module-title">{modInd + 1 + ". " + mod.name}</p>
                 {mod.lessons.map((lesson, lesInd) => {
                   return (
-                    <p
+                    <div
+                      key={lesson.id}
                       className={
                         String(activeLessonId) === String(lesson.id)
                           ? "active-lesson"
                           : "lesson"
                       }
-                      key={lesson.id}
-                      onClick={() => {
-                        navigate(
-                          `/course/${courseId}/lesson/${lesson.id}/s/1/`
-                        );
-                      }}
                     >
-                      {modInd + 1 + "." + (lesInd + 1) + ". " + lesson.name}
-                    </p>
+                      <button
+                        className="navigate-button"
+                        onClick={() => {
+                          navigate(
+                            `/course/${courseId}/lesson/${lesson.id}/s/1/`
+                          );
+                        }}
+                      >
+                        {modInd + 1 + "." + (lesInd + 1) + ". " + lesson.name}
+                      </button>
+                    </div>
                   );
                 })}
               </div>

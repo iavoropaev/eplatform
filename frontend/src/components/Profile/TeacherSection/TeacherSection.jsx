@@ -24,7 +24,7 @@ const TeacherSection = () => {
   return (
     <div className="lk-teach">
       <div>
-        <h2>Материалы</h2>
+        <h3>Материалы</h3>
 
         <p className="grey-text">Мои материалы</p>
         <div className="my-materilas">
@@ -54,7 +54,7 @@ const TeacherSection = () => {
       </div>
 
       <div>
-        <h2>Классы</h2>
+        <h3>Классы</h3>
         <div>
           <p className="grey-text">Мои классы</p>
           <div className="class-cont">

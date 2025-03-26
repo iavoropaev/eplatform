@@ -19,3 +19,6 @@
   min-height: 0;
   overflow-y: auto;
 }
+.content-container > div {
+  margin-top: 10px;
+}

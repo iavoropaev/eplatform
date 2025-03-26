@@ -1,7 +1,9 @@
 .create-task {
   padding: 30px;
   padding-bottom: 0px;
+  padding-top: 0px;
   text-align: left;
+  margin-top: 0px;
 }
 
 .create-task .task-id {

@@ -5,3 +5,7 @@
   width: 100%;
   flex: 1;
 }
+
+.content-container .course-container {
+  margin-top: 0px;
+}

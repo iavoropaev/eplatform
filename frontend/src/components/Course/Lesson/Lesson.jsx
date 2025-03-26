@@ -16,6 +16,7 @@ const Lesson = () => {
   const intSectionIndex = Number(sectionIndex) - 1;
 
   const currentLesson = useSelector((state) => state.course.currentLesson);
+  const isAuthor = useSelector((state) => state.course.courseData?.is_author);
 
   if (currentLesson === undefined) {
     return <p>Загрузка...</p>;
@@ -60,9 +61,11 @@ const Lesson = () => {
       <div className="lesson">
         <div className="lesson-name-cont">
           <p className="lesson-name">{currentLesson.name}</p>
-          <p className="edit-but" onClick={goEditing}>
-            Редактировать
-          </p>
+          {isAuthor && (
+            <p className="edit-but" onClick={goEditing}>
+              Редактировать
+            </p>
+          )}
         </div>
 
         <SectionMenu

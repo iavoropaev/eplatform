@@ -82,7 +82,7 @@ const Exam = () => {
 
   return (
     <div className="exam-container">
-      <h1 className="exam-title">{colName}</h1>
+      <h2 className="exam-title">{colName}</h2>
       <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>
 
       {tasks.map((task) => {

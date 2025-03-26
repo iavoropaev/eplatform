@@ -193,7 +193,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                     response_ser.data,
                     status=status.HTTP_201_CREATED
                 )
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -201,7 +201,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         task = self.get_object()
         data = request.data.copy()
-        if task.created_by != request.user:
+        if task.created_by != request.user and (not request.user.is_staff):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         if not request.user.is_staff:
@@ -270,7 +270,8 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
         if self.action in ['new_tasks', 'send_solution']:
             permission_classes = [AllowAny]
         elif self.action in ['my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
-                             'percent_ok_solves_by_task_id', 'send_solution', 'get_statuses']:
+                             'percent_ok_solves_by_task_id', 'send_solution', 'get_statuses',
+                             'solves_statistics_by_subject']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]

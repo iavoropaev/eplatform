@@ -62,7 +62,7 @@ const MessagesSection = () => {
   return (
     <div className="lk-messages-section">
       <div>
-        <h2>Мои классы</h2>
+        <h3>Мои классы</h3>
         <div>
           {classes.map((cl, i) => {
             return (
@@ -82,7 +82,7 @@ const MessagesSection = () => {
         </div>
       </div>
       <div>
-        <h2>Сообщения</h2>
+        <h3>Сообщения</h3>
         <div className="lk-messages">
           {messages.map((mes) => {
             return (
@@ -99,6 +99,7 @@ const MessagesSection = () => {
               </div>
             );
           })}
+          {messages?.length === 0 && <p>Сообщений пока нет.</p>}
         </div>
       </div>
     </div>

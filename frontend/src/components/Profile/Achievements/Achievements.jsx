@@ -20,7 +20,7 @@ export const Achievements = () => {
 
   return (
     <div className="achievements-section">
-      <h2>Мои достижения</h2>
+      <h3>Мои достижения</h3>
       <div className="achievements">
         {achievements.map((ach) => {
           return (
@@ -29,6 +29,7 @@ export const Achievements = () => {
             </div>
           );
         })}
+        {achievements?.length === 0 && <p>Достижений пока не получено.</p>}
       </div>
     </div>
   );

@@ -55,7 +55,7 @@ const Course = () => {
   }, [dispatch, navigate, lessonId, courseId, currentLesson]);
 
   if (!courseData?.id) {
-    return <h1>Загрузка</h1>;
+    return <h2>Загрузка</h2>;
   }
   console.log(courseData);
   return (

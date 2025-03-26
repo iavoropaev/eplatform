@@ -20,8 +20,8 @@ class ClassesViewSet(viewsets.ModelViewSet):
         if self.action in []:
             permission_classes = [AllowAny]
         elif self.action in ['create_class', 'create_invitation', 'delete_invitation', 'create_message',
-                             'activate_invitation', 'get_my_classes', 'get_class_data', 'get-student-messages',
-                             'delete_message', 'delete_class', 'get_student_classes']:
+                             'activate_invitation', 'get_my_classes', 'get_class_data', 'get_student_messages',
+                             'delete_message', 'delete_class', 'get_student_classes', 'exclude_user_from_class']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -36,6 +36,8 @@ class ClassesViewSet(viewsets.ModelViewSet):
             cur_user_id = request.user.id
             cur_class_id = request.GET.get('class_id')
             cur_class = Class.objects.filter(id=cur_class_id).get()
+            if (cur_class.created_by.id != cur_user_id) and (not request.user.is_staff):
+                return Response(status=403)
             serializer = ClassSerializerForTeacher(cur_class)
             return Response(serializer.data)
         except Exception as e:

@@ -39,13 +39,19 @@
 }
 
 .course-container .left-menu .active-lesson {
-  padding: 5px;
-  padding-left: 30px;
   background-color: rgb(155, 178, 255);
 }
 
 .course-container .left-menu .lesson {
   cursor: pointer;
+  /* padding-left: 30px; */
+}
+
+.course-container .navigate-button {
+  border-radius: 0px;
+  width: 100%;
+  height: 100%;
   padding: 5px;
   padding-left: 30px;
+  text-align: left;
 }

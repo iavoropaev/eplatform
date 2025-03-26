@@ -138,7 +138,7 @@ const UpdateCourse = () => {
 
   return (
     <div className="edit-course">
-      <h1>Редактирование курса</h1>
+      <h2>Редактирование курса</h2>
 
       <div className="course-info">
         <div>

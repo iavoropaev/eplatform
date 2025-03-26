@@ -71,7 +71,7 @@ const Collection = () => {
 
   return (
     <div className="collection-container">
-      <h1>{colName}</h1>
+      <h2>{colName}</h2>
 
       <p className="count-answers">
         Решено {countOk}/{tasks.length}.

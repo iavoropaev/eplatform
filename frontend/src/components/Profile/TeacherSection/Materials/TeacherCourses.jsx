@@ -53,14 +53,14 @@ const TeacherCourses = () => {
             key={course.id}
             className="collection"
             onClick={() => {
-              window.open(`/course/${course.id}/lesson/-1/s/-1/`, "_blank");
+              window.open(`/course/${course.id}/`, "_blank");
             }}
           >
             <p>{course.name}</p>
             <div className="buttons">
               <button
                 onClick={() => {
-                  window.open(`/course/${course.id}/lesson/-1/s/-1/`, "_blank");
+                  window.open(`/course/${course.id}/`, "_blank");
                 }}
               >
                 Смотреть

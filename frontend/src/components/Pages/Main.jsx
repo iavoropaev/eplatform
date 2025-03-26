@@ -51,7 +51,7 @@ const Main = () => {
   const showOK = (text) => toast.success(text);
   return (
     <div>
-      <h1>Главная, {userName}</h1>
+      <h2>Главная, {userName}</h2>
       {!isAuth && <Auth />}
 
       <div className="menu">

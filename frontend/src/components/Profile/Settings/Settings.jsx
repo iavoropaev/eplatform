@@ -45,8 +45,6 @@ const Settings = () => {
 
   return (
     <div className="settings-section">
-      <h2>Настройки</h2>
-
       <div className="tg">
         <h3>Привязка телеграм аккаунта</h3>
         {isLinked === undefined && <p>Загрузка...</p>}
