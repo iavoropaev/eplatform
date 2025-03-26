@@ -1,24 +1,11 @@
 .content {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  height: 100dvh;
-  align-items: start;
-  justify-items: stretch;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow: hidden;
 }
 
-.content > div {
-  margin: auto;
-  margin-top: 0px;
-  /* overflow-y: auto; */
-}
-
 .content-container {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  overflow-y: auto;
-}
-.content-container > div {
-  margin-top: 10px;
+  flex-grow: 1;
+  overflow: auto;
 }
