@@ -4,6 +4,7 @@ import { getExamSolution } from "../../server/exam";
 import ExamSolutionTable from "./components/ExamSolutionTable";
 import "./ExamResults.css";
 import { showError } from "../Utils/Notifications";
+import { getStrTime, getWordForm } from "../Utils/dates";
 
 const ExamResults = () => {
   const { slug, solveType, attemptId } = useParams();
@@ -14,6 +15,7 @@ const ExamResults = () => {
   const [colName, setColName] = useState("");
   const [answers, setAnswers] = useState([]);
   const [score, setScore] = useState(undefined);
+  const [maxScore, setMaxScore] = useState(undefined);
   const [testScore, setTestScore] = useState(undefined);
   const [duration, setDuration] = useState(0);
   const [solData, setSolData] = useState("");
@@ -28,6 +30,7 @@ const ExamResults = () => {
         setColName(solve.task_collection.name);
         setAnswers(solve.answers);
         setScore(solve.score);
+        setMaxScore(solve.max_score);
         setTestScore(solve.test_score);
         setDuration(solve.duration);
         setSolData(solve.time_create);
@@ -49,9 +52,41 @@ const ExamResults = () => {
     }
   };
 
+  const getColorByScore = (score) => {
+    if (score === 100) {
+      return "#FFD700";
+    }
+    const hue = (score / 100) * 120;
+    return `hsl(${hue}, 100%, 50%)`;
+  };
+
   return (
     <div className="exam-results">
       <h2>{colName}</h2>
+      <div className="score-time-cont">
+        {testScore !== undefined && (
+          <p
+            className={"test-score " + (testScore === 100 ? " score-100" : "")}
+            title="Тестовый балл"
+            style={{
+              backgroundColor: getColorByScore(testScore),
+            }}
+          >
+            {`${testScore} ${getWordForm(testScore, [
+              "балл",
+              "балла",
+              "баллов",
+            ])}`}
+          </p>
+        )}
+        <p className="time">{getStrTime(duration)}</p>
+      </div>
+      <div className="score">
+        <p>
+          Баллов набрано {score}/{maxScore}.
+        </p>
+      </div>
+
       <div>
         <select value={solveType} onChange={handleResTypeChange}>
           <option disabled value="id">
@@ -62,9 +97,6 @@ const ExamResults = () => {
           <option value="best">Лучший результат</option>
         </select>
       </div>
-      <p>Баллы {score}</p>
-      {testScore && <p>Тестовый балл {testScore}</p>}
-      <p>Времени потрачено {duration}</p>
       <div className="results-table-cont">
         <ExamSolutionTable answers={answers} />
       </div>

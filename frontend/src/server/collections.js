@@ -26,7 +26,7 @@ export const getCollectionBySlug = async (slug) => {
 export const updateCollection = async (data) => {
   try {
     const res = await axios.post(
-      process.env.REACT_APP_API_URL + "tasks-collections/update_collection/",
+      process.env.REACT_APP_API_URL + "tasks-collections/update-collection/",
       data,
       {
         headers: headers,

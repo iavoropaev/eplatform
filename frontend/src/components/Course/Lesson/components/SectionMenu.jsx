@@ -10,13 +10,11 @@ const SectionMenu = ({
   return (
     <div className="lesson-menu">
       {menuStatuses.map((status, index) => {
-        let solveStatus = "";
-        if (status === 1) {
-          solveStatus = "ok";
+        let solveStatus = status;
+        if (status === undefined) {
+          solveStatus = " ";
         }
-        if (status === -1) {
-          solveStatus = "wa";
-        }
+
         const className =
           (index === indexActive ? "menu-active-el " : "menu-el ") +
           solveStatus;

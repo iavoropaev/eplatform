@@ -48,6 +48,7 @@ class TaskCollectionSolve(models.Model):
     duration = models.IntegerField(blank=False)
     answers = models.JSONField(blank=False)
     score = models.IntegerField(blank=False)
+    max_score = models.IntegerField(blank=False)
     test_score = models.IntegerField(blank=True, null=True)
     achievements = models.ManyToManyField(Achievement, related_name='solves', blank=True)
 

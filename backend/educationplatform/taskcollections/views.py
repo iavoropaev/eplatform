@@ -93,11 +93,12 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
         serializer = TaskCollectionInfoSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], url_path='update-collection')
     def update_collection(self, request):
         try:
             cur_user_id = request.user.id
-
+            print(request.data)
+            print(request.data['tasks'])
             if 'id' in request.data:
                 collection = TaskCollection.objects.select_related('created_by').get(id=request.data['id'])
             elif 'slug' in request.data:
@@ -122,15 +123,17 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             tasks_to_delete = list(TaskCollectionTask.objects.filter(task_collection=collection).values('id'))
             old_task_ids = TaskCollectionTask.objects.filter(task_collection=collection)
             old_task_ids.delete()
-
+            print(request.data['tasks'])
             task_instances = [
                 TaskCollectionTask(task_collection=collection, task_id=task['id'], order=i)
                 for i, task in enumerate(request.data['tasks'])
             ]
+            print(task_instances)
 
             try:
                 TaskCollectionTask.objects.bulk_create(task_instances)
-            except Exception:
+            except Exception as e:
+                print(e)
                 TaskCollectionTask.objects.bulk_create([TaskCollectionTask(**data) for data in tasks_to_delete])
 
             links = collection.taskcollectiontasks.select_related('task', 'task__author', 'task__source',
@@ -245,21 +248,19 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             total_score = 0
             max_score = 0
             for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name',
-                                                      'number_in_exam__max_score'):
+                                                      'number_in_exam__max_score',  'number_in_exam__check_rule'):
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
                 max_task_score = task['number_in_exam__max_score']
+                check_rule = task['number_in_exam__check_rule']
                 ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task['answer'])}
                 score = 0
                 max_score += max_task_score
                 if str(task_id) in user_answers:
                     user_answer = user_answers[str(task_id)]
-
-                    if check_answer(user_answer, ok_answer):
-                        score = max_task_score
-                        status = 'OK'
-                    else:
-                        status = 'WA'
+                    check_res = check_answer(user_answer, ok_answer, max_score=max_task_score, check_rule=check_rule)
+                    score = check_res['score']
+                    status = check_res['status']
                     total_score += score
                 else:
                     status = 'NA'
@@ -312,6 +313,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 user_id=cur_user_id,
                 answers=answers_summary,
                 score=total_score,
+                max_score=max_score,
                 test_score=test_score,
                 duration=duration
             )

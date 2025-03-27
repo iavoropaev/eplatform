@@ -46,12 +46,15 @@ const TaskFooter = ({
   const curAnswerData = taskAnswer ? taskAnswer[taskAnswer.type] : answer;
 
   let saveButText = "Проверить ответ";
-  console.log(status);
-  if (status === "wa" && isAnswerSave) {
+  console.log("sssss", status, isAnswerSave);
+  if (status === "WA" && isAnswerSave) {
     saveButText = "Неправильно";
   }
-  if (status === "ok" && isAnswerSave) {
+  if (status === "OK" && isAnswerSave) {
     saveButText = "Верно";
+  }
+  if (status === "PA" && isAnswerSave) {
+    saveButText = "Частично верно";
   }
 
   return (

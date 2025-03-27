@@ -2,6 +2,7 @@ import SingleAnswer from "./SingleAnswer";
 import "./ExamSolutionTable.css";
 
 const ExamSolutionTable = ({ answers }) => {
+  console.log(answers);
   return (
     <table className="results-table">
       <thead>
@@ -14,7 +15,7 @@ const ExamSolutionTable = ({ answers }) => {
       </thead>
       <tbody>
         {answers.map((answer, index) => (
-          <tr key={index}>
+          <tr key={index} className={answer.status}>
             <td>{answer.number_in_exam}</td>
             <td>{answer.score}</td>
             <td>

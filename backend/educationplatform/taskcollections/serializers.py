@@ -55,7 +55,7 @@ class TaskCollectionSolveForUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskCollectionSolve
-        fields = ['id', 'task_collection', 'score', 'test_score', 'duration', 'answers', 'achievements', 'time_create']
+        fields = ['id', 'task_collection', 'score', 'max_score', 'test_score', 'duration', 'answers', 'achievements', 'time_create']
 
 
 class TaskCollectionSolveForAllSolSerializer(serializers.ModelSerializer):

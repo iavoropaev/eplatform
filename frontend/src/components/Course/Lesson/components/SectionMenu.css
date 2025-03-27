@@ -23,13 +23,17 @@
 .course-container .lesson .plus {
   background-color: rgb(138, 255, 140);
 }
-.course-container .lesson-menu > .ok {
+.course-container .lesson-menu > .OK {
   background-color: rgb(138, 255, 140);
 }
-.course-container .lesson-menu > .wa {
+.course-container .lesson-menu > .WA {
   background-color: rgb(255, 105, 105);
+}
+.course-container .lesson-menu > .PA {
+  background-color: #fffea8;
 }
 
 .course-container .lesson .menu-active-el {
   background-color: rgb(155, 178, 255);
+  text-decoration: underline;
 }

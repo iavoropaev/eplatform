@@ -145,21 +145,27 @@ class CoursesViewSet(viewsets.ModelViewSet):
             user_answer = request.data['user_answer']
 
             section = Section.objects.all().filter(id=cur_section_id)[0]
-            score = 0
+
             if section.type == 'text':
-                solve_status = 1
+                solve_status = 'OK'
                 score = 1
             else:
                 ok_answer = {"type": section.task.answer_type,
                              section.task.answer_type: json.loads(section.task.answer)}
-                if check_answer(user_answer, ok_answer):
-                    solve_status = 1
-                    score = 1
-                else:
-                    solve_status = -1
+                check_res = check_answer(user_answer,
+                                         ok_answer,
+                                         max_score=section.task.number_in_exam.max_score,
+                                         check_rule=section.task.number_in_exam.check_rule
+                                         )
+                solve_status = check_res['status']
+                score = check_res['score']
 
-            solve = SectionSolve(user_id=cur_user_id, section_id=cur_section_id,
-                                 score=score, solve_status=solve_status, answer=user_answer)
+            solve = SectionSolve(user_id=cur_user_id,
+                                 section_id=cur_section_id,
+                                 score=score,
+                                 solve_status=solve_status,
+                                 answer=user_answer
+                                 )
             solve.save()
             serializer = SectionSolveSerializer(solve, many=False)
 

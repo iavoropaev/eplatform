@@ -136,12 +136,16 @@ div.task-container {
 }
 
 /* Status */
-div.task-container > .ok .answer {
+div.task-container > .OK .answer {
   background-color: #9ced99;
 }
 
-div.task-container > .wa .answer {
+div.task-container > .WA .answer {
   background-color: #ff7f7f;
+}
+
+div.task-container > .PA .answer {
+  background-color: #fffea8;
 }
 
 .task-container .task-footer .buttons > button {

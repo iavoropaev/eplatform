@@ -87,7 +87,7 @@ class SectionSolve(models.Model):
 
     answer = models.JSONField()
     score = models.IntegerField(blank=False, null=False)
-    solve_status = models.IntegerField(blank=False, null=False)
+    solve_status = models.CharField(blank=False, choices=[('WA', 'WA'), ('OK', 'OK'), ('PA', 'PA'), ('NA', 'NA')])
 
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)

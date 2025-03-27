@@ -285,34 +285,39 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             cur_task_id = request.data['task_id']
             user_answer = request.data['answer']
 
-            task = Task.objects.values("answer", "answer_type").get(id=cur_task_id)
-
+            task = Task.objects.values("answer", "answer_type",
+                                       'number_in_exam__max_score',
+                                       'number_in_exam__check_rule').get(id=cur_task_id)
+            max_score = task['number_in_exam__max_score']
+            check_rule = task['number_in_exam__check_rule']
             ok_answer_data = json.loads(task["answer"])
             ok_answer_type = task["answer_type"]
             ok_answer = {'type': ok_answer_type, ok_answer_type: ok_answer_data}
 
+            check_res = check_answer(user_answer, ok_answer, max_score=max_score, check_rule=check_rule)
+            
+            sol_status = check_res['status']
+            score = check_res['score']
             if cur_user_id:
                 solution = TaskSolutions(task_id=cur_task_id,
                                          user_id=cur_user_id,
                                          answer=user_answer,
-                                         is_ok_solution=check_answer(user_answer, ok_answer))
-
+                                         is_ok_solution=sol_status!='WA',
+                                         score=score,
+                                         status=sol_status
+                                         )
                 solution.save()
-                serializer = TaskSolutionsSerializer(solution, many=False)
-                data = serializer.data
-                sol_status = 'ok' if data['is_ok_solution'] else 'wa'
-            else:
-                sol_status = 'ok' if check_answer(user_answer, ok_answer) else 'wa'
-
+                print('сохранено')
             print('my', len(connection.queries))
             return Response({
-                'status': sol_status
+                'status': sol_status,
+                'score': score
             })
         except Exception as e:
             print(e)
             return Response({
                 'Error': 'Не удалось обработать решение.',
-                'status': 'wa'
+                'status': 'WA'
             })
 
     @extend_schema(description='Get all user solutions.')

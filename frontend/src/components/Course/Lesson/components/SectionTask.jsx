@@ -19,11 +19,9 @@ const SectionTask = ({ taskData, sendSolution, solveFromServer }) => {
     }
   };
 
-  let tasksStatus = "";
-  if (solveFromServer?.solve_status === 1) {
-    tasksStatus = "ok";
-  } else if (solveFromServer?.solve_status === -1) {
-    tasksStatus = "wa";
+  let tasksStatus = solveFromServer?.solve_status;
+  if (solveFromServer?.solve_status === undefined) {
+    tasksStatus = " ";
   }
 
   return (

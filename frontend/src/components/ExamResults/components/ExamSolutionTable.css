@@ -23,3 +23,17 @@
   padding: 2px;
   border: 0px;
 }
+
+.results-table .OK {
+  background-color: rgb(199, 252, 207);
+}
+.results-table .WA {
+  background-color: #ff7f7f;
+}
+.results-table .PA {
+  background-color: #fffea8;
+}
+
+.results-table .NA {
+  color: grey;
+}

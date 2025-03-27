@@ -95,6 +95,7 @@ class TaskNumberInExam(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, blank=False, null=False)
 
+    check_rule = models.CharField(max_length=100, default='default')
     max_score = models.IntegerField(blank=False, null=False, default=1)
     subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='numbers')
 
@@ -154,7 +155,9 @@ class TaskSolutions(models.Model):
     task = models.ForeignKey('Task', on_delete=models.PROTECT, blank=False)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False)
     answer = models.CharField(blank=False)
+    score = models.IntegerField(blank=False, null=False, default=0)
     is_ok_solution = models.BooleanField(blank=False)
+    status = models.CharField(blank=False, choices=[('WA', 'WA'), ('OK', 'OK'), ('PA', 'PA'), ('NA', 'NA')])
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { MdModeEdit } from "react-icons/md";
 
 const TaskHeader = ({ taskData, showEditIcon }) => {
   const isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
@@ -27,7 +28,7 @@ const TaskHeader = ({ taskData, showEditIcon }) => {
             target="_blank"
             to={`../edit-task/${taskData.id}/`}
           >
-            E
+            <MdModeEdit color="black" />
           </NavLink>
         )}
       </span>

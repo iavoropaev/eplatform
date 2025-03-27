@@ -56,6 +56,7 @@ const Lesson = () => {
     }
   };
   console.log(menuStatuses);
+  console.log("s", solveFromServer);
   return (
     <div className="lesson-container">
       <div className="lesson">
