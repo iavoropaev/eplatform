@@ -172,6 +172,28 @@ div.task-container > .PA .answer {
   user-select: none;
 }
 
+.task-container .files-cont {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0px 8px;
+  margin-top: 30px;
+}
+
+.task-container .files-list {
+  display: flex;
+  gap: 0px 8px;
+  flex-wrap: wrap;
+}
+.task .task-body .files-cont .f-title {
+  padding-bottom: 0px;
+}
+.task-container .files-list a {
+  color: grey;
+}
+.task-container .files-list a:hover {
+  color: black;
+}
+
 @media (max-width: 600px) {
   .task {
     width: 90%;

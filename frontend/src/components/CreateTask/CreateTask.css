@@ -113,7 +113,6 @@
 }
 .create-task .upload-files .file-item button {
   background-color: transparent;
-  /* border: 0px; */
   color: red;
 }
 .create-task .upload-files .file-item a:hover {

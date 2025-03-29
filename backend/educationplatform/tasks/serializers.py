@@ -93,6 +93,10 @@ class FilterSerializer(serializers.ModelSerializer):
         model = TaskExam
         fields = ('id', 'name', 'slug', 'subjects', 'dif_levels')
 
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadFiles
+        fields = ('id', 'name', 'location')
 
 class TaskSerializerForUser(serializers.ModelSerializer):
     author = TaskAuthorSerializer()
@@ -100,14 +104,12 @@ class TaskSerializerForUser(serializers.ModelSerializer):
     source = TaskSourceSerializer()
     actuality = TaskActualitySerializer()
     difficulty_level = TaskDifficultyLevelSerializer()
+    files = FileSerializer(many=True)
 
     class Meta:
         model = Task
         fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
-                  'difficulty_level', 'actuality', 'time_update', 'time_create')
+                  'difficulty_level', 'actuality', 'files', 'time_update', 'time_create')
 
 
-class FileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UploadFiles
-        fields = ('id', 'name', 'location')
+
