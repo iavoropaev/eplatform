@@ -31,6 +31,7 @@ const CreateTaskPage = () => {
   const [selectedDifLevel, setSelectedDifLevel] = useState(-1);
   const [selectedTaskAuthor, setSelectedTaskAuthor] = useState(-1);
   const [selectedActuality, setSelectedActuality] = useState(-1);
+  const [files, setFiles] = useState([]);
   const [filterData, setFilterData] = useState([]);
 
   const {
@@ -66,6 +67,7 @@ const CreateTaskPage = () => {
     setSelectedDifLevel(-1);
     setSelectedTaskAuthor(-1);
     setSelectedActuality(-1);
+    setFiles([]);
   };
   const notify = (text) => toast.success(text);
   const showError = (text) => toast.error(text);
@@ -99,6 +101,8 @@ const CreateTaskPage = () => {
         setSelectedSubject(subjectId);
         setSelectedNumber(numberId);
         setSelectedBanks(bankAuthors);
+        setFiles(data.files);
+
         if (data.difficulty_level?.id !== undefined) {
           setSelectedDifLevel(data.difficulty_level.id);
         } else {
@@ -140,6 +144,7 @@ const CreateTaskPage = () => {
       bank_authors: selectedBanks,
       difficulty_level: selectedDifLevel !== -1 ? selectedDifLevel : null,
       actuality: selectedActuality !== -1 ? selectedActuality : null,
+      files: files.map((file) => file.id),
     });
     if (newTask !== undefined) {
       notify("Задача сохранена!");
@@ -187,6 +192,7 @@ const CreateTaskPage = () => {
     taskAuthors,
     difficulty_levels,
     actualities,
+    files,
     setEditorContent,
     setAnswer,
     setAnswerType,
@@ -198,10 +204,11 @@ const CreateTaskPage = () => {
     setSelectedBanks,
     setSelectedDifLevel,
     setSelectedActuality,
+    setFiles,
   };
   console.log("SB", selectedBanks);
   return (
-    <div>
+    <div className="create-task-cont">
       {taskId && loadStatus !== -1 && (
         <div className="container">
           <div>
@@ -220,15 +227,15 @@ const CreateTaskPage = () => {
         loadStatus={loadStatus}
       />
       {showSaveText && "Сохранено"}
-      <div className="container">
-        {taskId && (
+      {taskId && (
+        <div className="container">
           <div>
             <button onClick={goToPrevTask}>Предыдущая</button>
             <button onClick={goToNewTask}>Новая</button>
             <button onClick={goToNextTask}>Следующая</button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

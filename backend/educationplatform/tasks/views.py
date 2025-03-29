@@ -15,12 +15,12 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from urllib3 import request
 
-from educationplatform.settings import DOMAIN
+from educationplatform.settings import DOMAIN, MAX_FILE_SIZE
 from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, \
     TaskNumberInExam, \
     TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
-    TaskNumberInExamSerializer, TaskSerializerForCreate
+    TaskNumberInExamSerializer, TaskSerializerForCreate, FileSerializer
 from .utils import check_answer
 
 
@@ -540,12 +540,17 @@ class NumbersViewSet(viewsets.ModelViewSet):
 def upload_file(request):
     try:
         file = request.FILES['file']
-        fp = UploadFiles(file=file)
+        if file.size > MAX_FILE_SIZE:
+            return Response('Максимальный размер файла 50 Мбайт.', status=400)
+        user = request.user if request.user.is_authenticated else None
+        fp = UploadFiles(file=file, created_by=user, location='---', name=file.name)
         fp.save()
-        return Response({
-            'location': f'{DOMAIN}media/{fp.file}',
-        }, status=200)
-    except:
+        fp.location = f'{DOMAIN}media/{fp.file}'
+        fp.save()
+        serializer = FileSerializer(fp)
+        return Response(serializer.data, status=201)
+    except Exception as e:
+        print(e)
         return Response({
             'error': 'File did not save.',
         }, status=406)

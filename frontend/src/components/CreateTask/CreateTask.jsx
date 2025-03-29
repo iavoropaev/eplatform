@@ -4,9 +4,15 @@ import { CustomSelect } from "../Utils/CustomSelect";
 import { TinyMCE } from "../Utils/TinyMCE";
 import { CheckBoxes } from "../Utils/CheckBoxes";
 import "./CreateTask.css";
+import { useState } from "react";
+import { uploadFile } from "../../server/user";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { showError } from "../Utils/Notifications";
 
 const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
   const isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
+
+  const [file, setFile] = useState(null);
 
   const handleAnswerTypeSelect = (e) => {
     const type = e.target.value;
@@ -38,6 +44,33 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFile(file);
+    if (file.size > 50 * 1024 * 1024) {
+      showError("Файл слишком большой. Максимальный размер файла — 50 Мбайт.");
+      return;
+    }
+  };
+
+  const handleFileUpload = async () => {
+    if (!file) return;
+    if (file.size > 50 * 1024 * 1024) {
+      showError("Файл слишком большой. Максимальный размер файла — 50 Мбайт.");
+      return;
+    }
+
+    const res = await uploadFile(file);
+    if (res !== undefined) {
+      taskData.setFiles([...taskData.files, res]);
+    } else {
+      showError("Файл не был сохранён.");
+    }
+  };
+  const handleFileErase = (fileId) => {
+    taskData.setFiles(taskData.files.filter((file) => file.id !== fileId));
+  };
+
   if (taskData.taskId && loadStatus === -1) {
     return <h2>Задача не найдена</h2>;
   }
@@ -45,6 +78,7 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
     return <h2>Загрузка...</h2>;
   }
 
+  console.log("files", taskData.files, file);
   return (
     <div className="create-task">
       {taskData?.taskId && (
@@ -159,6 +193,43 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
             </p>
           </div>
         )}
+      </div>
+
+      <div className="upload-files">
+        <p className="title">Загрузка файлов</p>
+        <div className="file-control">
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+          {file !== null && (
+            <button onClick={handleFileUpload}>Загрузить</button>
+          )}
+        </div>
+        <div className="files-list">
+          <p className="title">Загруженные файлы</p>
+          {taskData.files.map((file) => {
+            return (
+              <div key={file.id} className="file-item">
+                <a
+                  href={`${file.location}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {file.name}
+                </a>
+                <button
+                  onClick={() => {
+                    handleFileErase(file.id);
+                  }}
+                >
+                  <FaRegTrashCan />
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div className="save-button">
         <button onClick={handleSaveButton} className="black-button">

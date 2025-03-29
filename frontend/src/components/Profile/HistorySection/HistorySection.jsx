@@ -5,7 +5,7 @@ import "./HistorySection.css";
 import { showError } from "../../Utils/Notifications";
 
 const HistorySection = () => {
-  const [examSolutions, setExamSolutions] = useState([]);
+  const [examSolutions, setExamSolutions] = useState(undefined);
 
   useEffect(() => {
     async function fetchData() {
@@ -35,18 +35,20 @@ const HistorySection = () => {
     <div className="exam-solutions-section">
       <h3>Решённые варианты</h3>
       <div className="exam-solutions">
-        {examSolutions.map((sol) => {
-          return (
-            <Solution
-              key={sol.id}
-              solution={sol}
-              handleDelete={() => {
-                handleDelete(sol.id);
-              }}
-            />
-          );
-        })}
+        {examSolutions &&
+          examSolutions.map((sol) => {
+            return (
+              <Solution
+                key={sol.id}
+                solution={sol}
+                handleDelete={() => {
+                  handleDelete(sol.id);
+                }}
+              />
+            );
+          })}
         {examSolutions?.length === 0 && <p>Решений пока нет.</p>}
+        {examSolutions === undefined && <p>Загрузка...</p>}
       </div>
     </div>
   );

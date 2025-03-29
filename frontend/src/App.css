@@ -10,7 +10,9 @@ h2,
 h3 {
   text-align: center;
 }
-
+button {
+  font-family: inherit;
+}
 .tags {
   display: flex;
   flex-wrap: wrap;

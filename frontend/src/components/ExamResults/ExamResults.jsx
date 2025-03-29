@@ -21,8 +21,11 @@ const ExamResults = () => {
   const [solData, setSolData] = useState("");
   const [achievements, setAchievements] = useState([]);
 
+  const [isLoading, setLoading] = useState(true);
+
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const realSolveType = solveType ? solveType : "last";
       const solve = await getExamSolution(slug, realSolveType, attemptId);
       if (solve) {
@@ -38,6 +41,7 @@ const ExamResults = () => {
       } else {
         showError("Ошибка загрузки.");
       }
+      setLoading(false);
     }
     fetchData();
   }, [slug, solveType, attemptId]);
@@ -60,11 +64,20 @@ const ExamResults = () => {
     return `hsl(${hue}, 100%, 50%)`;
   };
 
+  if (isLoading) {
+    return (
+      <div className="exam-results">
+        <p>Загрузка...</p>
+      </div>
+    );
+  }
+
+  console.log("ts", testScore, isLoading);
   return (
     <div className="exam-results">
       <h2>{colName}</h2>
       <div className="score-time-cont">
-        {testScore !== undefined && (
+        {testScore !== undefined && testScore !== null && (
           <p
             className={"test-score " + (testScore === 100 ? " score-100" : "")}
             title="Тестовый балл"

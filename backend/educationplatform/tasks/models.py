@@ -19,6 +19,7 @@ class Task(models.Model):
     difficulty_level = models.ForeignKey('DifficultyLevel', on_delete=models.PROTECT, blank=True, null=True)
     actuality = models.ForeignKey('Actuality', on_delete=models.PROTECT, blank=True, null=True)
 
+    files = models.ManyToManyField('UploadFiles', related_name='tasks', blank=True)
     bank_authors = models.ManyToManyField('TaskBankAuthor', related_name='tasks', blank=True)
 
     is_public = models.BooleanField(blank=False, default=True)
@@ -169,7 +170,10 @@ class TaskSolutions(models.Model):
 
 
 class UploadFiles(models.Model):
+    created_by = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False, null=True)
     file = models.FileField(upload_to='uploads')
+    name = models.CharField(max_length=1023, default='file')
+    location = models.CharField(max_length=1023, blank=False, null=False)
 
     class Meta:
         verbose_name = "Файл"

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Task, TaskSolutions, TaskNumberInExam, TaskExam, TaskSubject, TaskSource, DifficultyLevel, \
-    TaskBankAuthor, Actuality, TaskAuthor
+    TaskBankAuthor, Actuality, TaskAuthor, UploadFiles
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -60,13 +60,16 @@ class TaskActualitySerializer(serializers.ModelSerializer):
         model = Actuality
         fields = '__all__'
 
+
 class TaskExamNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskExam
         fields = ['id', 'name']
 
+
 class TaskSubjectNameSerializer(serializers.ModelSerializer):
     exam = TaskExamNameSerializer()
+
     class Meta:
         model = TaskSubject
         fields = ['id', 'name', 'exam']
@@ -102,3 +105,9 @@ class TaskSerializerForUser(serializers.ModelSerializer):
         model = Task
         fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
                   'difficulty_level', 'actuality', 'time_update', 'time_create')
+
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadFiles
+        fields = ('id', 'name', 'location')

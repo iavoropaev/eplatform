@@ -4,13 +4,26 @@ import { formatDate } from "../../../Utils/dates";
 
 export const Solution = ({ solution, handleDelete, hideDelete }) => {
   const [showAnswers, setShowAnswers] = useState(false);
-
+  console.log(solution);
   return (
     <div className="solution" key={solution.id}>
       <div className="solution-header">
         <div className="score-name">
-          <span className="score">{solution.score}</span>
-          <span>{solution.task_collection.name}</span>
+          <a
+            className="score"
+            href={`/variant/${solution.task_collection.slug}/results/id/${solution.id}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {solution.test_score ? solution.test_score : solution.score}
+          </a>
+          <a
+            href={`/variant/${solution.task_collection.slug}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {solution.task_collection.name}
+          </a>
         </div>
         <div className="but-date">
           <button onClick={() => setShowAnswers(!showAnswers)}>

@@ -3,6 +3,8 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from educationplatform.settings import AUTH_USER_MODEL
+
 
 class User(AbstractUser):
     photo = models.CharField(null=True, blank=True)

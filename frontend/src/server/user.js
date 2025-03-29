@@ -41,3 +41,23 @@ export const getSolvesStatisticsBySubject = async (subject_slug) => {
     return undefined;
   }
 };
+
+export const uploadFile = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "upload-file/",
+      formData,
+      { headers: { ...headers, "Content-Type": "multipart/form-data" } }
+    );
+
+    if (res.status === 201) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};

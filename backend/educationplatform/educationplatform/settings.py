@@ -147,6 +147,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = 'users.User'
 
+MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 Мбайт
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

@@ -3,7 +3,8 @@
   padding-bottom: 0px;
   padding-top: 0px;
   text-align: left;
-  margin-top: 0px;
+  margin-top: 15px;
+  padding-bottom: 15px;
 }
 
 .create-task .task-id {
@@ -64,6 +65,59 @@
 
 .create-task .text-answer-explanation {
   color: grey;
+}
+
+.create-task .upload-files {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+.create-task .upload-files .title {
+  color: grey;
+}
+
+.create-task .upload-files .file-control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.create-task .upload-files .file-input {
+  border: 0px;
+}
+.create-task .upload-files .file-input:hover {
+  cursor: pointer;
+}
+.create-task .upload-files .file-input:focus {
+  background-color: transparent;
+}
+
+.create-task .upload-files .files-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.create-task .upload-files .file-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 10px;
+  width: fit-content;
+}
+.create-task .upload-files .file-item a {
+  color: black;
+  text-decoration: none;
+}
+.create-task .upload-files .file-item button {
+  background-color: transparent;
+  /* border: 0px; */
+  color: red;
+}
+.create-task .upload-files .file-item a:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 600px) {
