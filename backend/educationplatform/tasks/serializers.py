@@ -49,10 +49,7 @@ class TaskBankAuthorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TaskNumberInExamSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TaskNumberInExam
-        fields = '__all__'
+
 
 
 class TaskActualitySerializer(serializers.ModelSerializer):
@@ -67,6 +64,7 @@ class TaskExamNameSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+
 class TaskSubjectNameSerializer(serializers.ModelSerializer):
     exam = TaskExamNameSerializer()
 
@@ -74,6 +72,12 @@ class TaskSubjectNameSerializer(serializers.ModelSerializer):
         model = TaskSubject
         fields = ['id', 'name', 'exam']
 
+class TaskNumberInExamSerializer(serializers.ModelSerializer):
+    subject = TaskSubjectNameSerializer(read_only=True)
+
+    class Meta:
+        model = TaskNumberInExam
+        fields = ['id', 'name', 'subject']
 
 class TaskSubjectSerializer(serializers.ModelSerializer):
     numbers = TaskNumberInExamSerializer(many=True, read_only=True)
@@ -105,11 +109,16 @@ class TaskSerializerForUser(serializers.ModelSerializer):
     actuality = TaskActualitySerializer()
     difficulty_level = TaskDifficultyLevelSerializer()
     files = FileSerializer(many=True)
+    #solution = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
-                  'difficulty_level', 'actuality', 'files', 'time_update', 'time_create')
+                  'difficulty_level', 'actuality',  'files', 'time_update', 'time_create')
+
+    # def get_solution(self, obj):
+    #     print([obj.solution])
+    #     return obj.solution != ''
 
 
 

@@ -187,3 +187,23 @@ export const createTaskOnServer = async (data) => {
     return undefined;
   }
 };
+
+export const getTaskSolution = async (taskId) => {
+  try {
+    const params = { task_id: taskId };
+    const res = await axios.get(
+      process.env.REACT_APP_API_URL + "tasks-solutions/get-solution/",
+      {
+        params,
+        headers: headers,
+      }
+    );
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};

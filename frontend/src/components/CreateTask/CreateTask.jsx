@@ -78,7 +78,6 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
     return <h2>Загрузка...</h2>;
   }
 
-  console.log("files", taskData.files, file);
   return (
     <div className="create-task">
       {taskData?.taskId && (
@@ -182,17 +181,32 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
         />
         {taskData.answerType === "text" && (
           <div className="text-answer-explanation">
-            <p>
-              При проверке ответа регистр учитывается. Если правильный ответ
-              "ДОМ", то ответ "дом" будет считаться неправильным.
-            </p>
-            <p>
-              Чтобы добавить несколько правильных ответов – разделите их с
-              помощью символа вертикальной черты | (без пробелов). Например,
-              12|13|14.
-            </p>
+            <details>
+              <summary>Справка</summary>
+              <p>
+                При проверке ответа регистр учитывается. Если правильный ответ
+                "ДОМ", то ответ "дом" будет считаться неправильным.
+              </p>
+              <p>
+                Чтобы добавить несколько правильных ответов – разделите их с
+                помощью символа вертикальной черты | (без пробелов). Например,
+                12|13|14.
+              </p>
+            </details>
           </div>
         )}
+      </div>
+
+      <div className="solution-cont">
+        <details>
+          <summary>Решение задачи</summary>
+          <TinyMCE
+            editorContent={taskData.solution}
+            setEditorContent={(c) => {
+              taskData.setSolution(c);
+            }}
+          />
+        </details>
       </div>
 
       <div className="upload-files">

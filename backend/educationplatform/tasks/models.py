@@ -11,6 +11,7 @@ class Task(models.Model):
                                             ('choice', 'choice'), ('open_answer', 'open_answer')])
     answer_data = models.JSONField(blank=True, null=True)
     answer = models.CharField(blank=False)
+    solution = models.CharField(blank=True, null=False, default='')
 
     number_in_exam = models.ForeignKey('TaskNumberInExam', on_delete=models.PROTECT, blank=True, null=True)
 

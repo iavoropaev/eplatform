@@ -78,6 +78,13 @@ div.task-container {
   cursor: pointer;
 }
 
+.task-container .task-footer .floor .h-content {
+  padding: 15px;
+  border: 1px solid rgb(188, 188, 188);
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
 .task-container .task-footer > .answer {
   padding: 20px;
 
@@ -89,8 +96,8 @@ div.task-container {
 }
 
 .task-container .task-footer .floor {
-  display: flex;
-  justify-content: space-between;
+  /* display: flex; */
+  /* justify-content: space-between; */
   padding: 10px;
 }
 
@@ -150,7 +157,7 @@ div.task-container > .PA .answer {
 
 .task-container .task-footer .buttons > button {
   border: 1px solid grey;
-  padding: 7.6px;
+  /* padding: 7.6px; */
 }
 
 .task-container .task-footer .buttons > button:active {

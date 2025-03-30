@@ -10,6 +10,8 @@ import "prismjs/components/prism-core";
 import renderMathInElement from "katex/contrib/auto-render";
 import "katex/dist/katex.min.css";
 
+import "./HighlightedContent.css";
+
 const HighlightedContent = ({ content }) => {
   const ref = useRef(null);
 

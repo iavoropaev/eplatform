@@ -20,6 +20,7 @@ const CreateTaskPage = () => {
   const [showSaveText, setShowSaveText] = useState(false);
 
   const [editorContent, setEditorContent] = useState("Начальный");
+  const [solution, setSolution] = useState("");
   const [answer, setAnswer] = useState("");
   const [answerType, setAnswerType] = useState("text");
   const [answerData, setAnswerData] = useState(["Опция 1"]);
@@ -68,6 +69,7 @@ const CreateTaskPage = () => {
     setSelectedTaskAuthor(-1);
     setSelectedActuality(-1);
     setFiles([]);
+    setSolution("");
   };
   const notify = (text) => toast.success(text);
   const showError = (text) => toast.error(text);
@@ -102,6 +104,7 @@ const CreateTaskPage = () => {
         setSelectedNumber(numberId);
         setSelectedBanks(bankAuthors);
         setFiles(data.files);
+        setSolution(data.solution);
 
         if (data.difficulty_level?.id !== undefined) {
           setSelectedDifLevel(data.difficulty_level.id);
@@ -145,6 +148,7 @@ const CreateTaskPage = () => {
       difficulty_level: selectedDifLevel !== -1 ? selectedDifLevel : null,
       actuality: selectedActuality !== -1 ? selectedActuality : null,
       files: files.map((file) => file.id),
+      solution,
     });
     if (newTask !== undefined) {
       notify("Задача сохранена!");
@@ -193,6 +197,8 @@ const CreateTaskPage = () => {
     difficulty_levels,
     actualities,
     files,
+    solution,
+    setSolution,
     setEditorContent,
     setAnswer,
     setAnswerType,

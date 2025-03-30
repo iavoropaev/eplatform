@@ -1,6 +1,8 @@
 // import { BiDislike, BiLike } from "react-icons/bi";
 import Answer from "../../Utils/Answer/Answer";
 import { useState } from "react";
+import HighlightedContent from "../../Utils/HighlightedContent";
+import { getTaskSolution } from "../../../server/bank";
 
 const TaskFooter = ({
   taskData,
@@ -9,7 +11,11 @@ const TaskFooter = ({
   handleCancelButton,
   hideAnswerBlock,
   status,
+  hideSolutionSection,
 }) => {
+  const [solution, setSolution] = useState(undefined);
+  const [hideSolution, setHideSolution] = useState(false);
+
   let defaultAnswer = "";
   if (taskData.answer_type === "table") {
     defaultAnswer = [["", ""]];
@@ -46,7 +52,7 @@ const TaskFooter = ({
   const curAnswerData = taskAnswer ? taskAnswer[taskAnswer.type] : answer;
 
   let saveButText = "Проверить ответ";
-  console.log("sssss", status, isAnswerSave);
+
   if (status === "WA" && isAnswerSave) {
     saveButText = "Неправильно";
   }
@@ -56,6 +62,20 @@ const TaskFooter = ({
   if (status === "PA" && isAnswerSave) {
     saveButText = "Частично верно";
   }
+
+  const handleSolButton = async () => {
+    if (status === undefined) {
+      await handleSendAnswer();
+    }
+    if (solution === undefined) {
+      const res = await getTaskSolution(taskData.id);
+      if (res !== undefined) {
+        setSolution(res);
+      }
+    } else {
+      setHideSolution(!hideSolution);
+    }
+  };
 
   return (
     <div className="task-footer">
@@ -113,12 +133,18 @@ const TaskFooter = ({
         )}
       </div>
 
-      {/* <div className="floor"> */}
-      {/* <span className="tags"> */}
-      {/* <span className="tag">Комментарии</span> */}
-      {/* <span className="tag show-solution">Решение</span> */}
-      {/* </span> */}
-      {/* <span className="tag likes">
+      {!hideSolutionSection && taskData.solution && (
+        <div className="floor">
+          {/* <span className="tags"> */}
+          {/* <span className="tag">Комментарии</span> */}
+          <button className="tag show-solution" onClick={handleSolButton}>
+            Решение
+          </button>
+          {solution !== undefined && !hideSolution && (
+            <HighlightedContent content={solution} />
+          )}
+          {/* </span> */}
+          {/* <span className="tag likes">
           <span className="like">
             <span>120</span>
             <BiLike />
@@ -128,7 +154,8 @@ const TaskFooter = ({
             <span>20</span>
           </span>
         </span> */}
-      {/* </div> */}
+        </div>
+      )}
     </div>
   );
 };

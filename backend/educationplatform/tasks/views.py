@@ -63,8 +63,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def filtered(self, request):
         tasks = Task.objects.all().select_related(
-            'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
-        ).prefetch_related('bank_authors')
+            'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality', 'number_in_exam__subject', 'number_in_exam__subject__exam'
+        ).prefetch_related('bank_authors').prefetch_related('files')
 
         if 'subject' in request.data:
             tasks = tasks.filter(number_in_exam__subject__id=request.data['subject'])
@@ -271,7 +271,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         elif self.action in ['my', 'new_tasks', 'by_task_id', 'count_users_who_solved_task',
                              'percent_ok_solves_by_task_id', 'send_solution', 'get_statuses',
-                             'solves_statistics_by_subject']:
+                             'solves_statistics_by_subject', 'get_solution']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -361,6 +361,21 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 'Error': 'Не удалось получить решения.'
             }, status=406)
 
+    @action(detail=False, methods=['get'], url_path='get-solution')
+    def get_solution(self, request):
+        try:
+            cur_user_id = request.user.id
+            cur_task_id = request.query_params.get('task_id')
+
+            solution = Task.objects.filter(id=cur_task_id).values_list('solution', flat=True).first()
+
+            return Response(solution, status=200)
+        except Exception as e:
+            print(e)
+            return Response({
+                'Error': 'Не удалось получить решения.'
+            }, status=406)
+
     @action(detail=False, methods=['post'])
     def get_statuses(self, request):
         try:
@@ -377,9 +392,9 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             id_status = {}
             for task in tasks_with_counts:
                 if task.correct_solutions > 0:
-                    id_status[task.id] = 'ok'
+                    id_status[task.id] = 'OK'
                 elif task.incorrect_solutions > 0:
-                    id_status[task.id] = 'wa'
+                    id_status[task.id] = 'WA'
             return Response(id_status)
         except:
             return Response({

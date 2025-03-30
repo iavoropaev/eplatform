@@ -33,6 +33,7 @@ const SectionTask = ({ taskData, sendSolution, solveFromServer }) => {
         handleSaveButton={sendSolution}
         handleCancelButton={handleCancelButton}
         status={tasksStatus}
+        hideSolutionSection={true}
       />
     </div>
   );

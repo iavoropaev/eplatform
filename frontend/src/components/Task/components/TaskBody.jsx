@@ -1,7 +1,6 @@
 import HighlightedContent from "../../Utils/HighlightedContent";
 
 const TaskBody = ({ taskData }) => {
-  console.log(taskData);
   return (
     <div className="task-body innerhtml">
       <HighlightedContent content={taskData.content} />
@@ -10,7 +9,7 @@ const TaskBody = ({ taskData }) => {
           <p className="f-title">Файлы:</p>
           <div className="files-list">
             {taskData.files.map((file, i) => (
-              <span>
+              <span key={i}>
                 <a
                   href={`${file.location}`}
                   target="_blank"
@@ -19,7 +18,7 @@ const TaskBody = ({ taskData }) => {
                   {file.name}
                 </a>
                 {i < taskData.files.length - 1 && ", "}
-                {i == taskData.files.length - 1 && "."}
+                {i === taskData.files.length - 1 && "."}
               </span>
             ))}
           </div>

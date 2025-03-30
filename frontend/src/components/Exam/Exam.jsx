@@ -97,6 +97,7 @@ const Exam = () => {
             }}
             status={answers[task.id]?.data}
             showCancelBut
+            hideSolutionSection={true}
           />
         );
       })}

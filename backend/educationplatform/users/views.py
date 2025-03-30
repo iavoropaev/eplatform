@@ -93,8 +93,6 @@ def get_tg_invitation(request):
 @api_view(['POST'])
 def activate_tg_invitation(request):
     try:
-        print('start')
-        print(request.data)
         invitation_token = request.data['invitation']
         tg_id = int(request.data['tg_id'])
 
