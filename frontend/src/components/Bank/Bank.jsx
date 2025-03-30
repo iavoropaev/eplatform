@@ -164,6 +164,7 @@ const Bank = () => {
               key={task.id}
               handleSaveButton={sendAnswerToServer}
               status={solvedStatuses[task.id]}
+              hideSolutionSection={false}
             />
           );
         })}

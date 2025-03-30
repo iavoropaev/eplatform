@@ -109,16 +109,16 @@ class TaskSerializerForUser(serializers.ModelSerializer):
     actuality = TaskActualitySerializer()
     difficulty_level = TaskDifficultyLevelSerializer()
     files = FileSerializer(many=True)
-    #solution = serializers.SerializerMethodField()
+    solution = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
-                  'difficulty_level', 'actuality',  'files', 'time_update', 'time_create')
+                  'difficulty_level', 'actuality',  'files', 'solution', 'time_update', 'time_create')
 
-    # def get_solution(self, obj):
-    #     print([obj.solution])
-    #     return obj.solution != ''
+    def get_solution(self, obj):
+        print([obj.solution])
+        return obj.solution != ''
 
 
 
