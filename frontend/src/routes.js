@@ -117,6 +117,7 @@ export const authRoutes = [
   { path: "edit-course/:courseId/", Component: UpdateCourse },
   { path: "create-course/", Component: CreateCourse },
 
+  { path: "variant/:slug/attempt/:attemptId", Component: ExamPage },
   { path: "variant/:slug/", Component: ExamPage },
   {
     path: "variant/:slug/results/:solveType/:attemptId/",

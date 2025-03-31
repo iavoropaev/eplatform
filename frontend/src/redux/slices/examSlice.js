@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  examSlug: undefined,
   name: "",
   tasks: [],
   answers: {},
@@ -10,6 +11,9 @@ const examSlice = createSlice({
   name: "exam",
   initialState,
   reducers: {
+    setExamSlug: (state, action) => {
+      return { ...state, examSlug: action.payload };
+    },
     setExamName: (state, action) => {
       return { ...state, name: action.payload };
     },
@@ -35,6 +39,7 @@ const examSlice = createSlice({
 export const setExamName = examSlice.actions.setExamName;
 export const addExamAnswer = examSlice.actions.addExamAnswer;
 export const setExamTasks = examSlice.actions.setExamTasks;
+export const setExamSlug = examSlice.actions.setExamSlug;
 export const clearExamAnswer = examSlice.actions.clearExamAnswer;
 export const clearExamAnswers = examSlice.actions.clearExamAnswers;
 

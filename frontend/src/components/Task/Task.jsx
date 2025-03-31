@@ -13,6 +13,7 @@ const Task = ({
   hideAnswerBlock,
   showEditIcon,
   hideSolutionSection,
+  buttonText,
 }) => {
   return (
     <div className="task-container">
@@ -28,6 +29,7 @@ const Task = ({
           hideAnswerBlock={hideAnswerBlock}
           hideSolutionSection={hideSolutionSection}
           status={status}
+          buttonText={buttonText}
         />
       </div>
     </div>

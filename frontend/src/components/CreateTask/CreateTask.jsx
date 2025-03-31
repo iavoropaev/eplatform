@@ -42,6 +42,10 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
       taskData.setAnswer("");
       taskData.setAnswerData(null);
     }
+    if (type === "no_answer") {
+      taskData.setAnswer("");
+      taskData.setAnswerData(null);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -163,6 +167,7 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
             ["comparison", "Сопоставление"],
             ["sorting", "Сортировка"],
             ["open_answer", "Свободный ответ"],
+            ["no_answer", "Нет ответа"],
           ]}
           selected={taskData.answerType}
           handleSelect={handleAnswerTypeSelect}

@@ -3,6 +3,7 @@ import Answer from "../../Utils/Answer/Answer";
 import { useState } from "react";
 import HighlightedContent from "../../Utils/HighlightedContent";
 import { getTaskSolution } from "../../../server/bank";
+import { showError } from "../../Utils/Notifications";
 
 const TaskFooter = ({
   taskData,
@@ -12,7 +13,10 @@ const TaskFooter = ({
   hideAnswerBlock,
   status,
   hideSolutionSection,
+  buttonText,
 }) => {
+  const isAuth = localStorage.getItem("isAuth") !== null;
+
   const [solution, setSolution] = useState(undefined);
   const [hideSolution, setHideSolution] = useState(false);
 
@@ -51,8 +55,10 @@ const TaskFooter = ({
   const isAnswerSaveReady = (taskAnswer ? true : false) | isAnswerSave;
   const curAnswerData = taskAnswer ? taskAnswer[taskAnswer.type] : answer;
 
-  let saveButText = "Проверить ответ";
-
+  let saveButText = buttonText?.[0] ? buttonText?.[0] : "Проверить ответ";
+  if (isAnswerSaveReady) {
+    saveButText = buttonText?.[1] ? buttonText?.[1] : "Проверить ответ";
+  }
   if (status === "WA" && isAnswerSave) {
     saveButText = "Неправильно";
   }
@@ -64,6 +70,10 @@ const TaskFooter = ({
   }
 
   const handleSolButton = async () => {
+    if (!isAuth) {
+      showError("Необходимо авторизоваться на сайте для доступа к решениям.");
+      return;
+    }
     if (status === undefined) {
       await handleSendAnswer();
     }
@@ -89,29 +99,31 @@ const TaskFooter = ({
               setAnswer={setAnswer}
               disabled={isAnswerSaveReady}
             />
-            <div className="buttons">
-              <button
-                disabled={isAnswerSaveReady}
-                onClick={async () => {
-                  handleSendAnswer();
-                  setAnswerSave(true);
-                }}
-              >
-                {saveButText}
-              </button>
+            {taskData.answer_type !== "no_answer" && (
+              <div className="buttons">
+                <button
+                  disabled={isAnswerSaveReady}
+                  onClick={async () => {
+                    handleSendAnswer();
+                    setAnswerSave(true);
+                  }}
+                >
+                  {saveButText}
+                </button>
 
-              <button
-                onClick={() => {
-                  if (handleCancelButton) {
-                    handleCancelButton();
-                  }
-                  setAnswer(defaultAnswer);
-                  setAnswerSave(false);
-                }}
-              >
-                Отчистить
-              </button>
-            </div>
+                <button
+                  onClick={() => {
+                    if (handleCancelButton) {
+                      handleCancelButton();
+                    }
+                    setAnswer(defaultAnswer);
+                    setAnswerSave(false);
+                  }}
+                >
+                  Отчистить
+                </button>
+              </div>
+            )}
           </span>
         )}
 

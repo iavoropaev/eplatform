@@ -42,7 +42,7 @@ class TaskCollectionTask(models.Model):
 
 
 class TaskCollectionSolve(models.Model):
-    task_collection = models.ForeignKey('TaskCollection', on_delete=models.PROTECT, blank=False)
+    task_collection = models.ForeignKey('TaskCollection', on_delete=models.CASCADE, blank=False)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False)
 
     duration = models.IntegerField(blank=False)

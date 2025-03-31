@@ -5,7 +5,7 @@ import pytz
 from django.core.paginator import Paginator
 from django.db import connection
 from django.db.models import Count, Q, OuterRef, Subquery, BooleanField, ExpressionWrapper, FloatField, F, Exists, \
-    Value, Case, When
+    Value, Case, When, IntegerField
 from django.db.models.functions import Coalesce
 from drf_spectacular.utils import extend_schema
 
@@ -94,14 +94,25 @@ class TaskViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'Error': 'Неверно указан период.'}, status=406)
 
+        tasks = tasks.annotate(
+            answer_priority=Case(
+                When(answer_type='no_answer', then=Value(1)),
+                default=Value(0),
+                output_field=IntegerField()
+            )
+        )
+
+
         if 'ordering' in request.data:
             ordering = request.data['ordering']
             if ordering == 'new-first':
-                tasks = tasks.order_by('-time_create')
+                tasks = tasks.order_by('answer_priority', '-time_create')
             elif ordering == 'old-first':
-                tasks = tasks.order_by('time_create')
+                tasks = tasks.order_by('answer_priority', 'time_create')
             else:
                 return Response({'Error': 'Неверно указан критерий сортировки.'}, status=406)
+        else:
+            tasks = tasks.order_by('answer_priority', '-time_create')
         tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
@@ -395,6 +406,7 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                     id_status[task.id] = 'OK'
                 elif task.incorrect_solutions > 0:
                     id_status[task.id] = 'WA'
+            print('statuses', len(connection.queries))
             return Response(id_status)
         except:
             return Response({
@@ -554,7 +566,9 @@ class NumbersViewSet(viewsets.ModelViewSet):
 @permission_classes([AllowAny])
 def upload_file(request):
     try:
+        print(request)
         file = request.FILES['file']
+        print(file)
         if file.size > MAX_FILE_SIZE:
             return Response('Максимальный размер файла 50 Мбайт.', status=400)
         user = request.user if request.user.is_authenticated else None

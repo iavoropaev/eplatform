@@ -4,14 +4,13 @@ import { getExamSolution } from "../../server/exam";
 import ExamSolutionTable from "./components/ExamSolutionTable";
 import "./ExamResults.css";
 import { showError } from "../Utils/Notifications";
-import { getStrTime, getWordForm } from "../Utils/dates";
+import { formatDate, getStrTime, getWordForm } from "../Utils/dates";
 
 const ExamResults = () => {
   const { slug, solveType, attemptId } = useParams();
   const navigate = useNavigate();
-  console.log(solveType);
-  //const [solveType, setSolveType] = useState("last");
 
+  const [attId, setAttId] = useState("");
   const [colName, setColName] = useState("");
   const [answers, setAnswers] = useState([]);
   const [score, setScore] = useState(undefined);
@@ -30,6 +29,7 @@ const ExamResults = () => {
       const solve = await getExamSolution(slug, realSolveType, attemptId);
       if (solve) {
         console.log(solve);
+        setAttId(solve.id);
         setColName(solve.task_collection.name);
         setAnswers(solve.answers);
         setScore(solve.score);
@@ -98,6 +98,7 @@ const ExamResults = () => {
         <p>
           Баллов набрано {score}/{maxScore}.
         </p>
+        <p className="grey">{formatDate(solData)}</p>
       </div>
 
       <div>
@@ -112,6 +113,16 @@ const ExamResults = () => {
       </div>
       <div className="results-table-cont">
         <ExamSolutionTable answers={answers} />
+      </div>
+
+      <div>
+        <button
+          onClick={() => {
+            navigate(`/variant/${slug}/attempt/${attId}/`);
+          }}
+        >
+          Вернуться к варианту
+        </button>
       </div>
       {achievements.length > 0 && (
         <>

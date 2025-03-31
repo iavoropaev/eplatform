@@ -1,5 +1,5 @@
 .collection-container {
-  padding-top: 15px;
+  padding-top: 20px;
   padding-bottom: 30px;
 }
 
@@ -21,4 +21,8 @@
 
 .collection-container .count-answers {
   font-size: 20px;
+}
+
+.loading {
+  margin-top: 100px;
 }

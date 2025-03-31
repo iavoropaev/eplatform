@@ -12,6 +12,7 @@ const Collection = () => {
 
   const { slug } = useParams();
   const [isError, setError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [colName, setColName] = useState("");
 
@@ -22,6 +23,7 @@ const Collection = () => {
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const collection = await getCollectionBySlug(slug);
       if (collection) {
         if (jwt) {
@@ -38,6 +40,7 @@ const Collection = () => {
       } else {
         setError(true);
       }
+      setLoading(false);
     }
     fetchData();
   }, [slug, jwt]);
@@ -51,8 +54,12 @@ const Collection = () => {
       showError("Решение не отправлено.");
     }
   };
+
   if (isError) {
     return <h2>Такой подборки не существует.</h2>;
+  }
+  if (isLoading) {
+    return <p className="loading">Загрузка...</p>;
   }
 
   const goToExam = (

@@ -55,7 +55,10 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
         response = dict(serializer.data)
 
         links = obj.taskcollectiontasks.select_related('task', 'task__author', 'task__source', 'task__number_in_exam',
-                                                       'task__difficulty_level', 'task__actuality').order_by('order')
+                                                       'task__number_in_exam__subject',
+                                                       'task__number_in_exam__subject__exam',
+                                                       'task__difficulty_level', 'task__actuality').prefetch_related(
+            'task__files').order_by('order')
         tasks = [TaskSerializerForUser(task.task).data for task in links]
         response['tasks'] = tasks
         print(f"Количество SQL-запросов: {len(connection.queries)}")
@@ -82,7 +85,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def get_collections(self, request):
         subject_slug = request.query_params.get('subject_slug', None)
-        queryset = TaskCollection.objects.all().filter(is_public=True, subject__slug=subject_slug)
+        queryset = TaskCollection.objects.all().filter(is_public=True, subject__slug=subject_slug).order_by('time_create')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -248,7 +251,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             total_score = 0
             max_score = 0
             for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name',
-                                                      'number_in_exam__max_score',  'number_in_exam__check_rule'):
+                                                      'number_in_exam__max_score', 'number_in_exam__check_rule'):
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
                 max_task_score = task['number_in_exam__max_score']
@@ -291,7 +294,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 if total_score == max_score:
                     achievements_names.append('100%')
                 # Первопроходец
-                if total_score * 2 >= 0:
+                if total_score * 2 >= max_score:
                     count_50p_attempts = TaskCollectionSolve.objects.filter(task_collection=collection.id,
                                                                             score__gte=max_score / 2).count()
                     if count_50p_attempts == 0:

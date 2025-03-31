@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addExamAnswer,
   clearExamAnswer,
+  clearExamAnswers,
   setExamName,
+  setExamSlug,
   setExamTasks,
 } from "../../redux/slices/examSlice";
 import { sendExamSolutionToServer } from "../../server/exam";
@@ -15,31 +17,41 @@ import { showError, showOK } from "../Utils/Notifications";
 
 const Exam = () => {
   const navigate = useNavigate();
-  const { slug } = useParams();
+  const { slug, attemptId } = useParams();
 
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.exam.tasks);
   const answers = useSelector((state) => state.exam.answers);
   const colName = useSelector((state) => state.exam.name);
+  const examSlug = useSelector((state) => state.exam.examSlug);
 
   const [startTime, setStartTime] = useState(new Date());
+  const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
 
   const countUserAnswers = Object.keys(answers).length;
 
   useEffect(() => {
     async function fetchData() {
-      const collection = await getCollectionBySlug(slug);
-      if (collection) {
-        dispatch(setExamTasks(collection.tasks));
-        dispatch(setExamName(collection.name));
-      } else {
-        setError(true);
+      setLoading(true);
+      if (examSlug !== slug) {
+        const collection = await getCollectionBySlug(slug);
+        if (collection) {
+          if (collection.slug !== examSlug) {
+            dispatch(clearExamAnswers());
+          }
+          dispatch(setExamTasks(collection.tasks));
+          dispatch(setExamName(collection.name));
+          dispatch(setExamSlug(collection.slug));
+        } else {
+          setError(true);
+        }
       }
+      setLoading(false);
     }
 
     fetchData();
-  }, [dispatch, slug]);
+  }, [dispatch, slug, examSlug]);
 
   useEffect(() => {
     setStartTime(new Date());
@@ -80,6 +92,10 @@ const Exam = () => {
     }
   };
 
+  if (isLoading) {
+    return <p>Загрузка...</p>;
+  }
+
   return (
     <div className="exam-container">
       <h2 className="exam-title">{colName}</h2>
@@ -98,14 +114,28 @@ const Exam = () => {
             status={answers[task.id]?.data}
             showCancelBut
             hideSolutionSection={true}
+            buttonText={["Сохранить ответ", "Ответ сохранён"]}
           />
         );
       })}
+
       <div className="finish-exam">
         <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>
-        <button onClick={handleSendExamBut} className="black-button">
-          Завершить решение
-        </button>
+        {attemptId === undefined && (
+          <button onClick={handleSendExamBut} className="black-button">
+            Завершить решение
+          </button>
+        )}
+        {attemptId !== undefined && (
+          <button
+            onClick={() => {
+              navigate(`/variant/${slug}/results/id/${attemptId}`);
+            }}
+            className="black-button"
+          >
+            Просмотр решения
+          </button>
+        )}
       </div>
     </div>
   );

@@ -181,3 +181,7 @@ table td table td {
 .navigate-button:hover {
   background-color: transparent;
 }
+
+.grey {
+  color: grey;
+}
