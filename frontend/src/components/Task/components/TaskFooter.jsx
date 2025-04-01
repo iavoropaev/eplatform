@@ -22,7 +22,16 @@ const TaskFooter = ({
 
   let defaultAnswer = "";
   if (taskData.answer_type === "table") {
-    defaultAnswer = [["", ""]];
+    if (
+      taskData?.number_in_exam?.answer_data?.table?.cols &&
+      taskData?.number_in_exam?.answer_data?.table?.rows
+    ) {
+      const cols = taskData?.number_in_exam?.answer_data?.table?.cols;
+      const rows = taskData?.number_in_exam?.answer_data?.table?.rows;
+      defaultAnswer = Array.from({ length: rows }, () => Array(cols).fill(""));
+    } else {
+      defaultAnswer = [["", ""]];
+    }
   }
   if (taskData.answer_type === "choice") {
     defaultAnswer = [];
@@ -59,13 +68,17 @@ const TaskFooter = ({
   if (isAnswerSaveReady) {
     saveButText = buttonText?.[1] ? buttonText?.[1] : "Проверить ответ";
   }
-  if (status === "WA" && isAnswerSave) {
+
+  if (status === "checking" && isAnswerSaveReady) {
+    saveButText = "Проверка...";
+  }
+  if (status === "WA" && isAnswerSaveReady) {
     saveButText = "Неправильно";
   }
-  if (status === "OK" && isAnswerSave) {
+  if (status === "OK" && isAnswerSaveReady) {
     saveButText = "Верно";
   }
-  if (status === "PA" && isAnswerSave) {
+  if (status === "PA" && isAnswerSaveReady) {
     saveButText = "Частично верно";
   }
 

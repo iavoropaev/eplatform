@@ -18,9 +18,14 @@ const BankFilter = ({
   const subjects = activeExam["subjects"];
   const sources = activeSubject["sources"];
   const numbersNotSorted = activeSubject["numbers"];
+
+  const getFirstNumber = (name) => {
+    const match = name.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  };
+
   const numbers = numbersNotSorted?.sort((a, b) => {
-    const getNumber = (name) => parseInt(name.replace(/\D/g, ""), 10);
-    return getNumber(a.name) - getNumber(b.name);
+    return getFirstNumber(a.name) - getFirstNumber(b.name);
   });
 
   const authors = activeSubject["authors"];

@@ -26,6 +26,8 @@ class Task(models.Model):
 
     is_public = models.BooleanField(blank=False, default=True)
 
+    extra_data = models.JSONField(blank=True, null=True)
+
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
 
@@ -51,6 +53,7 @@ class TaskAuthor(models.Model):
 
 class Actuality(models.Model):
     name = models.CharField(max_length=100)
+    priority = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name
@@ -101,6 +104,7 @@ class TaskNumberInExam(models.Model):
     check_rule = models.CharField(max_length=100, default='default')
     max_score = models.IntegerField(blank=False, null=False, default=1)
     subject = models.ForeignKey('TaskSubject', on_delete=models.PROTECT, blank=False, related_name='numbers')
+    answer_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -155,7 +159,7 @@ class TaskExam(models.Model):
 
 
 class TaskSolutions(models.Model):
-    task = models.ForeignKey('Task', on_delete=models.PROTECT, blank=False)
+    task = models.ForeignKey('Task', on_delete=models.CASCADE, blank=False)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.PROTECT, blank=False)
     answer = models.CharField(blank=False)
     score = models.IntegerField(blank=False, null=False, default=0)

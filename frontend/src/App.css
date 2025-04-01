@@ -160,7 +160,7 @@ table td table {
 }
 table td table td {
   padding: 2px;
-  border: 0px;
+  /* border: 0px; */
 }
 .table,
 .table th,

@@ -18,7 +18,7 @@ div.task-container {
 
 .task .task-body p:not(:last-child) {
   margin: 0px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
 }
 
 .task-container .task-header {
@@ -153,6 +153,10 @@ div.task-container > .WA .answer {
 
 div.task-container > .PA .answer {
   background-color: #fffea8;
+}
+
+div.task-container > .EXIST .answer {
+  background-color: #68deff;
 }
 
 .task-container .task-footer .buttons > button {

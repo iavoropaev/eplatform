@@ -40,6 +40,13 @@ const Lesson = () => {
     navigate(`./../../../../edit-lesson/${lessonId}/s/${intSectionIndex + 1}/`);
   };
   const sendSolution = async (data) => {
+    dispatch(
+      updateSolveStatus({
+        id: currentSectionData.id,
+        solve: { solve_status: "checking" },
+      })
+    );
+
     const answer = {
       type: data.type,
       [data.type]: data.answer,

@@ -86,7 +86,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     def get_collections(self, request):
         subject_slug = request.query_params.get('subject_slug', None)
         queryset = TaskCollection.objects.all().filter(is_public=True, subject__slug=subject_slug).order_by('time_create')
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = TaskCollectionInfoSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'], url_path='my-collections')

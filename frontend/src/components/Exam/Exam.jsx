@@ -102,6 +102,7 @@ const Exam = () => {
       <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>
 
       {tasks.map((task) => {
+        console.log(answers[task.id], answers[task.id]?.data);
         return (
           <Task
             taskData={task}
@@ -111,7 +112,7 @@ const Exam = () => {
             handleCancelButton={() => {
               handleCancelButton(task.id);
             }}
-            status={answers[task.id]?.data}
+            status={answers[task.id] !== undefined ? "EXIST" : ""}
             showCancelBut
             hideSolutionSection={true}
             buttonText={["Сохранить ответ", "Ответ сохранён"]}

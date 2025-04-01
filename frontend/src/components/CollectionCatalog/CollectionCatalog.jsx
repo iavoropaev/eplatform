@@ -10,13 +10,16 @@ const CollectionCatalog = () => {
   const navigate = useNavigate();
   const { examSlug, subjectSlug } = useParams();
   const [collections, setCollections] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const collectionsFromServer = await getCollections(subjectSlug);
       if (collectionsFromServer) {
         setCollections(collectionsFromServer);
       }
+      setLoading(false);
     }
     fetchData();
   }, [subjectSlug]);
@@ -26,19 +29,22 @@ const CollectionCatalog = () => {
       <h2>Каталог подборок</h2>
       <SubjectSelect />
       <div className="col-list">
-        {collections.map((col) => {
-          return (
-            <div
-              className="col-item"
-              key={col.slug}
-              onClick={() => {
-                navigate(`/collection/${col.slug}/`);
-              }}
-            >
-              <span>{col.name}</span>
-            </div>
-          );
-        })}
+        {isLoading && <p>Загрузка...</p>}
+        {!isLoading && collections?.length === 0 && <p>Подборки пока нет.</p>}
+        {!isLoading &&
+          collections.map((col) => {
+            return (
+              <div
+                className="col-item"
+                key={col.slug}
+                onClick={() => {
+                  navigate(`/collection/${col.slug}/`);
+                }}
+              >
+                <span>{col.name}</span>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

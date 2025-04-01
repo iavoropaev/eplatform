@@ -63,7 +63,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def filtered(self, request):
         tasks = Task.objects.all().select_related(
-            'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality', 'number_in_exam__subject', 'number_in_exam__subject__exam'
+            'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality', 'number_in_exam__subject',
+            'number_in_exam__subject__exam'
         ).prefetch_related('bank_authors').prefetch_related('files')
 
         if 'subject' in request.data:
@@ -102,18 +103,17 @@ class TaskViewSet(viewsets.ModelViewSet):
             )
         )
 
-
         if 'ordering' in request.data:
             ordering = request.data['ordering']
             if ordering == 'new-first':
-                tasks = tasks.order_by('answer_priority', '-time_create')
+                tasks = tasks.order_by('answer_priority', 'actuality__priority', '-time_create')
             elif ordering == 'old-first':
-                tasks = tasks.order_by('answer_priority', 'time_create')
+                tasks = tasks.order_by('answer_priority', 'actuality__priority', 'time_create')
             else:
                 return Response({'Error': 'Неверно указан критерий сортировки.'}, status=406)
         else:
-            tasks = tasks.order_by('answer_priority', '-time_create')
-        tasks = tasks[:150]
+            tasks = tasks.order_by('answer_priority', 'actuality__priority', '-time_create')
+        # tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
         print('filtered', len(connection.queries))
@@ -173,12 +173,14 @@ class TaskViewSet(viewsets.ModelViewSet):
         Upload multiple tasks at once.
         """
         tasks_data = request.data.get('tasks', [])
+        user_id = request.user.id
         if not isinstance(tasks_data, list):
             return Response(
                 {"error": "Expected a list of tasks."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
+        for task in tasks_data:
+            task['created_by'] = user_id
         serializer = self.get_serializer(data=tasks_data, many=True)
         if serializer.is_valid():
             serializer.save()
@@ -225,6 +227,23 @@ class TaskViewSet(viewsets.ModelViewSet):
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # @action(detail=False, methods=['post'])
+    # def answer_update_by_fipi_id(self, request, *args, **kwargs):
+    #     data = request.data
+    #     print([data])
+    #
+    #     for id, answer in data:
+    #         task = Task.objects.filter(extra_data__fipi_id=id).first()
+    #         print(task)
+    #         task_data = {"answer_type":"text", "answer":answer}
+    #         update_serializer = TaskSerializer(task, data=task_data, partial=True)
+    #         if update_serializer.is_valid():
+    #             updated_instance = update_serializer.save()
+    #             #response_serializer = TaskSerializerForCreate(updated_instance)
+    #             #return Response(response_serializer.data, status=status.HTTP_200_OK)
+    #
+    #     return Response(status=status.HTTP_400_BAD_REQUEST)
 
     # @action(detail=False, methods=['post'])
     # def delete_all(self, request, *args, **kwargs):
@@ -306,14 +325,14 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             ok_answer = {'type': ok_answer_type, ok_answer_type: ok_answer_data}
 
             check_res = check_answer(user_answer, ok_answer, max_score=max_score, check_rule=check_rule)
-            
+
             sol_status = check_res['status']
             score = check_res['score']
             if cur_user_id:
                 solution = TaskSolutions(task_id=cur_task_id,
                                          user_id=cur_user_id,
                                          answer=user_answer,
-                                         is_ok_solution=sol_status!='WA',
+                                         is_ok_solution=sol_status != 'WA',
                                          score=score,
                                          status=sol_status
                                          )
@@ -396,14 +415,19 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             tasks_with_counts = tasks.filter(id__in=task_ids).annotate(
                 correct_solutions=Count('tasksolutions',
                                         filter=Q(tasksolutions__user_id=cur_user_id,
-                                                 tasksolutions__is_ok_solution=True)),
+                                                 tasksolutions__status='OK')),
+                partial_solutions=Count('tasksolutions',
+                                        filter=Q(tasksolutions__user_id=cur_user_id,
+                                                 tasksolutions__status='PA')),
                 incorrect_solutions=Count('tasksolutions',
                                           filter=Q(tasksolutions__user_id=cur_user_id,
-                                                   tasksolutions__is_ok_solution=False)))
+                                                   tasksolutions__status='WA')))
             id_status = {}
             for task in tasks_with_counts:
                 if task.correct_solutions > 0:
                     id_status[task.id] = 'OK'
+                elif task.partial_solutions > 0:
+                    id_status[task.id] = 'PA'
                 elif task.incorrect_solutions > 0:
                     id_status[task.id] = 'WA'
             print('statuses', len(connection.queries))

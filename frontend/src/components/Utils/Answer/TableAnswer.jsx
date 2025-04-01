@@ -67,7 +67,7 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
   return (
     <div>
       <div className="answer-table">
-        <table border="1">
+        <table>
           <thead></thead>
           <tbody>
             {answer.map((row, rowIndex) => (
