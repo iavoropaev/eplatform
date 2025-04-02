@@ -43,3 +43,8 @@
 .lk-messages-section .del-student:hover {
   color: red;
 }
+
+.lk-messages-section .message-content .h-content p {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}

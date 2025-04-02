@@ -252,6 +252,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             max_score = 0
             for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name',
                                                       'number_in_exam__max_score', 'number_in_exam__check_rule'):
+                print(task)
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
                 max_task_score = task['number_in_exam__max_score']

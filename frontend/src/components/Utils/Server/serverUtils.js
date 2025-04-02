@@ -1,10 +1,8 @@
 export const prepareTask = (task) => {
-  let answer = "";
+  let answer = task.answer;
   try {
     answer = JSON.parse(task.answer);
-  } catch (error) {
-    answer = "";
-  }
+  } catch (error) {}
 
   return { ...task, answer: answer };
 };

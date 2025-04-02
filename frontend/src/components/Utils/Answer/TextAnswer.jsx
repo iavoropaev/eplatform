@@ -1,4 +1,5 @@
 const TextAnswer = ({ answer, setAnswer, disabled }) => {
+  console.log("AAAAA", answer);
   return (
     <div className="answer text-answer">
       <input

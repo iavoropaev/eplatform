@@ -13,7 +13,6 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from urllib3 import request
 
 from educationplatform.settings import DOMAIN, MAX_FILE_SIZE
 from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, \
@@ -235,8 +234,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     #
     #     for id, answer in data:
     #         task = Task.objects.filter(extra_data__fipi_id=id).first()
-    #         print(task)
-    #         task_data = {"answer_type":"text", "answer":answer}
+    #         #print(task)
+    #         task_data = {"answer_type":"text", "answer":json.dumps(answer)}
     #         update_serializer = TaskSerializer(task, data=task_data, partial=True)
     #         if update_serializer.is_valid():
     #             updated_instance = update_serializer.save()

@@ -87,7 +87,7 @@ const CreateTaskPage = () => {
       const data = await getTaskWithAnsById(taskId);
 
       if (data !== undefined && filterData?.exams?.length > 0) {
-        console.log(data);
+        console.log("data", data);
         setEditorContent(data.content);
         setAnswer(data.answer);
         setAnswerType(data.answer_type);
