@@ -21,7 +21,7 @@ from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, 
     TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
     TaskNumberInExamSerializer, TaskSerializerForCreate, FileSerializer
-from .utils import check_answer
+from .utils import check_answer, get_int_number
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -521,7 +521,8 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                 ).values('id', 'name', 'total_tried_tasks', 'solved_tasks', 'percent')
             )
             res = list(qs)
-            res.sort(key=lambda x: int(''.join(c for c in x['name'] if c.isdigit())))
+
+            res.sort(key=lambda x: get_int_number(x['name']))
             return Response(res)
         except Exception as e:
             print(e)
@@ -544,9 +545,15 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
                                                        'subjects__sources',
                                                        'subjects__authors').all()
         serializer = FilterSerializer(task_exams, many=True)
+        data = serializer.data
+        for exam in data:
+            for subject in exam['subjects']:
+                numbers = subject['numbers']
+                numbers_sorted = sorted(numbers, key=lambda x:get_int_number(x['name']))
+                subject['numbers'] = numbers_sorted
         actualities = [{'id': item.id, 'name': item.name} for item in Actuality.objects.all()]
         print('my', len(connection.queries))
-        return Response({'exams': serializer.data, 'actualities': actualities})
+        return Response({'exams': data, 'actualities': actualities})
 
     @action(detail=False, methods=['post'])
     def get_numbers(self, request):

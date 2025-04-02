@@ -1,4 +1,5 @@
 import slugify from "slugify";
+import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
 import { getFilterData } from "../../server/bank";
 import { useEffect, useState } from "react";
@@ -45,6 +46,9 @@ const GenerateCollection = () => {
       const data = await getFilterData();
       if (data) {
         setFilterData(data);
+        const id = uuidv4();
+        setCollectionName(id);
+        setCollectionSlug(id);
       } else {
         showError("Ошибка загрузки.");
       }
@@ -110,9 +114,10 @@ const GenerateCollection = () => {
   }
   return (
     <div className="gen-col">
-      <h2>Генерация варианта</h2>
+      <h2>Генерация подборки</h2>
       <div className="col-info">
         <input
+          className={collectionName === "" ? "error" : ""}
           placeholder="Название"
           value={collectionName}
           onChange={(e) => {
@@ -125,6 +130,7 @@ const GenerateCollection = () => {
           }}
         ></input>
         <input
+          className={collectionSlug === "" ? "error" : ""}
           placeholder="Слаг"
           value={collectionSlug}
           onChange={(e) => {

@@ -61,6 +61,7 @@ const CreateCourse = () => {
 
   return (
     <div className="create-course">
+      <h2>Создание курса</h2>
       <div className="subject-select">
         <select value={examId} onChange={handleChangeExam}>
           <option value="-" disabled>

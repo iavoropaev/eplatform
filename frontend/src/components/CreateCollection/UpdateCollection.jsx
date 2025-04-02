@@ -59,13 +59,18 @@ const UpdateCollection = () => {
     fetchData();
   }, [dispatch, slug]);
 
-  const handleAddTaskByIdBut = async () => {
+  const handleAddTaskByIdBut = async (position) => {
     const id = Number(newTaskId);
     const taskIds = tasks.map((task) => task.id);
     if (id && !taskIds.includes(id)) {
       const task = await getTaskById(id);
       if (task !== undefined) {
-        dispatch(setTasks([...tasks, task]));
+        if (position === "start") {
+          dispatch(setTasks([task, ...tasks]));
+        } else {
+          dispatch(setTasks([...tasks, task]));
+        }
+
         showOK("Задача добавлена!");
       } else {
         showError("Задача не добавлена.");
@@ -119,25 +124,25 @@ const UpdateCollection = () => {
     }
   };
 
-  const addTaskById = (
-    <div className="add-by-id">
-      <span>Добавить задачу по ID </span>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleAddTaskByIdBut();
-        }}
-      >
-        <input
-          value={newTaskId}
-          onChange={(e) => {
-            setNewTaskId(e.target.value);
-          }}
-        ></input>
-        <button type="submit">Добавить</button>
-      </form>
-    </div>
-  );
+  // const addTaskById = (
+  //   <div className="add-by-id">
+  //     <span>Добавить задачу по ID </span>
+  //     <form
+  //       onSubmit={(e) => {
+  //         e.preventDefault();
+  //         handleAddTaskByIdBut();
+  //       }}
+  //     >
+  //       <input
+  //         value={newTaskId}
+  //         onChange={(e) => {
+  //           setNewTaskId(e.target.value);
+  //         }}
+  //       ></input>
+  //       <button type="submit">Добавить</button>
+  //     </form>
+  //   </div>
+  // );
 
   if (isLoading) {
     return <></>;
@@ -148,10 +153,11 @@ const UpdateCollection = () => {
   }
   return (
     <div className="create-collection">
+      <h2>Обновление подборки задач</h2>
       <div>{`Экзамен: ${examName}.`}</div>
       <div>{`Предмет: ${subjectName}.`}</div>
       <div>
-        <span>Название коллекции </span>
+        <span>Название подборки </span>
         <input
           value={colName}
           onChange={(e) => {
@@ -160,7 +166,7 @@ const UpdateCollection = () => {
         ></input>
       </div>
       <div className="discr">
-        <span>Описание коллекции </span>
+        <span>Описание подборки </span>
         <textarea
           wrap="hard"
           rows="5"
@@ -172,7 +178,7 @@ const UpdateCollection = () => {
         ></textarea>
       </div>
       <div>
-        <span>Это вариант? </span>
+        <span>Это полноценный вариант? </span>
         <input
           checked={isExam}
           onChange={(e) => {
@@ -181,7 +187,23 @@ const UpdateCollection = () => {
           type="checkbox"
         ></input>
       </div>
-      {addTaskById}
+      <div className="add-by-id">
+        <span>Добавить задачу по ID </span>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleAddTaskByIdBut("start");
+          }}
+        >
+          <input
+            value={newTaskId}
+            onChange={(e) => {
+              setNewTaskId(e.target.value);
+            }}
+          ></input>
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
 
       <div>{`Всего задач ${tasks.length}.`}</div>
       <button onClick={saveCollection} className="black-button">
@@ -190,7 +212,25 @@ const UpdateCollection = () => {
 
       <TasksList tasks={tasks} swap={swap} delTaskByIndex={delTaskByIndex} />
 
-      {tasks.length > 0 && addTaskById}
+      {tasks.length > 0 && (
+        <div className="add-by-id">
+          <span>Добавить задачу по ID </span>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleAddTaskByIdBut("end");
+            }}
+          >
+            <input
+              value={newTaskId}
+              onChange={(e) => {
+                setNewTaskId(e.target.value);
+              }}
+            ></input>
+            <button type="submit">Добавить</button>
+          </form>
+        </div>
+      )}
       {tasks.length > 0 && (
         <button onClick={saveCollection} className="black-button">
           Сохранить

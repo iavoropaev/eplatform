@@ -215,6 +215,7 @@ const CreateTaskPage = () => {
   console.log("SB", selectedBanks);
   return (
     <div className="create-task-cont">
+      <h2>Добавление задачи</h2>
       {taskId && loadStatus !== -1 && (
         <div className="container">
           <div>
@@ -232,7 +233,7 @@ const CreateTaskPage = () => {
         handleSaveButton={saveTaskOnServer}
         loadStatus={loadStatus}
       />
-      {showSaveText && "Сохранено"}
+      {/* {showSaveText && "Сохранено"} */}
       {taskId && (
         <div className="container">
           <div>

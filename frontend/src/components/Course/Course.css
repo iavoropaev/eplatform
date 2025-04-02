@@ -1,4 +1,5 @@
-.course-container {
+.content-container .course-container {
+  padding-top: 50px;
   box-sizing: border-box;
   display: flex;
   height: 100dvh;

@@ -174,9 +174,14 @@ const UpdateCourse = () => {
                   {module.lessons.map((lesson, lesInd) => {
                     return (
                       <div key={lesson.id} className="lesson-cont">
-                        <div className="lesson">{`${lesInd + 1}. ${
-                          lesson.name
-                        }`}</div>
+                        <div className="lesson">
+                          <a
+                            className="common-a"
+                            href={`/course/${courseId}/lesson/${lesson.id}/s/1/`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >{`${lesInd + 1}. ${lesson.name}`}</a>
+                        </div>
                         <SwapAndDelete
                           swap={(i, j) => swapLessons(indMod, i, j)}
                           erase={(i) => {
@@ -202,6 +207,13 @@ const UpdateCourse = () => {
           disabled={isSaving}
         >
           {isSaving ? "Сохранение..." : "Сохранить"}
+        </button>
+        <button
+          onClick={() => {
+            window.open(`/course/${courseId}/`);
+          }}
+        >
+          Просмотр курса
         </button>
       </div>
     </div>

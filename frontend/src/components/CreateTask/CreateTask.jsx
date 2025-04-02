@@ -13,6 +13,7 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
   const isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
 
   const [file, setFile] = useState(null);
+  const [isSaving, setSaving] = useState(false);
 
   const handleAnswerTypeSelect = (e) => {
     const type = e.target.value;
@@ -84,6 +85,19 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
 
   return (
     <div className="create-task">
+      <div className="save-button">
+        <button
+          disabled={isSaving}
+          onClick={async () => {
+            setSaving(true);
+            await handleSaveButton();
+            setSaving(false);
+          }}
+          className="black-button"
+        >
+          {isSaving ? "Сохранение..." : "Сохранить"}
+        </button>
+      </div>
       {taskData?.taskId && (
         <p className="task-id">{`Задача ${taskData.taskId}.`}</p>
       )}
@@ -251,8 +265,16 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
         </div>
       </div>
       <div className="save-button">
-        <button onClick={handleSaveButton} className="black-button">
-          Сохранить
+        <button
+          disabled={isSaving}
+          onClick={async () => {
+            setSaving(true);
+            await handleSaveButton();
+            setSaving(false);
+          }}
+          className="black-button"
+        >
+          {isSaving ? "Сохранение..." : "Сохранить"}
         </button>
       </div>
     </div>

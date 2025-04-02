@@ -185,3 +185,15 @@ table td table td {
 .grey {
   color: grey;
 }
+
+.error {
+  border-color: #ff7f7f;
+}
+
+.common-a {
+  color: black;
+  text-decoration: none;
+}
+.common-a:hover {
+  text-decoration: underline;
+}

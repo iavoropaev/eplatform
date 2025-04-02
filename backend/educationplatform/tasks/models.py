@@ -99,7 +99,7 @@ class TaskTopic(models.Model):
 
 class TaskNumberInExam(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, blank=False, null=False)
+    #slug = models.SlugField(max_length=100, blank=False, null=False)
 
     check_rule = models.CharField(max_length=100, default='default')
     max_score = models.IntegerField(blank=False, null=False, default=1)
@@ -107,7 +107,7 @@ class TaskNumberInExam(models.Model):
     answer_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} | {self.subject.name} | {self.subject.exam.name}'
 
     class Meta:
         verbose_name = "Номер задач в экзамене"

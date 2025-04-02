@@ -1,6 +1,7 @@
 .results-table {
   border-collapse: collapse;
   border: 1px solid grey;
+  max-width: 100%;
 }
 
 .results-table th {

@@ -1,6 +1,9 @@
 .edit-course {
   padding-bottom: 30px;
 }
+.edit-course .course-info {
+  margin-top: 20px;
+}
 .edit-course .modules {
   margin: auto;
   margin-top: 20px;
@@ -97,6 +100,11 @@
 
 .edit-course .save-button-cont {
   margin-top: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Input */

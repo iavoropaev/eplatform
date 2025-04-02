@@ -15,6 +15,7 @@
   border: 1px solid grey;
   border-radius: 5px;
   background-color: rgb(229, 249, 255);
+  overflow: auto;
 }
 .exam-solutions-section .solution-header {
   display: flex;
@@ -57,15 +58,19 @@
 }
 
 .exam-solutions-section .sol-answers {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  display: block;
+  padding: 20px;
   text-align: center;
-  overflow: auto;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
   .exam-solutions-section {
     width: 100%;
+  }
+  .exam-solutions-section .sol-answers {
+    padding: 0px;
+    padding-top: 10px;
   }
 }

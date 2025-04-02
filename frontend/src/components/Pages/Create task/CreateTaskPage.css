@@ -1,5 +1,9 @@
+.create-task-cont {
+  padding-bottom: 20px;
+}
+
 .container {
-  padding: 20px;
+  margin: 10px;
 }
 .container button {
   border: 1px solid grey;

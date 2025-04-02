@@ -17,16 +17,16 @@ const BankFilter = ({
 
   const subjects = activeExam["subjects"];
   const sources = activeSubject["sources"];
-  const numbersNotSorted = activeSubject["numbers"];
+  const numbers = activeSubject["numbers"];
 
-  const getFirstNumber = (name) => {
-    const match = name.match(/\d+/);
-    return match ? parseInt(match[0], 10) : 0;
-  };
+  // const getFirstNumber = (name) => {
+  //   const match = name.match(/\d+/);
+  //   return match ? parseInt(match[0], 10) : 0;
+  // };
 
-  const numbers = numbersNotSorted?.sort((a, b) => {
-    return getFirstNumber(a.name) - getFirstNumber(b.name);
-  });
+  // const numbers = numbersNotSorted?.sort((a, b) => {
+  //   return getFirstNumber(a.name) - getFirstNumber(b.name);
+  // });
 
   const authors = activeSubject["authors"];
   const difficulty_levels = activeExam["dif_levels"];

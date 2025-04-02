@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LeftMenu from "./LeftMenu/LeftMenu";
 
@@ -21,22 +21,32 @@ const Course = () => {
   const viewType = lesson;
 
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const courseData = useSelector((state) => state.course.courseData);
   const currentLesson = useSelector((state) => state.course.currentLesson);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const courseData = await getCourseFromServerById(courseId);
+
       if (courseData) {
-        console.log(courseData);
         dispatch(setCourseData(courseData));
+        if (lessonId === undefined) {
+          navigate(
+            `/course/${courseId}/lesson/${courseData?.modules?.[0]?.lessons?.[0]?.id}/s/1/`
+          );
+        }
       } else {
         showError("Курс не загружен.");
       }
+      setLoading(false);
     }
-    fetchData();
-  }, [dispatch, courseId]);
+    if (courseData && String(courseData?.id) !== courseId) {
+      fetchData();
+    }
+  }, [navigate, dispatch, courseId, lessonId, courseData]);
 
   useEffect(() => {
     async function fetchData() {
@@ -58,11 +68,17 @@ const Course = () => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
+      dispatch(setCurrentLesson(undefined));
+      dispatch(setCourseData({}));
     };
   }, []);
 
-  if (!courseData?.id) {
-    return <h2>Загрузка</h2>;
+  if (isLoading) {
+    return (
+      <div className="course-container">
+        <p>Загрузка...</p>
+      </div>
+    );
   }
   console.log(courseData);
   return (

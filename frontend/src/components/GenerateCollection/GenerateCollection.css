@@ -1,5 +1,4 @@
 .gen-col {
-  margin-top: 15px;
   padding-bottom: 30px;
 }
 
@@ -10,6 +9,9 @@
   gap: 5px;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+.gen-col .col-info input {
+  width: 300px;
 }
 .gen-col .col-info .discription {
   width: 300px;

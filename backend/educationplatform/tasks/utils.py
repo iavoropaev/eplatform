@@ -87,3 +87,15 @@ def check_answer(user_answer, true_answer, max_score=1, check_rule='default'):
             score = int(max_score * (count_ok / count_all))
         return {'score': score, 'status': status}
     return wa_sol
+
+
+def get_int_number(x: str):
+    x = x.replace('-', ' ').split()
+    if len(x) > 1:
+        x = x[1]
+        if all(y.isdigit() for y in x):
+            return int(x)
+        else:
+            return 1000
+    else:
+        return 1000

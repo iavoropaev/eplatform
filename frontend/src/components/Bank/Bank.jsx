@@ -148,6 +148,7 @@ const Bank = () => {
 
   return (
     <div className="bank">
+      <h2>Банк задач</h2>
       <BankFilter
         selectedFilters={selectedFilters}
         getSelectFromFilter={getSelectFromFilter}

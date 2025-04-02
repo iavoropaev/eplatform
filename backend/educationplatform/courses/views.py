@@ -183,7 +183,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create_course', 'update_course', 'update_lesson', 'create_module', 'create_lesson',
-                           'create-section', 'delete_course']:
+                           'create_section', 'delete_course']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
