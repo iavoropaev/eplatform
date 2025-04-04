@@ -1,7 +1,7 @@
 .section-content {
   box-sizing: border-box;
-  padding: 20px;
-  border-radius: 10px;
+
+  border-radius: 5px;
   border: 1px solid grey;
   text-align: left;
   background-color: white;
@@ -9,7 +9,16 @@
   width: 100%;
 }
 
+.section-content .h-content {
+  margin: 15px 15px 15px 15px;
+}
 .section-content .h-content p {
   margin-bottom: 10px;
   margin-top: 10px;
+}
+.section-content .h-content p:first-child {
+  margin-top: 0px;
+}
+.section-content .h-content p:last-child {
+  margin-bottom: 0px;
 }

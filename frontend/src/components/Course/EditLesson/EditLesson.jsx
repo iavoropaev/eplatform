@@ -267,6 +267,7 @@ const EditLesson = () => {
             ></input>
             <button type="submit">+</button>
           </form>
+          <p className="grey">{`Id текущей секции: ${currentSectionData.id}.`}</p>
         </div>
       </div>
     </div>

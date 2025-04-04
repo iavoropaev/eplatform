@@ -1,10 +1,22 @@
 .h-content {
   background-color: white;
   overflow: auto;
+  margin: 15px 15px 15px 15px;
 }
 
 .h-content img {
   max-width: 90%;
   height: auto;
   display: block;
+}
+
+.h-content p {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.h-content p:first-child {
+  margin-top: 0px;
+}
+.h-content p:last-child {
+  margin-bottom: 0px;
 }

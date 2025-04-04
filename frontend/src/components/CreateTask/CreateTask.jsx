@@ -161,7 +161,7 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
         />
       )}
 
-      <div className="editor-container">
+      <div className="editor-container" key={taskData?.id}>
         <p className="editor-label">Условие задачи</p>
         <TinyMCE
           editorContent={taskData.editorContent}

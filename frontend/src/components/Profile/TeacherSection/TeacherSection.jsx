@@ -41,7 +41,7 @@ const TeacherSection = () => {
 
         <p className="grey-text">Добавить новые</p>
         <div className="add-new">
-          <NavLink to="/create-task//" className={"tag"}>
+          <NavLink to="/create-task/" className={"tag"}>
             Добавить задачу
           </NavLink>
           <NavLink to="/create-collection/" className={"tag"}>

@@ -14,7 +14,7 @@ export const TinyMCE = ({ editorContent, setEditorContent }) => {
         tinymceScriptSrc="/tinymce/tinymce.min.js"
         licenseKey="gpl"
         onInit={(_evt, editor) => (editorRef.current = editor)}
-        //initialValue="<p>This is the initial content of the editor.</p>"
+        // initialValue="<p>This is the initial content of the editor.</p>"
         value={editorContent}
         onEditorChange={handleEditorChange}
         init={{
@@ -48,7 +48,7 @@ export const TinyMCE = ({ editorContent, setEditorContent }) => {
             "alignright alignjustify | bullist numlist outdent indent | " +
             "removeformat | help | ",
           content_style:
-            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            "body { font-family:Helvetica,Arial,sans-serif; font-size:15px }",
           codesample_languages: [{ text: "Python", value: "python" }],
           codesample_default_language: "python",
           elementpath: false,
@@ -56,8 +56,6 @@ export const TinyMCE = ({ editorContent, setEditorContent }) => {
           promotion: false,
           autoresize_bottom_margin: 10,
           autoresize_overflow_padding: 10,
-          // autoresize_on_init: true,
-          content_style: "body { font-size: 15px; }",
         }}
       />
     </div>

@@ -87,7 +87,7 @@ const TaskFooter = ({
       showError("Необходимо авторизоваться на сайте для доступа к решениям.");
       return;
     }
-    if (status === undefined) {
+    if (status === undefined && taskData?.answer_type !== "no_answer") {
       await handleSendAnswer();
     }
     if (solution === undefined) {
@@ -166,7 +166,9 @@ const TaskFooter = ({
             Решение
           </button>
           {solution !== undefined && !hideSolution && (
-            <HighlightedContent content={solution} />
+            <div className="sol-cont">
+              <HighlightedContent content={solution} />
+            </div>
           )}
           {/* </span> */}
           {/* <span className="tag likes">

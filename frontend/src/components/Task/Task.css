@@ -7,33 +7,22 @@ div.task-container {
 }
 
 .task {
-  border-radius: 1dvh;
+  border-radius: 5px;
   width: 70%;
   text-align: left;
   margin: auto;
   border: 1px solid grey;
-  /* min-width: 300px; */
   overflow: hidden;
-}
-
-.task .task-body p:not(:last-child) {
-  margin: 0px;
-  padding-bottom: 15px;
 }
 
 .task-container .task-header {
   display: flex;
   justify-content: space-between;
-  /* flex-wrap: wrap; */
   grid-gap: 5px 15px;
-
-  /* border-radius: 1dvh 1dvh 0dvh 0dvh; */
   padding: 10px;
 }
 
 .task-container .task-body {
-  padding: 15px;
-  /* padding-top: 0px; */
   background-color: white;
   border-bottom: 1px solid grey;
   border-top: 1px solid grey;
@@ -78,13 +67,6 @@ div.task-container {
   cursor: pointer;
 }
 
-.task-container .task-footer .floor .h-content {
-  padding: 15px;
-  border: 1px solid rgb(188, 188, 188);
-  border-radius: 5px;
-  margin-top: 10px;
-}
-
 .task-container .task-footer > .answer {
   padding: 20px;
 
@@ -96,8 +78,6 @@ div.task-container {
 }
 
 .task-container .task-footer .floor {
-  /* display: flex; */
-  /* justify-content: space-between; */
   padding: 10px;
 }
 
@@ -119,7 +99,6 @@ div.task-container {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  /* grid-gap: 5px 4px; */
   align-items: center;
   white-space: nowrap;
 
@@ -161,7 +140,6 @@ div.task-container > .EXIST .answer {
 
 .task-container .task-footer .buttons > button {
   border: 1px solid grey;
-  /* padding: 7.6px; */
 }
 
 .task-container .task-footer .buttons > button:active {
@@ -205,6 +183,12 @@ div.task-container > .EXIST .answer {
   color: black;
 }
 
+.task-container .sol-cont {
+  margin-top: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: white;
+}
 @media (max-width: 600px) {
   .task {
     width: 90%;

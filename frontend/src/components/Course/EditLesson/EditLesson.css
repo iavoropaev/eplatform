@@ -63,7 +63,9 @@
   flex-wrap: wrap;
   gap: 5px;
 }
-
+.lesson-container .add-section .grey {
+  margin-top: 5px;
+}
 .lesson-container .editor {
   margin-top: 5px;
 }

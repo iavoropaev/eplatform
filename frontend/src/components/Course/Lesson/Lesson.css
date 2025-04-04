@@ -14,6 +14,13 @@
 .course-container .edit-but {
   color: grey;
   cursor: pointer;
+  background-color: transparent;
+  border: 0px;
+  text-decoration: none;
+  padding: 0px;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
 }
 .course-container .edit-but:hover {
   text-decoration: underline;
@@ -30,6 +37,7 @@
   gap: 20px;
   width: 80%;
   margin: auto;
+  padding-bottom: 20px;
 }
 
 .course-container > .lesson-container .save-text-section {

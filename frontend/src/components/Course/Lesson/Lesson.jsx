@@ -70,9 +70,9 @@ const Lesson = () => {
         <div className="lesson-name-cont">
           <p className="lesson-name">{currentLesson.name}</p>
           {isAuthor && (
-            <p className="edit-but" onClick={goEditing}>
+            <button className="edit-but " onClick={goEditing}>
               Редактировать
-            </p>
+            </button>
           )}
         </div>
 

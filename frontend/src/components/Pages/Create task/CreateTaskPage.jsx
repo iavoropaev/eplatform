@@ -86,7 +86,7 @@ const CreateTaskPage = () => {
     async function fetchData() {
       const data = await getTaskWithAnsById(taskId);
 
-      if (data !== undefined && filterData?.exams?.length > 0) {
+      if (data !== undefined) {
         console.log("data", data);
         setEditorContent(data.content);
         setAnswer(data.answer);
@@ -127,7 +127,7 @@ const CreateTaskPage = () => {
       }
     }
 
-    if (taskId) {
+    if (taskId && filterData?.exams?.length > 0) {
       fetchData();
       console.log("Download task");
     } else {
@@ -212,7 +212,7 @@ const CreateTaskPage = () => {
     setSelectedActuality,
     setFiles,
   };
-  console.log("SB", selectedBanks);
+  console.log("EC", editorContent);
   return (
     <div className="create-task-cont">
       <h2>Добавление задачи</h2>
