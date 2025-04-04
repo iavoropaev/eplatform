@@ -3,8 +3,8 @@ import Auth from "../Utils/Auth";
 import { useEffect } from "react";
 import queryString from "query-string";
 import { getTokenByVKID } from "../../server/auth";
+import "./Main.css";
 
-import { toast } from "react-toastify";
 const Main = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,13 +48,63 @@ const Main = () => {
     navigate("./", { relative: "path" });
     window.location.reload();
   };
-  const showOK = (text) => toast.success(text);
+  // const showOK = (text) => toast.success(text);
   return (
-    <div>
-      <h2>Главная, {userName}</h2>
-      {!isAuth && <Auth />}
+    <div className="main-page">
+      {/* <h2>Главная, {userName}</h2> */}
+      <h3>Для выпускников</h3>
+      <div className="main-section">
+        <button
+          className="item"
+          onClick={() => {
+            navigate("/bank/");
+          }}
+        >
+          <b>Банк задач</b> предоставляет Вам возможность потренироваться в
+          решении заданий из экзамена.
+        </button>
+        <button
+          className="item"
+          onClick={() => {
+            navigate("/collections/ege/ege_inf/");
+          }}
+        >
+          С помощью <b>подборок задач</b> Вы можете отточить свои навыки решения
+          полноценных вариантов или отработать задания по конкретной теме.
+        </button>
+        <button
+          className="item"
+          onClick={() => {
+            navigate("/courses/ege/ege_inf/");
+          }}
+        >
+          Проходя <b>курсы</b> Вы можете получить новые знания.
+        </button>
+      </div>
+      <h3>Для учителей</h3>
+      <div className="main-section">
+        <button
+          className="item"
+          onClick={() => {
+            navigate("/lk/teach/");
+          }}
+        >
+          Вы можете объеденить своих учеников в <b>классы</b>, чтобы выдавать им
+          домашние задания и следить за успеваемостью своих учеников.
+        </button>
+        <button
+          className="item"
+          onClick={() => {
+            navigate("/lk/teach/");
+          }}
+        >
+          Вы можете <b>добавлять на сайт</b> свои собственные задачи, подборки
+          задач, а также можете создавать свои курсы.
+        </button>
+      </div>
+      {/* {!isAuth && <Auth />} */}
 
-      <div className="menu">
+      {/* <div className="menu">
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <NavLink to="/" end>
             Главная
@@ -102,7 +152,7 @@ const Main = () => {
         >
           Увед
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,0 +1,35 @@
+.content-container .main-page {
+  margin: auto;
+  width: 80%;
+  padding-top: 80px;
+}
+.main-page h3 {
+  text-align: center;
+}
+.main-page .main-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* align-items: start; */
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+
+.main-page .item {
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: white;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid grey;
+  flex: 1;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+}
+.main-page .item:hover {
+  background-color: rgb(199, 252, 207);
+}
+.main-page .item:active {
+  background-color: transparent;
+}

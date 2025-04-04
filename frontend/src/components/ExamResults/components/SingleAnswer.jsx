@@ -5,9 +5,9 @@ const SingleAnswer = ({ answer }) => {
       {answer.type === "table" && (
         <table>
           <tbody>
-            {answer.table.map((row, rowIndex) => (
+            {answer?.table?.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                {row.map((cell, cellIndex) => (
+                {row?.map((cell, cellIndex) => (
                   <td key={cellIndex}>{cell}</td>
                 ))}
               </tr>

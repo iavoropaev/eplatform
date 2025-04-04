@@ -47,6 +47,9 @@ const TeacherSection = () => {
           <NavLink to="/create-collection/" className={"tag"}>
             Создать вариант
           </NavLink>
+          <NavLink to="/generate-collection/ege/ege_inf/" className={"tag"}>
+            Сгенерировать вариант
+          </NavLink>
           <NavLink to="/create-course/" className={"tag"}>
             Создать курс
           </NavLink>
