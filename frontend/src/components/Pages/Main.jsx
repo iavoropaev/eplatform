@@ -52,7 +52,7 @@ const Main = () => {
   return (
     <div className="main-page">
       {/* <h2>Главная, {userName}</h2> */}
-      <h3>Для выпускников</h3>
+      <h2>Для выпускников</h2>
       <div className="main-section">
         <button
           className="item"
@@ -81,7 +81,7 @@ const Main = () => {
           Проходя <b>курсы</b> Вы можете получить новые знания.
         </button>
       </div>
-      <h3>Для учителей</h3>
+      <h2>Для учителей</h2>
       <div className="main-section">
         <button
           className="item"

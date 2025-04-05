@@ -43,38 +43,39 @@ const SortingAnswer = ({
       setAnswerData(ansToAnsData(newAns));
     }
   };
-
+  console.log("aaa", answer);
   return (
     <div className="sorting-answer">
       {!isCreating && (
         <div className="for-user">
-          {answer.map((opt, i) => {
-            return (
-              <div className="option" key={i}>
-                <p>{opt}</p>
-                {!disabled && (
-                  <div>
-                    <span
-                      className="up-down"
-                      onClick={() => {
-                        handleChange(i, "up");
-                      }}
-                    >
-                      ↑
-                    </span>
-                    <span
-                      className="up-down"
-                      onClick={() => {
-                        handleChange(i, "down");
-                      }}
-                    >
-                      ↓
-                    </span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {Array.isArray(answer) &&
+            answer?.map((opt, i) => {
+              return (
+                <div className="option" key={i}>
+                  <p>{opt}</p>
+                  {!disabled && (
+                    <div>
+                      <span
+                        className="up-down"
+                        onClick={() => {
+                          handleChange(i, "up");
+                        }}
+                      >
+                        ↑
+                      </span>
+                      <span
+                        className="up-down"
+                        onClick={() => {
+                          handleChange(i, "down");
+                        }}
+                      >
+                        ↓
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
         </div>
       )}
 

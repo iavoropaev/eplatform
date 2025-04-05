@@ -15,6 +15,7 @@ const Task = ({
   hideSolutionSection,
   buttonText,
 }) => {
+  console.log("ta", taskAnswer);
   return (
     <div className="task-container">
       <div className={"task " + status}>

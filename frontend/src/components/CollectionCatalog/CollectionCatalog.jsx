@@ -30,7 +30,7 @@ const CollectionCatalog = () => {
       <SubjectSelect />
       <div className="col-list">
         {isLoading && <p>Загрузка...</p>}
-        {!isLoading && collections?.length === 0 && <p>Подборки пока нет.</p>}
+        {!isLoading && collections?.length === 0 && <p>Подборок пока нет.</p>}
         {!isLoading &&
           collections.map((col) => {
             return (

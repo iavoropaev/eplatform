@@ -256,6 +256,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
                 max_task_score = task['number_in_exam__max_score']
+                if max_task_score is None:
+                    max_task_score = 1
                 check_rule = task['number_in_exam__check_rule']
                 ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task['answer'])}
                 score = 0
@@ -535,6 +537,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 .annotate(best_score=Max('test_score'))
                 .aggregate(avg_score=Avg('best_score'))
             )['avg_score']
+            if avg_score:
+                avg_score = round(avg_score, 2)
 
             max_score = TaskCollectionSolve.objects.filter(
                 user=request.user,

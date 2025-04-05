@@ -49,7 +49,8 @@ const ComparisonAnswer = ({
   return (
     <div className="comparison-answer">
       {!isCreating &&
-        answer.map((opt, i) => {
+        Array.isArray(answer) &&
+        answer?.map((opt, i) => {
           return (
             <div className="comp-option" key={i}>
               <p className="option-left">{opt[0]}</p>

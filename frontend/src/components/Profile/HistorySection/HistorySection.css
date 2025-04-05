@@ -64,6 +64,9 @@
   overflow-x: auto;
   max-width: 100%;
 }
+.exam-solutions-section .sol-answers > table {
+  margin: auto;
+}
 
 @media (max-width: 768px) {
   .exam-solutions-section {

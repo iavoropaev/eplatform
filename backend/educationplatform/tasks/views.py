@@ -318,6 +318,8 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                                        'number_in_exam__max_score',
                                        'number_in_exam__check_rule').get(id=cur_task_id)
             max_score = task['number_in_exam__max_score']
+            if max_score is None:
+                max_score = 1
             check_rule = task['number_in_exam__check_rule']
             ok_answer_data = json.loads(task["answer"])
             ok_answer_type = task["answer_type"]

@@ -46,13 +46,14 @@ const ChoiceAnswer = ({
   return (
     <div className="answer-choice">
       {!isCreating &&
+        Array.isArray(answer) &&
         answerData.map((opt, i) => {
           return (
             <div className="ch-option" key={i}>
               <input
                 type="checkbox"
                 className="ch-input"
-                checked={answer.includes(i)}
+                checked={answer?.includes(i)}
                 onChange={() => {
                   handleChange(i);
                 }}

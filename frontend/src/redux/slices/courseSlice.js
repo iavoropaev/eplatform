@@ -64,10 +64,12 @@ const courseSlice = createSlice({
     changeSectionTask: (state, action) => {
       const sectionIndex = action.payload.index;
       const newTask = action.payload.task;
+      const sectionType =
+        newTask && newTask?.answer_type !== "no_answer" ? "task" : "text";
       const curSection = {
         ...state.currentLesson.sections[sectionIndex],
         task: newTask,
-        type: newTask ? "task" : "text",
+        type: sectionType,
       };
 
       const newSections = [...state.currentLesson.sections];

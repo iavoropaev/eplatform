@@ -94,7 +94,7 @@ const Lesson = () => {
             solveFromServer={solveFromServer}
           />
         )}
-        {!taskData && (
+        {currentSectionData?.type === "text" && (
           <div className="save-text-section">
             <button
               className="black-button"

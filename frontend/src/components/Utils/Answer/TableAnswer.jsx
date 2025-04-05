@@ -70,27 +70,33 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
         <table>
           <thead></thead>
           <tbody>
-            {answer.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {/* <td>{rowIndex + 1}</td> */}
-                {row.map((cell, colIndex) => (
-                  <td key={colIndex}>
-                    <input
-                      className="table-input"
-                      disabled={disabled}
-                      type="text"
-                      value={cell}
-                      onPaste={(e) => {
-                        paste(e, rowIndex, colIndex);
-                      }}
-                      onChange={(e) =>
-                        handleInputChange(rowIndex, colIndex, e.target.value)
-                      }
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {Array.isArray(answer) &&
+              answer?.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {/* <td>{rowIndex + 1}</td> */}
+                  {Array.isArray(row) &&
+                    row?.map((cell, colIndex) => (
+                      <td key={colIndex}>
+                        <input
+                          className="table-input"
+                          disabled={disabled}
+                          type="text"
+                          value={cell}
+                          onPaste={(e) => {
+                            paste(e, rowIndex, colIndex);
+                          }}
+                          onChange={(e) =>
+                            handleInputChange(
+                              rowIndex,
+                              colIndex,
+                              e.target.value
+                            )
+                          }
+                        />
+                      </td>
+                    ))}
+                </tr>
+              ))}
           </tbody>
         </table>
         {!disabled && (

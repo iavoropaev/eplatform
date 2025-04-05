@@ -154,8 +154,8 @@ class CoursesViewSet(viewsets.ModelViewSet):
                              section.task.answer_type: json.loads(section.task.answer)}
                 check_res = check_answer(user_answer,
                                          ok_answer,
-                                         max_score=section.task.number_in_exam.max_score,
-                                         check_rule=section.task.number_in_exam.check_rule
+                                         max_score=getattr(section.task.number_in_exam, 'max_score', None),
+                                         check_rule=getattr(section.task.number_in_exam, 'check_rule', None)
                                          )
                 solve_status = check_res['status']
                 score = check_res['score']

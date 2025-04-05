@@ -2,6 +2,10 @@ import re
 
 
 def check_answer(user_answer, true_answer, max_score=1, check_rule='default'):
+    if max_score is None:
+        max_score = 1
+    if check_rule is None:
+        check_rule = 'default'
     ok_sol = {'score': max_score, 'status': 'OK'}
     wa_sol = {'score': 0, 'status': 'WA'}
 

@@ -165,7 +165,9 @@ div.task-container > .EXIST .answer {
   display: flex;
   flex-wrap: wrap;
   gap: 0px 8px;
-  margin-top: 30px;
+  margin-top: 10px;
+  margin-left: 15px;
+  margin-bottom: 10px;
 }
 
 .task-container .files-list {
