@@ -22,3 +22,10 @@
 .exam-container .count-answers {
   font-size: 20px;
 }
+
+.exam-container .solutions {
+  margin-bottom: 20px;
+}
+.exam-container .solutions .task-container {
+  margin-top: 20px;
+}

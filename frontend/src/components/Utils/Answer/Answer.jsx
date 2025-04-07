@@ -6,6 +6,7 @@ import ChoiceAnswer from "./ChoiceAnswer";
 import ComparisonAnswer from "./СomparisonAnswer";
 import SortingAnswer from "./SortingAnswer";
 import OpenAnswer from "./OpenAnswer";
+import ChoiceScore from "./ChoiseScore";
 
 const Answer = ({
   type,
@@ -13,6 +14,7 @@ const Answer = ({
   answer,
   setAnswer,
   setAnswerData,
+  handleChooseScore,
   disabled,
   isCreating,
 }) => {
@@ -89,6 +91,21 @@ const Answer = ({
           setAnswerData={setAnswerData}
           answer={answer}
           setAnswer={setAnswer}
+          disabled={disabled}
+          isCreating={isCreating}
+        />
+      </div>
+    );
+  }
+
+  if (type === "no_answer" && handleChooseScore !== undefined) {
+    return (
+      <div className="task-answer">
+        <ChoiceScore
+          answerData={answerData}
+          setAnswerData={setAnswerData}
+          answer={answer}
+          setAnswer={handleChooseScore}
           disabled={disabled}
           isCreating={isCreating}
         />

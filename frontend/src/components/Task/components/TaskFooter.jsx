@@ -10,6 +10,7 @@ const TaskFooter = ({
   taskAnswer,
   handleSaveButton,
   handleCancelButton,
+  handleChooseScore,
   hideAnswerBlock,
   status,
   hideSolutionSection,
@@ -61,6 +62,17 @@ const TaskFooter = ({
     return res;
   };
 
+  const handleChooseScoreInFooter =
+    handleChooseScore !== undefined
+      ? (score) => {
+          handleChooseScore({
+            type: "score",
+            taskId: taskData.id,
+            answer: score,
+          });
+        }
+      : undefined;
+
   const isAnswerSaveReady = (taskAnswer ? true : false) | isAnswerSave;
   const curAnswerData = taskAnswer ? taskAnswer[taskAnswer.type] : answer;
 
@@ -90,6 +102,7 @@ const TaskFooter = ({
     if (status === undefined && taskData?.answer_type !== "no_answer") {
       await handleSendAnswer();
     }
+
     if (solution === undefined) {
       const res = await getTaskSolution(taskData.id);
       if (res !== undefined) {
@@ -99,6 +112,12 @@ const TaskFooter = ({
       setHideSolution(!hideSolution);
     }
   };
+  const allAnswerData = {
+    ...taskData.answer_data,
+    maxScore: taskData?.number_in_exam?.max_score
+      ? taskData?.number_in_exam?.max_score
+      : 1,
+  };
 
   return (
     <div className="task-footer">
@@ -107,9 +126,10 @@ const TaskFooter = ({
           <span className="input-with-but">
             <Answer
               type={taskData.answer_type}
-              answerData={taskData.answer_data}
+              answerData={allAnswerData}
               answer={curAnswerData}
               setAnswer={setAnswer}
+              handleChooseScore={handleChooseScoreInFooter}
               disabled={isAnswerSaveReady}
             />
             {taskData.answer_type !== "no_answer" && (

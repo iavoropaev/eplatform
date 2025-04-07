@@ -46,6 +46,7 @@ const Collection = () => {
   }, [slug, jwt]);
 
   const sendAnswerToServer = async ({ taskId, answer, type }) => {
+    setSolvedStatuses({ ...solvedStatuses, [taskId]: "checking" });
     const readyAnswer = { type: type, [type]: answer };
     const res = await sendSolution({ taskId, answer: readyAnswer });
     if (res !== undefined) {

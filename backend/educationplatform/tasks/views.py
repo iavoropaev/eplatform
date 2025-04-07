@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from educationplatform.settings import DOMAIN, MAX_FILE_SIZE
-from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskTopic, TaskSolutions, \
+from .models import Task, UploadFiles, TaskAuthor, TaskSource, DifficultyLevel, TaskSolutions, \
     TaskNumberInExam, \
     TaskExam, Actuality
 from .serializers import TaskSerializer, TaskSerializerForUser, TaskSolutionsSerializer, FilterSerializer, \
@@ -282,13 +282,13 @@ class TaskInfoViewSet(viewsets.ViewSet):
             'd_level': d_levels,
         })
 
-    @extend_schema(description='Get all task topics.')
-    @action(detail=False, methods=['get'], url_path='topics')
-    def task_topic(self, request):
-        topics = [{'id': topic.id, 'name': topic.name} for topic in TaskTopic.objects.all()]
-        return Response({
-            'topics': topics,
-        })
+    # @extend_schema(description='Get all task topics.')
+    # @action(detail=False, methods=['get'], url_path='topics')
+    # def task_topic(self, request):
+    #     topics = [{'id': topic.id, 'name': topic.name} for topic in TaskTopic.objects.all()]
+    #     return Response({
+    #         'topics': topics,
+    #     })
 
 
 class TaskSolutionsViewSet(viewsets.ModelViewSet):

@@ -77,7 +77,7 @@ class TaskNumberInExamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskNumberInExam
-        fields = ['id', 'name', 'subject', 'answer_data']
+        fields = ['id', 'name', 'subject', 'answer_data', 'max_score']
 
 class TaskSubjectSerializer(serializers.ModelSerializer):
     numbers = TaskNumberInExamSerializer(many=True, read_only=True)

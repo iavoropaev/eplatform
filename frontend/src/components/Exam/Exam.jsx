@@ -95,14 +95,16 @@ const Exam = () => {
   if (isLoading) {
     return <p>Загрузка...</p>;
   }
-
+  const tasksWithSol = tasks.filter(
+    (task) => task.answer_type === "no_answer" && task.solution
+  );
+  console.log(tasksWithSol);
   return (
     <div className="exam-container">
       <h2 className="exam-title">{colName}</h2>
       <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>
 
       {tasks.map((task) => {
-        console.log(answers[task.id], answers[task.id]?.data);
         return (
           <Task
             taskData={task}
@@ -112,13 +114,43 @@ const Exam = () => {
             handleCancelButton={() => {
               handleCancelButton(task.id);
             }}
+            handleChooseScore={handleSaveAnswerButton}
             status={answers[task.id] !== undefined ? "EXIST" : ""}
             showCancelBut
             hideSolutionSection={true}
+            hideTaskInfo={true}
             buttonText={["Сохранить ответ", "Ответ сохранён"]}
           />
         );
       })}
+
+      {tasksWithSol && tasksWithSol.length > 0 && (
+        <div className="solutions">
+          <details>
+            <summary>Просмотреть решения задач с развёрнутым ответом</summary>
+            {tasksWithSol.map((task) => {
+              return (
+                <Task
+                  taskData={task}
+                  taskAnswer={answers[task.id]}
+                  key={task.id}
+                  handleSaveButton={handleSaveAnswerButton}
+                  handleCancelButton={() => {
+                    handleCancelButton(task.id);
+                  }}
+                  handleChooseScore={handleSaveAnswerButton}
+                  status={answers[task.id] !== undefined ? "EXIST" : ""}
+                  showCancelBut
+                  hideSolutionSection={false}
+                  hideTaskInfo={true}
+                  hideAnswerBlock={true}
+                  buttonText={["Сохранить ответ", "Ответ сохранён"]}
+                />
+              );
+            })}
+          </details>
+        </div>
+      )}
 
       <div className="finish-exam">
         <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>

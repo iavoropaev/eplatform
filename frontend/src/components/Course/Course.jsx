@@ -76,7 +76,7 @@ const Course = () => {
   if (isLoading) {
     return (
       <div className="course-container">
-        <p>Загрузка...</p>
+        <p className="page-loading">Загрузка...</p>
       </div>
     );
   }

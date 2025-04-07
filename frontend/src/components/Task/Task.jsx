@@ -10,16 +10,21 @@ const Task = ({
   status,
   showCancelBut,
   handleCancelButton,
+  handleChooseScore,
   hideAnswerBlock,
   showEditIcon,
   hideSolutionSection,
+  hideTaskInfo,
   buttonText,
 }) => {
-  console.log("ta", taskAnswer);
   return (
     <div className="task-container">
       <div className={"task " + status}>
-        <TaskHeader taskData={taskData} showEditIcon={showEditIcon} />
+        <TaskHeader
+          taskData={taskData}
+          showEditIcon={showEditIcon}
+          hideTaskInfo={hideTaskInfo}
+        />
         <TaskBody taskData={taskData} />
         <TaskFooter
           taskData={taskData}
@@ -27,6 +32,7 @@ const Task = ({
           handleSaveButton={handleSaveButton}
           showCancelBut={showCancelBut}
           handleCancelButton={handleCancelButton}
+          handleChooseScore={handleChooseScore}
           hideAnswerBlock={hideAnswerBlock}
           hideSolutionSection={hideSolutionSection}
           status={status}
