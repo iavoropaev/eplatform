@@ -85,7 +85,8 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def get_collections(self, request):
         subject_slug = request.query_params.get('subject_slug', None)
-        queryset = TaskCollection.objects.all().filter(is_public=True, subject__slug=subject_slug).order_by('time_create')
+        queryset = TaskCollection.objects.all().filter(is_public=True, subject__slug=subject_slug).order_by(
+            'time_create')
         serializer = TaskCollectionInfoSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -363,10 +364,14 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 solve = solves.filter(user__id=user_id).order_by('-score', '-time_create').first()
             else:
                 solve = solves.filter(user__id=user_id).first()
-
+            if solve is None:
+                return Response({
+                    'Error': 'Такого решения нет.',
+                }, status=404)
             serializer = TaskCollectionSolveForUserSerializer(solve, many=False)
             data = serializer.data
-
+            data['exam'] = solve.task_collection.subject.exam.name
+            
             return Response(data, status=200)
         except Exception as e:
             print(e)
@@ -426,19 +431,19 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             else:
                 cur_class = None
 
-            if cur_class and (cur_class.created_by.id != user_id) and (not is_staff):
-                return Response("Forbidden", status=406)
-            if (collection.created_by.id != user_id) and (not is_staff) and (not cur_class):
-                return Response("Forbidden", status=406)
-
             collection_info = TaskCollectionInfoSerializer(collection).data
-
             solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug)
+
             if cur_class:
+                if (cur_class.created_by.id != user_id) and (not is_staff):
+                    return Response("Forbidden", status=406)
                 solves = solves.filter(user__in=cur_class.students.all())
+            else:
+                if (collection.created_by.id != user_id) and (not is_staff) and (not cur_class):
+                    solves = solves.filter(user=user_id)
             solves = TaskCollectionSolveForAllSolSerializer(solves, many=True).data
             response = {'col_info': collection_info, "solves": solves}
-            print(f"Количество SQL-запросов: {len(connection.queries)}")
+            #print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response(response, status=200)
         except Exception as e:
             print(e)
@@ -463,10 +468,10 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             else:
                 cur_class = None
 
-            if cur_class and (cur_class.created_by.id != user_id) and (not is_staff):
-                return Response("Forbidden", status=406)
-            if (collection.created_by.id != user_id) and (not is_staff) and (not cur_class):
-                return Response("Forbidden", status=406)
+            # if cur_class and (cur_class.created_by.id != user_id) and (not is_staff):
+            #     return Response("Forbidden", status=406)
+            # if (collection.created_by.id != user_id) and (not is_staff) and (not cur_class):
+            #     return Response("Forbidden", status=406)
 
             # collection_info = TaskCollectionInfoSerializer(collection).data
 
@@ -483,7 +488,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                         tasks_ok[name] = tasks_ok.get(name, 0) + 1
                     tasks_all[name] = tasks_all.get(name, 0) + 1
 
-            tasks_percent = {task_name: round(tasks_ok.get(task_name, 0) / tasks_all[task_name], 2) for task_name in
+            tasks_percent = {task_name: round(tasks_ok.get(task_name, 0) / tasks_all[task_name]*100, 2) for task_name in
                              tasks_all}
 
             scale = collection.subject.scale

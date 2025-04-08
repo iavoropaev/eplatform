@@ -1,5 +1,6 @@
 import axios from "axios";
 import { prepareTask } from "../components/Utils/Server/serverUtils";
+import { showError } from "../components/Utils/Notifications";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
@@ -45,6 +46,10 @@ export const getExamSolution = async (col_slug, sol_type, sol_id) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 404) {
+      showError("Такого решения не существует.");
+    }
+
     return undefined;
   }
 };

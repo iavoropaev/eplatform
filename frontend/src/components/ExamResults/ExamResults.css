@@ -75,7 +75,13 @@
   box-shadow: 0 0 15px 4px rgba(255, 215, 0, 0.6);
   animation: gold-glow 2s ease-in-out infinite;
 }
-
+.exam-results .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
 @keyframes gold-glow {
   0% {
     box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.5);

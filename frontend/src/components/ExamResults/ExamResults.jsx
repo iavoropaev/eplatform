@@ -18,6 +18,7 @@ const ExamResults = () => {
   const [testScore, setTestScore] = useState(undefined);
   const [duration, setDuration] = useState(0);
   const [solData, setSolData] = useState("");
+  const [examName, setExamName] = useState("");
   const [achievements, setAchievements] = useState([]);
 
   const [isLoading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ const ExamResults = () => {
         console.log(solve);
         setAttId(solve.id);
         setColName(solve.task_collection.name);
+        setExamName(solve.exam);
         setAnswers(solve.answers);
         setScore(solve.score);
         setMaxScore(solve.max_score);
@@ -57,6 +59,22 @@ const ExamResults = () => {
   };
 
   const getColorByScore = (score) => {
+    if (examName === "ОГЭ") {
+      if (score === 2) {
+        return "#ff7f7f";
+      }
+      if (score === 3) {
+        return "#ffa500";
+      }
+      if (score === 4) {
+        return "#fffea8";
+      }
+      if (score === 5) {
+        return "#9ced99";
+      }
+
+      return "";
+    }
     if (score === 100) {
       return "#FFD700";
     }
@@ -115,13 +133,20 @@ const ExamResults = () => {
         <ExamSolutionTable answers={answers} />
       </div>
 
-      <div>
+      <div className="buttons">
         <button
           onClick={() => {
             navigate(`/variant/${slug}/attempt/${attId}/`);
           }}
         >
           Вернуться к варианту
+        </button>
+        <button
+          onClick={() => {
+            window.open(`/variant/${slug}/all-results/stats/`, "_blank");
+          }}
+        >
+          Статистика варианта
         </button>
       </div>
       {achievements.length > 0 && (

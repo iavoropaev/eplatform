@@ -75,10 +75,14 @@ export const ExamStatistics = ({ statsData }) => {
             margin={{ top: 20, right: 30, left: 50, bottom: 60 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="score" interval={0}>
-              <Label value="Задачи" offset={-15} position="insideBottom" />
+            <XAxis
+              dataKey="score"
+              interval={0}
+              tick={{ angle: -45, dx: 0, dy: 20, fontSize: 12 }}
+            >
+              <Label value="Задачи" offset={-50} position="insideBottom" />
             </XAxis>
-            <YAxis domain={[0, 1]}>
+            <YAxis domain={[0, 100]}>
               <Label
                 value="Процент решения"
                 angle={-90}

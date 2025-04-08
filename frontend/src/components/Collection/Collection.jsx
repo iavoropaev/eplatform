@@ -14,6 +14,7 @@ const Collection = () => {
   const [isError, setError] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [description, setDescription] = useState("");
   const [colName, setColName] = useState("");
 
   const [solvedStatuses, setSolvedStatuses] = useState({});
@@ -26,6 +27,7 @@ const Collection = () => {
       setLoading(true);
       const collection = await getCollectionBySlug(slug);
       if (collection) {
+        console.log(collection);
         if (jwt) {
           const taskIds = collection["tasks"].map((task) => task.id);
           const idSolvedStatuses = await getSolveStatuses({ taskIds: taskIds });
@@ -37,6 +39,7 @@ const Collection = () => {
         }
         setTasks(collection.tasks);
         setColName(collection.name);
+        setDescription(collection.description);
       } else {
         setError(true);
       }
@@ -76,7 +79,7 @@ const Collection = () => {
       </button>
     </div>
   );
-
+  console.log(description);
   return (
     <div className="collection-container">
       <h2>{colName}</h2>
@@ -85,6 +88,10 @@ const Collection = () => {
         Решено {countOk}/{tasks.length}.
       </p>
       {goToExam}
+      {description && description.length > 10 && (
+        <div className="description">{description}</div>
+      )}
+
       {tasks.map((task) => {
         return (
           <Task

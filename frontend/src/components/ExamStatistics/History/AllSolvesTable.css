@@ -30,3 +30,7 @@
 .all-solves-table .WA {
   background-color: rgb(255, 121, 121);
 }
+
+.all-solves-table .PA {
+  background-color: #fffea8;
+}

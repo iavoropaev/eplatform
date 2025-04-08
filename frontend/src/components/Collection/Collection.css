@@ -22,7 +22,17 @@
 .collection-container .count-answers {
   font-size: 20px;
 }
-
+.collection-container .description {
+  background-color: white;
+  width: fit-content;
+  margin: auto;
+  text-align: left;
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  max-width: 70%;
+  white-space: "pre-line";
+}
 .loading {
   margin-top: 100px;
 }

@@ -25,12 +25,10 @@ const Main = () => {
             console.log(data);
             console.log(data.access);
             localStorage.setItem("jwt_a", data.access);
-            localStorage.setItem("jwt_r", data.refresh);
             localStorage.setItem("photo", data.photo_50);
             localStorage.setItem("first_name", data.first_name);
             localStorage.setItem("isAuth", true);
             localStorage.setItem("isAdmin", data.is_admin);
-            //dispatch(setHasToken(true));
             navigate("./", { relative: "path" });
             window.location.reload();
           } catch (error) {

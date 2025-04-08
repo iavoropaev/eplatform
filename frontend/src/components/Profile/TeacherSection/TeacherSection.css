@@ -38,7 +38,12 @@
   text-decoration: underline;
 }
 
+.lk-teach .create-class form {
+  display: flex;
+  align-items: center;
+}
 .lk-teach .create-class button {
   border-radius: 3px;
   margin-left: 5px;
+  padding: 4px;
 }
