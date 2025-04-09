@@ -49,9 +49,6 @@ class TaskBankAuthorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
-
-
 class TaskActualitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Actuality
@@ -64,13 +61,13 @@ class TaskExamNameSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-
 class TaskSubjectNameSerializer(serializers.ModelSerializer):
     exam = TaskExamNameSerializer()
 
     class Meta:
         model = TaskSubject
         fields = ['id', 'name', 'exam']
+
 
 class TaskNumberInExamSerializer(serializers.ModelSerializer):
     subject = TaskSubjectNameSerializer(read_only=True)
@@ -79,6 +76,7 @@ class TaskNumberInExamSerializer(serializers.ModelSerializer):
         model = TaskNumberInExam
         fields = ['id', 'name', 'subject', 'answer_data', 'max_score']
 
+
 class TaskSubjectSerializer(serializers.ModelSerializer):
     numbers = TaskNumberInExamSerializer(many=True, read_only=True)
     sources = TaskBankAuthorSerializer(many=True, read_only=True)
@@ -86,7 +84,7 @@ class TaskSubjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskSubject
-        fields = ['id', 'name', 'slug', 'numbers', 'sources', 'authors']
+        fields = ['id', 'name', 'slug', 'numbers', 'sources', 'authors', 'priority']
 
 
 class FilterSerializer(serializers.ModelSerializer):
@@ -97,10 +95,12 @@ class FilterSerializer(serializers.ModelSerializer):
         model = TaskExam
         fields = ('id', 'name', 'slug', 'subjects', 'dif_levels')
 
+
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UploadFiles
         fields = ('id', 'name', 'location')
+
 
 class TaskSerializerForUser(serializers.ModelSerializer):
     author = TaskAuthorSerializer()
@@ -114,11 +114,8 @@ class TaskSerializerForUser(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
-                  'difficulty_level', 'actuality',  'files', 'solution', 'time_update', 'time_create')
+                  'difficulty_level', 'actuality', 'files', 'solution', 'time_update', 'time_create')
 
     def get_solution(self, obj):
         print([obj.solution])
         return obj.solution != ''
-
-
-

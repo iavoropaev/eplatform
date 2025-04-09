@@ -12,7 +12,7 @@ const ComparisonAnswer = ({
       ansData.left.push(el[0]);
       ansData.right.push(el[1]);
     });
-    ansData.right.sort((a, b) => a[0].localeCompare(b[0]));
+    ansData.right.sort((a, b) => a.localeCompare(b));
     return ansData;
   };
 

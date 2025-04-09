@@ -63,9 +63,8 @@ export const ClassStudents = ({
         <summary>Приглашения</summary>
         <div className="invitations">
           {classData?.invitations.map((inv, i) => {
-            const link = `${i + 1}. ${
-              process.env.REACT_APP_AUTH_REDIRECT_URL
-            }class/activate-invitation/${inv.token}/`;
+            const link = `${process.env.REACT_APP_AUTH_REDIRECT_URL}class/activate-invitation/${inv.token}/`;
+
             return (
               <div key={i} className="invitation">
                 <span>{link}</span>{" "}

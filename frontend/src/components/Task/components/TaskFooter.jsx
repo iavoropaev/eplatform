@@ -112,12 +112,17 @@ const TaskFooter = ({
       setHideSolution(!hideSolution);
     }
   };
-  const allAnswerData = {
-    ...taskData.answer_data,
+
+  let allAnswerData = {
     maxScore: taskData?.number_in_exam?.max_score
       ? taskData?.number_in_exam?.max_score
       : 1,
   };
+  if (Array.isArray(taskData.answer_data)) {
+    allAnswerData["options"] = taskData.answer_data;
+  } else {
+    allAnswerData = { ...allAnswerData, ...taskData.answer_data };
+  }
 
   return (
     <div className="task-footer">

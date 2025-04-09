@@ -42,12 +42,12 @@ const ChoiceAnswer = ({
 
     setAnswer([...newAns]);
   };
-
+  console.log("ad", answerData);
   return (
     <div className="answer-choice">
       {!isCreating &&
-        Array.isArray(answer) &&
-        answerData.map((opt, i) => {
+        Array.isArray(answerData?.options) &&
+        answerData?.options.map((opt, i) => {
           return (
             <div className="ch-option" key={i}>
               <input
@@ -65,7 +65,7 @@ const ChoiceAnswer = ({
         })}
 
       {isCreating &&
-        answerData.map((opt, i) => {
+        answerData?.map((opt, i) => {
           return (
             <div className="ch-option" key={i}>
               <input

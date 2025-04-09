@@ -135,7 +135,7 @@ class TaskSubject(models.Model):
     exam = models.ForeignKey('TaskExam', on_delete=models.PROTECT, blank=False, related_name='subjects')
     authors = models.ManyToManyField('TaskAuthor', related_name='subjects')
     difficulty_levels = models.ManyToManyField('DifficultyLevel', related_name='subjects')
-
+    priority = models.IntegerField(blank=False, null=False, default=1)
     scale = models.JSONField(blank=True, null=True)
 
     def __str__(self):

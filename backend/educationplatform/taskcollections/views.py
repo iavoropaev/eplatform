@@ -38,7 +38,8 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve', 'get_collections']:
             permission_classes = [AllowAny]
-        elif self.action in ['create_collection', 'update_collection', 'generate_collection', 'my_collections']:
+        elif self.action in ['create_collection', 'update_collection', 'generate_collection', 'my_collections',
+                             'delete_collection']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -371,7 +372,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             serializer = TaskCollectionSolveForUserSerializer(solve, many=False)
             data = serializer.data
             data['exam'] = solve.task_collection.subject.exam.name
-            
+
             return Response(data, status=200)
         except Exception as e:
             print(e)
@@ -443,7 +444,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                     solves = solves.filter(user=user_id)
             solves = TaskCollectionSolveForAllSolSerializer(solves, many=True).data
             response = {'col_info': collection_info, "solves": solves}
-            #print(f"Количество SQL-запросов: {len(connection.queries)}")
+            # print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response(response, status=200)
         except Exception as e:
             print(e)
@@ -488,7 +489,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                         tasks_ok[name] = tasks_ok.get(name, 0) + 1
                     tasks_all[name] = tasks_all.get(name, 0) + 1
 
-            tasks_percent = {task_name: round(tasks_ok.get(task_name, 0) / tasks_all[task_name]*100, 2) for task_name in
+            tasks_percent = {task_name: round(tasks_ok.get(task_name, 0) / tasks_all[task_name] * 100, 2) for task_name
+                             in
                              tasks_all}
 
             scale = collection.subject.scale

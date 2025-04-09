@@ -39,12 +39,13 @@ class CoursesViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def all(self, request):
         try:
-            courses = Course.objects.all().values('id', 'name', 'slug', 'description')
+            courses = Course.objects.all().values('id', 'name', 'description')
 
             return Response({
                 'courses': list(courses),
             })
-        except:
+        except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)

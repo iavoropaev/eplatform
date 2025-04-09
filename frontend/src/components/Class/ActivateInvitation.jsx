@@ -11,7 +11,7 @@ const ActivateInvitation = () => {
 
     if (res) {
       showOK("Приглашение активироано!");
-      navigate("/");
+      navigate("/lk/dz/");
     } else {
       showError("Произошла ошибка.");
     }

@@ -112,7 +112,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 return Response({'Error': 'Неверно указан критерий сортировки.'}, status=406)
         else:
             tasks = tasks.order_by('answer_priority', 'actuality__priority', '-time_create')
-        # tasks = tasks[:150]
+        tasks = tasks[:500]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
         print('filtered', len(connection.queries))
@@ -548,9 +548,14 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
         serializer = FilterSerializer(task_exams, many=True)
         data = serializer.data
         for exam in data:
+            subjects = exam['subjects']
+            subjects_sorted = sorted(subjects, key=lambda x: -x['priority'])
+            exam['subjects'] = subjects_sorted
+
+        for exam in data:
             for subject in exam['subjects']:
                 numbers = subject['numbers']
-                numbers_sorted = sorted(numbers, key=lambda x:get_int_number(x['name']))
+                numbers_sorted = sorted(numbers, key=lambda x: get_int_number(x['name']))
                 subject['numbers'] = numbers_sorted
         actualities = [{'id': item.id, 'name': item.name} for item in Actuality.objects.all()]
         print('my', len(connection.queries))

@@ -177,14 +177,13 @@ class ClassesViewSet(viewsets.ModelViewSet):
     def activate_invitation(self, request):
         try:
             cur_user_id = request.user.id
-            is_admin = request.user.is_staff
 
             inv_token = request.data['token']
             inv = Invitation.objects.filter(token=inv_token).get()
             class_ = inv.inv_class
             if class_.students.filter(id=cur_user_id).exists():
                 return Response({'Error': 'Вы уже добавлены в класс.'}, status=400)
-            a = class_.students.add(cur_user_id)
+            class_.students.add(request.user)
             return Response("ok")
 
         except Exception as e:
