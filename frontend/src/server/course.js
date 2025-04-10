@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logOut } from "../components/Utils/Server/serverUtils";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
@@ -21,6 +22,9 @@ export const getCoursesBySubject = async (subjectSlug) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -39,6 +43,9 @@ export const getMyCourses = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -57,6 +64,9 @@ export const getCourseFromServerById = async (courseId) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -77,6 +87,9 @@ export const getLessonFromServerById = async (lessonId) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -96,6 +109,9 @@ export const getLessonNameOnlyByIdFromServer = async (lessonId) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -116,6 +132,9 @@ export const getModuleById = async (moduleId) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -135,6 +154,9 @@ export const getSectionById = async (sectionId) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -154,6 +176,9 @@ export const sendSectionSolution = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -173,6 +198,9 @@ export const createCourse = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -191,6 +219,9 @@ export const createModule = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -209,6 +240,9 @@ export const createLesson = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -227,6 +261,9 @@ export const createSection = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -246,6 +283,9 @@ export const updateCourse = async (data) => {
     }
     return res.data;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -265,6 +305,9 @@ export const updateLesson = async (data) => {
     }
     return res.data;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -284,6 +327,9 @@ export const deleteCourse = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };

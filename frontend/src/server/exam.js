@@ -1,5 +1,5 @@
 import axios from "axios";
-import { prepareTask } from "../components/Utils/Server/serverUtils";
+import { logOut, prepareTask } from "../components/Utils/Server/serverUtils";
 import { showError } from "../components/Utils/Notifications";
 
 const headers = { "Content-Type": "application/json" };
@@ -23,6 +23,9 @@ export const sendExamSolutionToServer = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -49,7 +52,9 @@ export const getExamSolution = async (col_slug, sol_type, sol_id) => {
     if (error.status === 404) {
       showError("Такого решения не существует.");
     }
-
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -69,6 +74,9 @@ export const getMyExamsSolutions = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -90,6 +98,9 @@ export const getMyStudentExamsSolutions = async (student_id) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -113,6 +124,9 @@ export const getAllSolutionsForExam = async (col_slug, class_id) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -135,6 +149,9 @@ export const getStatsForExam = async (col_slug, class_id) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -153,6 +170,9 @@ export const getSolvesExamStatisticsBySubject = async (subject_slug) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -173,6 +193,9 @@ export const deleteSolution = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };

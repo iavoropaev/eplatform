@@ -19,8 +19,11 @@ export const ExamStatisticsPage = () => {
 
   const [statsData, setStatsData] = useState(undefined);
 
+  const [isLoading, setLoading] = useState(false);
+
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const solves = await getAllSolutionsForExam(examSlug, selectedClass);
       const stats = await getStatsForExam(examSlug, selectedClass);
       if (solves && stats) {
@@ -31,6 +34,7 @@ export const ExamStatisticsPage = () => {
         setSolvesData([]);
         showError("Ошибка загрузки.");
       }
+      setLoading(false);
     }
     fetchData();
   }, [examSlug, selectedClass]);
@@ -70,7 +74,8 @@ export const ExamStatisticsPage = () => {
           Статистика
         </button>
       </div>
-      {eSection === "history" && (
+
+      {!isLoading && eSection === "history" && (
         <AllExamResults
           solvesData={solvesData}
           selectedClass={selectedClass}
@@ -78,7 +83,10 @@ export const ExamStatisticsPage = () => {
           allClasses={allClasses}
         />
       )}
-      {eSection === "stats" && <ExamStatistics statsData={statsData} />}
+      {!isLoading && eSection === "stats" && (
+        <ExamStatistics statsData={statsData} />
+      )}
+      {isLoading && <p>Загрузка...</p>}
     </div>
   );
 };

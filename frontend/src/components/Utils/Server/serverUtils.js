@@ -6,3 +6,9 @@ export const prepareTask = (task) => {
 
   return { ...task, answer: answer };
 };
+
+export const logOut = () => {
+  localStorage.clear();
+  alert("Сессия истекла. Пожалуйста, авторизуйтесь заново.");
+  window.location.reload();
+};

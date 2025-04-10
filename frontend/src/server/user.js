@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logOut } from "../components/Utils/Server/serverUtils";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
@@ -20,6 +21,9 @@ export const getMyAchievements = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -38,6 +42,9 @@ export const getSolvesStatisticsBySubject = async (subject_slug) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -58,6 +65,9 @@ export const uploadFile = async (file) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };

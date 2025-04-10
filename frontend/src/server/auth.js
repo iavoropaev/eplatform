@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logOut } from "../components/Utils/Server/serverUtils";
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
 if (jwt_a) {
@@ -27,6 +28,9 @@ export const getTgInvitation = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -45,6 +49,9 @@ export const getTgLinkStatus = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };

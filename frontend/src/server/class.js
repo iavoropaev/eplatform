@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logOut } from "../components/Utils/Server/serverUtils";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
@@ -22,6 +23,9 @@ export const getClassbyId = async (classId) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -40,6 +44,9 @@ export const getStudentClasses = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -57,6 +64,9 @@ export const getMyClasses = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -76,6 +86,9 @@ export const createClass = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -95,6 +108,9 @@ export const createInvitation = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -114,6 +130,9 @@ export const deleteInvitation = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -133,6 +152,9 @@ export const activateInvitation = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -152,6 +174,9 @@ export const createMessage = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -170,6 +195,9 @@ export const getUserMessages = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -189,6 +217,9 @@ export const deleteMessage = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -208,6 +239,9 @@ export const deleteClass = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -227,6 +261,9 @@ export const excludeUserFromClass = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { prepareTask } from "../components/Utils/Server/serverUtils";
+import { logOut, prepareTask } from "../components/Utils/Server/serverUtils";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
@@ -21,6 +21,9 @@ export const getTaskById = async (id) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -40,6 +43,9 @@ export const getTaskWithAnsById = async (id) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -76,6 +82,9 @@ export const getAllTasksFromServer = async ({
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -90,6 +99,9 @@ export const getMyTasks = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -105,6 +117,9 @@ export const getFilterData = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -124,6 +139,9 @@ export const getNumbers = async (examSlug, subjectSlug) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -141,6 +159,9 @@ export const sendSolution = async ({ taskId, answer }) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -159,6 +180,9 @@ export const getSolveStatuses = async ({ taskIds }) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -184,6 +208,9 @@ export const createTaskOnServer = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -204,6 +231,9 @@ export const getTaskSolution = async (taskId) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };

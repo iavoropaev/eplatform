@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { formatDate } from "../../Utils/dates";
+import { formatDate, getStrTime } from "../../Utils/dates";
 import "./AllSolvesTable.css";
 export const AllSolvesTable = ({ data }) => {
   const { examSlug } = useParams();
@@ -40,7 +40,7 @@ export const AllSolvesTable = ({ data }) => {
               </td>
               <td>{solution.score}</td>
               <td>{solution.test_score}</td>
-              <td>{solution.duration}</td>
+              <td>{getStrTime(solution.duration)}</td>
               <td>{formatDate(solution.time_create, "short")}</td>
               {solution.answers.map((ans, i) => {
                 return (

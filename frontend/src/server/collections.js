@@ -1,5 +1,5 @@
 import axios from "axios";
-import { prepareTask } from "../components/Utils/Server/serverUtils";
+import { logOut, prepareTask } from "../components/Utils/Server/serverUtils";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
@@ -20,6 +20,9 @@ export const getCollectionBySlug = async (slug) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -38,6 +41,9 @@ export const updateCollection = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -57,6 +63,9 @@ export const getCollections = async (subjectSlug) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -74,6 +83,9 @@ export const getMyCollections = async () => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -93,6 +105,9 @@ export const createCollection = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -112,6 +127,9 @@ export const deleteCollection = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };
@@ -131,6 +149,9 @@ export const generateCollection = async (data) => {
     }
     return undefined;
   } catch (error) {
+    if (error.status === 401) {
+      logOut();
+    }
     return undefined;
   }
 };

@@ -6,9 +6,11 @@ import { showError } from "../../Utils/Notifications";
 export const ClassVariants = ({ students }) => {
   const [selectedStudent, setSelectedStudent] = useState("-");
   const [solutions, setSolutions] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       if (selectedStudent !== "-") {
         const solutions = await getMyStudentExamsSolutions(selectedStudent);
         if (solutions) {
@@ -17,6 +19,7 @@ export const ClassVariants = ({ students }) => {
           showError("Ошибка.");
         }
       }
+      setLoading(false);
     }
     fetchData();
   }, [selectedStudent]);
@@ -43,16 +46,18 @@ export const ClassVariants = ({ students }) => {
 
       <div className="exam-solutions-section">
         <div className="exam-solutions">
-          {solutions.map((sol) => {
-            return (
-              <Solution
-                key={sol.id}
-                solution={sol}
-                handleDelete={() => {}}
-                hideDelete={true}
-              />
-            );
-          })}
+          {isLoading && <p>Загрузка...</p>}
+          {!isLoading &&
+            solutions.map((sol) => {
+              return (
+                <Solution
+                  key={sol.id}
+                  solution={sol}
+                  handleDelete={() => {}}
+                  hideDelete={true}
+                />
+              );
+            })}
         </div>
       </div>
     </div>

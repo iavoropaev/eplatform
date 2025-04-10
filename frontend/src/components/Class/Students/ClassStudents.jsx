@@ -4,7 +4,7 @@ import {
   deleteInvitation,
   excludeUserFromClass,
 } from "../../../server/class";
-import { showError } from "../../Utils/Notifications";
+import { showError, showOK } from "../../Utils/Notifications";
 
 export const ClassStudents = ({
   classData,
@@ -71,6 +71,7 @@ export const ClassStudents = ({
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(link);
+                    showOK("Скопировано!");
                   }}
                 >
                   Копировать
