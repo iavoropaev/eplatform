@@ -31,7 +31,12 @@ const CourseCatalog = () => {
       <SubjectSelect />
       <div className="col-list">
         {isLoading && <p>Загрузка...</p>}
-        {!isLoading && courses?.length === 0 && <p>Курсов пока нет.</p>}
+        {!isLoading && subjectSlug === "-" && courses?.length === 0 && (
+          <p>Выберите предмет.</p>
+        )}
+        {!isLoading && subjectSlug !== "-" && courses?.length === 0 && (
+          <p>Курсов пока нет.</p>
+        )}
         {!isLoading &&
           courses.map((course) => {
             return (

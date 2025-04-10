@@ -20,7 +20,7 @@ const Profile = () => {
       <div className="lk-navigate">
         <NavigateElement path="dz" name="Сообщения" />
         <NavigateElement path="history" name="История" />
-        <NavigateElement path="stats/-/-" name="Статистика" />
+        <NavigateElement path="stats/ege/ege_inf" name="Статистика" />
         <NavigateElement path="achievements" name="Достижения" />
         <NavigateElement path="teach" name="Для учителей" />
         <NavigateElement path="settings" name="Настройки" />
