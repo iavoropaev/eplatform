@@ -20,3 +20,7 @@
 .h-content p:last-child {
   margin-bottom: 0px;
 }
+
+.h-content iframe {
+  max-width: 100%;
+}

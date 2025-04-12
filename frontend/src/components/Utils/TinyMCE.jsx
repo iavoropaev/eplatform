@@ -56,6 +56,13 @@ export const TinyMCE = ({ editorContent, setEditorContent }) => {
           promotion: false,
           autoresize_bottom_margin: 10,
           autoresize_overflow_padding: 10,
+          extended_valid_elements:
+            "iframe[src|width|height|frameborder|allowfullscreen|sandbox]",
+          setup: function (editor) {
+            editor.on("GetContent", function (e) {
+              e.content = e.content.replace(/ sandbox=""/gi, "");
+            });
+          },
         }}
       />
     </div>

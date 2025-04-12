@@ -619,7 +619,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 )
                 .values('task_collection')
                 .annotate(best_score=Max('test_score'))
-                .filter(best_score__gte=80, best_score__lte=89)
+                .filter(best_score__gte=60, best_score__lte=79)
                 .count()
             )
 

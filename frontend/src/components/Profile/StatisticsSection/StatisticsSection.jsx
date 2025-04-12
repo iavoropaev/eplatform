@@ -102,32 +102,37 @@ export const StatisticsSection = () => {
                   </tr>
                 </tbody>
               </table>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Набрано</th>
-                    <th>Количество раз</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{"100 баллов"}</td>
-                    <td>{collectionStats.score_100_count}</td>
-                  </tr>
-                  <tr>
-                    <td>{"90-99 баллов"}</td>
-                    <td>{collectionStats.score_90_99_count}</td>
-                  </tr>
-                  <tr>
-                    <td>{"80-89 баллов"}</td>
-                    <td>{collectionStats.score_80_89_count}</td>
-                  </tr>
-                  <tr>
-                    <td>{"60-79 баллов"}</td>
-                    <td>{collectionStats.score_60_79_count}</td>
-                  </tr>
-                </tbody>
-              </table>
+              {(collectionStats.score_100_count > 0 ||
+                collectionStats.score_90_99_count > 0 ||
+                collectionStats.score_80_89_count > 0 ||
+                collectionStats.score_60_79_count > 0) && (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Набрано</th>
+                      <th>Количество раз</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{"100 баллов"}</td>
+                      <td>{collectionStats.score_100_count}</td>
+                    </tr>
+                    <tr>
+                      <td>{"90-99 баллов"}</td>
+                      <td>{collectionStats.score_90_99_count}</td>
+                    </tr>
+                    <tr>
+                      <td>{"80-89 баллов"}</td>
+                      <td>{collectionStats.score_80_89_count}</td>
+                    </tr>
+                    <tr>
+                      <td>{"60-79 баллов"}</td>
+                      <td>{collectionStats.score_60_79_count}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              )}
             </div>
           </>
         )}
