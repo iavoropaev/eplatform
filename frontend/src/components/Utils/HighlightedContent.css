@@ -3,14 +3,18 @@
   overflow: auto;
   margin: 15px 15px 15px 15px;
 }
-
+.h-content h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
 .h-content img {
   max-width: 90%;
   height: auto;
   display: block;
 }
 
-.h-content p {
+.h-content p,
+.h-content pre {
   margin-bottom: 10px;
   margin-top: 10px;
 }

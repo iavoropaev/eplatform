@@ -112,7 +112,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 return Response({'Error': 'Неверно указан критерий сортировки.'}, status=406)
         else:
             tasks = tasks.order_by('answer_priority', 'actuality__priority', '-time_create')
-        tasks = tasks[:500]
+        tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
         print('filtered', len(connection.queries))
@@ -226,6 +226,8 @@ class TaskViewSet(viewsets.ModelViewSet):
             return Response(response_serializer.data, status=status.HTTP_200_OK)
 
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
     # @action(detail=False, methods=['post'])
     # def answer_update_by_fipi_id(self, request, *args, **kwargs):
@@ -547,6 +549,7 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
                                                        'subjects__authors').all()
         serializer = FilterSerializer(task_exams, many=True)
         data = serializer.data
+        data = data[::-1]
         for exam in data:
             subjects = exam['subjects']
             subjects_sorted = sorted(subjects, key=lambda x: -x['priority'])
@@ -557,6 +560,7 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
                 numbers = subject['numbers']
                 numbers_sorted = sorted(numbers, key=lambda x: get_int_number(x['name']))
                 subject['numbers'] = numbers_sorted
+                subject['sources'] = subject['sources'][::-1]
         actualities = [{'id': item.id, 'name': item.name} for item in Actuality.objects.all()]
         print('my', len(connection.queries))
         return Response({'exams': data, 'actualities': actualities})
