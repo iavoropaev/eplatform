@@ -59,25 +59,44 @@ const UpdateCollection = () => {
     fetchData();
   }, [dispatch, slug]);
 
-  const handleAddTaskByIdBut = async (position) => {
-    const id = Number(newTaskId);
+  const handleAddTaskByIdBut = async (position, taskId) => {
+    let task = undefined;
     const taskIds = tasks.map((task) => task.id);
-    if (id && !taskIds.includes(id)) {
-      const task = await getTaskById(id);
-      if (task !== undefined) {
-        if (position === "start") {
-          dispatch(setTasks([task, ...tasks]));
-        } else {
-          dispatch(setTasks([...tasks, task]));
-        }
 
-        showOK("Задача добавлена!");
-      } else {
-        showError("Задача не добавлена.");
+    if (position === "start" || position === "end") {
+      const id = Number(newTaskId);
+      if (id && !taskIds.includes(id)) {
+        task = await getTaskById(id);
+      } else if (taskIds.includes(id)) {
+        showError("Эта задача уже есть в подборке.");
+        return;
       }
     } else {
-      showError("Задача не добавлена.");
+      if (taskId && !taskIds.includes(Number(taskId))) {
+        task = await getTaskById(taskId);
+      } else {
+        if (taskIds.includes(Number(taskId))) {
+          showError("Эта задача уже есть в подборке.");
+          return;
+        }
+      }
     }
+    if (task === undefined) {
+      showError("Задача с таким ID не найдена.");
+      return;
+    }
+
+    if (position === "start") {
+      dispatch(setTasks([task, ...tasks]));
+    } else if (position === "end") {
+      dispatch(setTasks([...tasks, task]));
+    } else {
+      const newTasks = [...tasks];
+      newTasks.splice(position, 1, task);
+      dispatch(setTasks(newTasks));
+    }
+    showOK("Задача добавлена!");
+
     setNewTaskId("");
   };
 
@@ -123,26 +142,6 @@ const UpdateCollection = () => {
       showError("Подборка не обновлена.");
     }
   };
-
-  // const addTaskById = (
-  //   <div className="add-by-id">
-  //     <span>Добавить задачу по ID </span>
-  //     <form
-  //       onSubmit={(e) => {
-  //         e.preventDefault();
-  //         handleAddTaskByIdBut();
-  //       }}
-  //     >
-  //       <input
-  //         value={newTaskId}
-  //         onChange={(e) => {
-  //           setNewTaskId(e.target.value);
-  //         }}
-  //       ></input>
-  //       <button type="submit">Добавить</button>
-  //     </form>
-  //   </div>
-  // );
 
   if (isLoading) {
     return <></>;
@@ -210,7 +209,12 @@ const UpdateCollection = () => {
         Сохранить
       </button>
 
-      <TasksList tasks={tasks} swap={swap} delTaskByIndex={delTaskByIndex} />
+      <TasksList
+        tasks={tasks}
+        swap={swap}
+        delTaskByIndex={delTaskByIndex}
+        handleAddTaskByIdBut={handleAddTaskByIdBut}
+      />
 
       {tasks.length > 0 && (
         <div className="add-by-id">

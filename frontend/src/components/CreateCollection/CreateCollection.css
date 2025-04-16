@@ -21,7 +21,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 30px;
+  gap: 50px;
   margin: 30px 0px 30px 0px;
 }
 .cc-task {
@@ -66,6 +66,19 @@
   gap: 5px;
 }
 
+.create-collection .swap-cont {
+  margin-top: 10px;
+}
+.create-collection .swap-cont form {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.create-collection .swap-cont button {
+  padding: 4px;
+  border-radius: 5px;
+}
 @media (max-width: 600px) {
   .create-collection {
     padding-right: 15px;
