@@ -156,7 +156,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality'
             ).filter(created_by=cur_user_id)
             count_all = tasks.count()
-            tasks = tasks.order_by('-time_create')[:10]  # !!!!!!!!!
+            tasks = tasks.order_by('-time_create')[:20]  # !!!!!!!!!
             paginator = Paginator(tasks, 10 ** 6)
             tasks_page = paginator.get_page(1)
             tasks = tasks_page.object_list

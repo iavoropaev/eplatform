@@ -158,7 +158,7 @@ const TaskFooter = ({
                     setAnswerSave(false);
                   }}
                 >
-                  Отчистить
+                  Очистить
                 </button>
               </div>
             )}

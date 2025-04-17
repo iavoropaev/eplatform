@@ -1,3 +1,4 @@
+import datetime
 import json
 import random
 from collections import Counter
@@ -9,6 +10,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.reverse import reverse
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from classes.models import Class
@@ -86,15 +88,14 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def get_collections(self, request):
         subject_slug = request.query_params.get('subject_slug', None)
-        queryset = TaskCollection.objects.all().filter(is_public=True, subject__slug=subject_slug).order_by(
-            'time_create')
+        queryset = TaskCollection.objects.filter(is_public=True, subject__slug=subject_slug).order_by('time_create')
         serializer = TaskCollectionInfoSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'], url_path='my-collections')
     def my_collections(self, request):
         cur_user_id = request.user.id
-        queryset = TaskCollection.objects.all().filter(created_by=cur_user_id)
+        queryset = TaskCollection.objects.filter(created_by=cur_user_id).order_by('-time_create')
         serializer = TaskCollectionInfoSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -254,7 +255,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             max_score = 0
             for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name',
                                                       'number_in_exam__max_score', 'number_in_exam__check_rule'):
-                print(task)
+                print('task', task)
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
                 max_task_score = task['number_in_exam__max_score']
@@ -267,12 +268,14 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 if str(task_id) in user_answers:
                     user_answer = user_answers[str(task_id)]
                     check_res = check_answer(user_answer, ok_answer, max_score=max_task_score, check_rule=check_rule)
+                    print(check_res)
                     score = check_res['score']
                     status = check_res['status']
                     total_score += score
                 else:
                     status = 'NA'
                     user_answer = {}
+
                 answers_summary.append({"task_id": task_id,
                                         "number_in_exam": task['number_in_exam__name'],
                                         "user_answer": user_answer,
