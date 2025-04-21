@@ -69,7 +69,10 @@ export const AllExamResults = ({
       </div>
 
       {filteredSolvesData.length > 0 && (
-        <AllSolvesTable data={filteredSolvesData} />
+        <div className="res-table-cont">
+          {`Результатов: ${filteredSolvesData.length}.`}
+          <AllSolvesTable data={filteredSolvesData} />
+        </div>
       )}
       {filteredSolvesData.length === 0 && <h3>Решения не найдены.</h3>}
     </div>

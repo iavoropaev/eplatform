@@ -479,7 +479,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             # collection_info = TaskCollectionInfoSerializer(collection).data
 
-            solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug)
+            solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug, score__gt=0)
             if cur_class:
                 solves = solves.filter(user__in=cur_class.students.all())
 

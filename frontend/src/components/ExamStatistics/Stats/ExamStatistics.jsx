@@ -65,7 +65,7 @@ export const ExamStatistics = ({ statsData }) => {
         )}
       </div>
 
-      <div>
+      <div className="charts">
         <h3>Процент решения задач</h3>
         {preparedScoreDistribution && (
           <BarChart
