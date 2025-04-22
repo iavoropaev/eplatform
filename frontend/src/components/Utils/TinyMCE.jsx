@@ -19,6 +19,8 @@ export const TinyMCE = ({ editorContent, setEditorContent }) => {
         onEditorChange={handleEditorChange}
         init={{
           file_picker_types: "file image media",
+          relative_urls: false,
+          convert_urls: false,
           images_upload_url: process.env.REACT_APP_API_URL + "upload-file/",
           menubar: true,
           plugins: [
