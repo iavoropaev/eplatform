@@ -64,7 +64,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         tasks = Task.objects.all().select_related(
             'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality', 'number_in_exam__subject',
             'number_in_exam__subject__exam'
-        ).prefetch_related('bank_authors').prefetch_related('files').filter(~Q(number_in_exam=33))
+        ).prefetch_related('bank_authors').prefetch_related('files')
 
         if 'subject' in request.data:
             tasks = tasks.filter(number_in_exam__subject__id=request.data['subject'])
@@ -73,6 +73,8 @@ class TaskViewSet(viewsets.ModelViewSet):
             tasks = tasks.filter(bank_authors__id__in=request.data['bank_authors'])
         if 'numbers_in_exam' in request.data and request.data['numbers_in_exam']:
             tasks = tasks.filter(number_in_exam_id__in=request.data['numbers_in_exam'])
+        else:
+            tasks = tasks.filter(~Q(number_in_exam=33))
         if 'authors' in request.data and request.data['authors']:
             tasks = tasks.filter(author_id__in=request.data['authors'])
         if 'sources' in request.data and request.data['sources']:
