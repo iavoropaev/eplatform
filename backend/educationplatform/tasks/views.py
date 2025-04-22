@@ -64,7 +64,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         tasks = Task.objects.all().select_related(
             'author', 'source', 'number_in_exam', 'difficulty_level', 'actuality', 'number_in_exam__subject',
             'number_in_exam__subject__exam'
-        ).prefetch_related('bank_authors').prefetch_related('files')
+        ).prefetch_related('bank_authors').prefetch_related('files').filter(~Q(number_in_exam=33))
 
         if 'subject' in request.data:
             tasks = tasks.filter(number_in_exam__subject__id=request.data['subject'])
@@ -111,7 +111,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'Error': 'Неверно указан критерий сортировки.'}, status=406)
         else:
-            tasks = tasks.order_by('answer_priority', 'actuality__priority', '-time_create')
+            tasks = tasks.order_by('answer_priority', 'actuality__priority', 'number_in_exam', '-time_create')
         tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
