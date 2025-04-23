@@ -2,7 +2,7 @@ import requests
 
 from educationplatform.settings import BOT_TOKEN
 
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup
 
 
 def clean_html_for_telegram(html):

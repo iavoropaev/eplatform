@@ -44,6 +44,31 @@
   text-align: left;
 }
 
+.course-container .section-content {
+  box-sizing: border-box;
+
+  border-radius: 5px;
+  border: 1px solid grey;
+  text-align: left;
+  background-color: white;
+
+  width: 100%;
+}
+
+.course-container .section-content .h-content {
+  margin: 15px 15px 15px 15px;
+}
+.course-container .section-content .h-content p {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.course-container .section-content .h-content p:first-child {
+  margin-top: 0px;
+}
+.course-container .section-content .h-content p:last-child {
+  margin-bottom: 0px;
+}
+
 @media (max-width: 600px) {
   .course-container > .lesson-container .lesson {
     width: 90%;

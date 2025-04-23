@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCollectionBySlug } from "../../server/collections";
 import Task from "../Task/Task";
 import { getSolveStatuses, sendSolution } from "../../server/bank";
-import "./Collection.css";
 import { showError } from "../Utils/Notifications";
+import "./Collection.css";
 
 const Collection = () => {
   const jwt = localStorage.getItem("jwt_a");
@@ -27,7 +27,6 @@ const Collection = () => {
       setLoading(true);
       const collection = await getCollectionBySlug(slug);
       if (collection) {
-        console.log(collection);
         if (jwt) {
           const taskIds = collection["tasks"].map((task) => task.id);
           const idSolvedStatuses = await getSolveStatuses({ taskIds: taskIds });
@@ -79,7 +78,7 @@ const Collection = () => {
       </button>
     </div>
   );
-  console.log(description);
+
   return (
     <div className="collection-container">
       <h2>{colName}</h2>

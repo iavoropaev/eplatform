@@ -1,8 +1,6 @@
 import json
-import time
 
 from django.db import connection
-from django.db.models import Prefetch
 from rest_framework import status
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
@@ -10,7 +8,6 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
-from yaml import serialize
 
 from courses.models import Course, Section, SectionSolve, Module, Lesson, CourseModule, ModuleLesson, LessonSection
 from courses.serializers import CourseSerializer, SectionSolveSerializer, ModuleSerializer, LessonSerializer, \
@@ -45,7 +42,6 @@ class CoursesViewSet(viewsets.ModelViewSet):
                 'courses': list(courses),
             })
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -76,7 +72,6 @@ class CoursesViewSet(viewsets.ModelViewSet):
             data['is_author'] = cur_user_id == course.created_by.id
             return Response(data)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -88,10 +83,8 @@ class CoursesViewSet(viewsets.ModelViewSet):
             cur_user_id = request.user.id
             cur_lesson_id = request.GET.get('lesson_id')
             lesson_data = get_lesson_data_with_solves(cur_lesson_id, cur_user_id)
-            print('lesson', len(connection.queries))
             return Response(lesson_data)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -101,13 +94,11 @@ class CoursesViewSet(viewsets.ModelViewSet):
         try:
             cur_user_id = request.user.id
             cur_section_id = request.GET.get('section_id')
-            print(cur_section_id)
             section = Section.objects.all().get(id=cur_section_id)
             serializer = SectionSerializer(section)
             return Response(serializer.data, status=200)
 
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=HTTP_404_NOT_FOUND)
@@ -122,7 +113,6 @@ class CoursesViewSet(viewsets.ModelViewSet):
             lesson_data = lesson_serializer.data
             return Response(lesson_data)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.'}, status=404)
 
@@ -130,7 +120,6 @@ class CoursesViewSet(viewsets.ModelViewSet):
     def get_module_with_lessons(self, request):
         try:
             cur_module_id = request.GET.get('module_id')
-            print(cur_module_id)
             module = Module.objects.all().get(id=cur_module_id)
             serializer = ModuleSerializer(module, many=False)
             return Response(serializer.data, status=200)
@@ -172,7 +161,6 @@ class CoursesViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -201,7 +189,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response({'Error': 'Не удалось создать курс.'}, status=status.HTTP_417_EXPECTATION_FAILED)
         except Exception as e:
-            print(e)
+
             return Response({
                 'Error': 'Не удалось создать курс.',
             }, status=status.HTTP_417_EXPECTATION_FAILED)
@@ -211,7 +199,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
         try:
             cur_user_id = request.user.id
             data = request.data | {'created_by': cur_user_id}
-            print(data)
+
             serializer = ModuleAllFieldsSerializer(data=data)
             if serializer.is_valid():
                 new_module = serializer.save()
@@ -219,7 +207,7 @@ class EditCourseViewSet(viewsets.ModelViewSet):
                 return Response(serializer_with_lessons.data, status=status.HTTP_201_CREATED)
             return Response({'Error': 'Не удалось создать модуль.'}, status=status.HTTP_417_EXPECTATION_FAILED)
         except Exception as e:
-            print(e)
+
             return Response({
                 'Error': 'Не удалось создать модуль.',
             }, status=status.HTTP_417_EXPECTATION_FAILED)
@@ -241,7 +229,6 @@ class EditCourseViewSet(viewsets.ModelViewSet):
                 return Response(only_name_serializer.data, status=status.HTTP_201_CREATED)
             return Response({'Error': 'Не удалось создать модуль.'}, status=status.HTTP_417_EXPECTATION_FAILED)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать модуль.',
             }, status=status.HTTP_417_EXPECTATION_FAILED)
@@ -254,7 +241,6 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             serializer = SectionSerializer(created_section)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать секцию.',
             }, status=status.HTTP_417_EXPECTATION_FAILED)
@@ -312,7 +298,6 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             lesson_data = get_lesson_data_with_solves(lesson_id, cur_user_id)
             return Response(lesson_data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(e)
             lesson_data = get_lesson_data_with_solves(lesson_id, cur_user_id)
             return Response(lesson_data)
 
@@ -388,7 +373,6 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             course_serializer = CourseSerializer(course, many=False)
             return Response(course_serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(e)
             course = Course.objects.all().get(id=course_id)
             course_serializer = CourseSerializer(course, many=False)
             return Response(course_serializer.data)
@@ -404,27 +388,4 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             cur_course.delete()
             return Response("deleted")
         except Exception as e:
-            print(e)
             return Response(status=400)
-    # @extend_schema(description='Get solved sections in course.')
-    # @action(detail=True, methods=['get'], url_path='solved-sections')
-    # def solved_sections(self, request, pk):
-    #     try:
-    #         cur_user_id = request.user.id
-    #         cur_course_id = int(pk)
-    #
-    #         solved_sections = []
-    #         for module_id in Course.objects.all().filter(id=cur_course_id)[0].modules.values():
-    #             for lesson_id in Module.objects.all().filter(id=module_id['id'])[0].lessons.values():
-    #                 for section in Lesson.objects.all().filter(id=lesson_id['id'])[0].section.values():
-    #                     if SectionSolve.objects.all().filter(section_id=section['id'], user_id=cur_user_id,
-    #                                                          solve_status=1).count():
-    #                         solved_sections.append(section['id'])
-    #
-    #         return Response({
-    #             'solved_sections_id': solved_sections,
-    #         })
-    #     except:
-    #         return Response({
-    #             'Error': 'Не удалось обработать запрос.',
-    #         })

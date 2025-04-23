@@ -11,5 +11,6 @@ schema.yml
 media
 uploads
 
+TestModule
 frontend/public/tinymce
 __pycache__/

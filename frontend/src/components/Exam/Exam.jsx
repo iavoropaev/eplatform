@@ -12,8 +12,8 @@ import {
   setExamTasks,
 } from "../../redux/slices/examSlice";
 import { sendExamSolutionToServer } from "../../server/exam";
-import "./Exam.css";
 import { showError, showOK } from "../Utils/Notifications";
+import "./Exam.css";
 
 const Exam = () => {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const Exam = () => {
   const tasksWithSol = tasks.filter(
     (task) => task.answer_type === "no_answer" && task.solution
   );
-  console.log(tasksWithSol);
+
   return (
     <div className="exam-container">
       <h2 className="exam-title">{colName}</h2>

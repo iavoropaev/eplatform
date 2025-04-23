@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from classes.models import Class, Invitation, Message
 from classes.serializers import ClassSerializer, InvitationSerializer, ClassSerializerForTeacher, ClassCreateSerializer, \
     MessageSerializer, MessageCreateSerializer
-from educationplatform.settings import BOT_TOKEN
 from educationplatform.utils import send_message_to_tg
 from users.models import User
 
@@ -41,7 +40,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
             serializer = ClassSerializerForTeacher(cur_class)
             return Response(serializer.data)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Error',
             }, status=400)
@@ -67,9 +65,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
         classes_id = list(request.user.student_classes.values_list('id', flat=True))
         messages = Message.objects.select_related('mes_class').filter(mes_class_id__in=classes_id).order_by(
             '-created_at')
-        print(messages)
         serializer = MessageSerializer(messages, many=True)
-        print(f"Количество SQL-запросов: {len(connection.queries)}")
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'], url_path='create-class')
@@ -84,7 +80,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать класс.',
             }, status=400)
@@ -104,7 +99,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
                 return Response(status=403)
 
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось удалить класс.',
             }, status=400)
@@ -128,7 +122,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
                 return Response(status=403)
 
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось исключить ученика из класса.',
             }, status=400)
@@ -152,7 +145,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать приглашение.',
             }, status=400)
@@ -170,7 +162,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
 
             return Response("ok")
         except Exception as e:
-            print(e)
             return Response(status=400)
 
     @action(detail=False, methods=['post'], url_path='activate-invitation')
@@ -187,7 +178,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
             return Response("ok")
 
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось активировать приглашение.',
             }, status=400)
@@ -210,7 +200,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
                 for student in cur_class.students.all():
                     try:
                         if not (student.tg_id is None):
-                            print(student, student.tg_id)
                             send_message_to_tg(student.tg_id, 'Получено новое сообщение.')
                             send_message_to_tg(student.tg_id, f"<b>Текст сообщения:</b>\n{request.data['content']}")
                     except Exception as e:
@@ -219,7 +208,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать приглашение.',
             }, status=400)
@@ -231,13 +219,11 @@ class ClassesViewSet(viewsets.ModelViewSet):
             message_id = request.data['message_id']
             message = Message.objects.filter(id=message_id).get()
             author = message.mes_class.created_by.id
-            print(author)
             if cur_user_id != author:
                 return Response({'Error': 'Доступ запрещён.'}, status=406)
             message.delete()
             return Response('deleted')
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать приглашение.',
             }, status=400)

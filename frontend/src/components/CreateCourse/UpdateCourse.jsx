@@ -5,11 +5,11 @@ import {
   updateCourse,
 } from "../../server/course";
 import { useParams } from "react-router-dom";
-import "./UpdateCourse.css";
 import SwapAndDelete from "../Utils/SwapAndDelete";
 import AddNewLesson from "./components/AddNewLesson";
 import AddNewModule from "./components/AddNewModule";
 import { showError, showOK } from "../Utils/Notifications";
+import "./UpdateCourse.css";
 
 const UpdateCourse = () => {
   const { courseId } = useParams();

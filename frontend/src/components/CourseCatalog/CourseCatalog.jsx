@@ -7,7 +7,7 @@ import "./CourseCatalog.css";
 
 const CourseCatalog = () => {
   const navigate = useNavigate();
-  const { examSlug, subjectSlug } = useParams();
+  const { subjectSlug } = useParams();
   const [courses, setCourses] = useState([]);
   const [isLoading, setLoading] = useState(false);
 

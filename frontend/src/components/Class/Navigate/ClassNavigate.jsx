@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 
-export const ClassNavigate = ({}) => {
+export const ClassNavigate = () => {
   const navigate = useNavigate();
   const { classSection } = useParams();
   return (

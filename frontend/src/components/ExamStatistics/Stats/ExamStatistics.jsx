@@ -29,7 +29,6 @@ export const ExamStatistics = ({ statsData }) => {
       value: percentDistribution[key],
     }));
 
-  console.log("SSSSSS", preparedScoreDistribution);
   return (
     <div>
       <h2>Графики</h2>
@@ -56,10 +55,10 @@ export const ExamStatistics = ({ statsData }) => {
               />
             </YAxis>
             <Tooltip
-              labelFormatter={(label) => `${label} баллов`} // Добавляем слово "баллов"
-              formatter={(value) => [`${value} человек`]} // Форматируем значение
+              labelFormatter={(label) => `${label} баллов`}
+              formatter={(value) => [`${value} человек`]}
             />
-            {/* <Legend /> */}
+
             <Bar dataKey="value" name="Количество человек" fill="#8884d8" />
           </BarChart>
         )}
@@ -91,9 +90,7 @@ export const ExamStatistics = ({ statsData }) => {
                 position="insideLeft"
               />
             </YAxis>
-            <Tooltip
-              formatter={(value) => [`${value} %`]} // Форматируем значение
-            />
+            <Tooltip formatter={(value) => [`${value} %`]} />
 
             <Bar dataKey="value" name="Количество человек" fill="#8884d8" />
           </BarChart>

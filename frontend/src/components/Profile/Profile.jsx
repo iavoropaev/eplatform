@@ -1,15 +1,12 @@
-import { useParams, useNavigate } from "react-router-dom";
-
-import "./Profile.css";
+import { useParams } from "react-router-dom";
 import TeacherSection from "./TeacherSection/TeacherSection";
-import { getMyClasses } from "../../server/class";
-import { useEffect } from "react";
 import { NavigateElement } from "./components/NavigateElement";
 import HistorySection from "./HistorySection/HistorySection";
 import MessagesSection from "./MessagesSection/MessagesSection";
 import Settings from "./Settings/Settings";
 import { Achievements } from "./Achievements/Achievements";
 import { StatisticsSection } from "./StatisticsSection/StatisticsSection";
+import "./Profile.css";
 
 const Profile = () => {
   const { section } = useParams();

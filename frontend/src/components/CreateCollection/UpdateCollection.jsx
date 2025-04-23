@@ -37,7 +37,6 @@ const UpdateCollection = () => {
   const examName = useSelector(
     (state) => state.createCollection?.subject?.exam?.name
   );
-  const colSlug = useSelector((state) => state.createCollection.slug);
 
   const [newTaskId, setNewTaskId] = useState("");
 
@@ -45,7 +44,6 @@ const UpdateCollection = () => {
     async function fetchData() {
       const collection = await getCollectionBySlug(slug);
       if (collection) {
-        console.log(collection);
         dispatch(setTasks(collection.tasks));
         dispatch(setName(collection.name));
         dispatch(setDescription(collection.description));
@@ -132,7 +130,6 @@ const UpdateCollection = () => {
     });
 
     if (collection) {
-      console.log(collection);
       dispatch(setTasks(collection.tasks));
       dispatch(setName(collection.name));
       dispatch(setDescription(collection.description));

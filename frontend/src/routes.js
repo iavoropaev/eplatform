@@ -1,5 +1,5 @@
 import NotFound from "./components/Pages/NotFound";
-import Test from "./components/Pages/Test/Test";
+import Test from "./components/Pages/TestModule/Test";
 import Variants from "./components/Pages/Variants";
 import CreateTaskPage from "./components/Pages/Create task/CreateTaskPage";
 import BankPage from "./components/Pages/Bank/BankPage";

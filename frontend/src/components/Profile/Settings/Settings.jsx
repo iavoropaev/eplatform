@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { deleteSolution, getMyExamsSolutions } from "../../../server/exam";
 import { showError } from "../../Utils/Notifications";
 import { useNavigate } from "react-router-dom";
 import { getTgInvitation, getTgLinkStatus } from "../../../server/auth";
@@ -13,7 +12,6 @@ const Settings = () => {
   useEffect(() => {
     async function fetchData() {
       const status = await getTgLinkStatus();
-      console.log(invitation);
       if (status !== undefined) {
         setLinked(status);
       } else {
@@ -26,11 +24,8 @@ const Settings = () => {
   const getLink = async () => {
     if (invitation === undefined) {
       const invitation = await getTgInvitation();
-      console.log(invitation);
       if (invitation) {
-        setInvitation(
-          "https://t.me/Test_python_aiogram_bot?start=" + invitation.inv_token
-        );
+        setInvitation(process.env.REACT_APP_BOT_URL + invitation.inv_token);
       } else {
         showError("Ошибка загрузки.");
       }
@@ -68,7 +63,7 @@ const Settings = () => {
             <p>Аккаунт успешно привязан.</p>
 
             <a
-              href={"https://t.me/Test_python_aiogram_bot?start=logout"}
+              href={process.env.REACT_APP_BOT_URL + "logout"}
               target="_blank"
               rel="noopener noreferrer"
             >

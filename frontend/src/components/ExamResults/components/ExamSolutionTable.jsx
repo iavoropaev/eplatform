@@ -2,7 +2,6 @@ import SingleAnswer from "./SingleAnswer";
 import "./ExamSolutionTable.css";
 
 const ExamSolutionTable = ({ answers }) => {
-  console.log(answers);
   return (
     <table className="results-table">
       <thead>

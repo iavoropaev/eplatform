@@ -1,3 +1,4 @@
+import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -43,8 +44,7 @@ urlpatterns = [
                   path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:  # Включаем Debug Toolbar только в режиме отладки
-    import debug_toolbar
+if settings.DEBUG:
     urlpatterns += [
-        path('__debug__/', include(debug_toolbar.urls)),  # Это важно!
+        path('__debug__/', include(debug_toolbar.urls)),
     ]

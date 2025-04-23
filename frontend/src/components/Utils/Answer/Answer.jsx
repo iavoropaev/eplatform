@@ -1,4 +1,3 @@
-import { useState } from "react";
 import TextAnswer from "./TextAnswer";
 import TableAnswer from "./TableAnswer";
 import "./Answer.css";

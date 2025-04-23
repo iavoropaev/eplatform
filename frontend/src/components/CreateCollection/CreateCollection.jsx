@@ -1,12 +1,11 @@
 import slugify from "slugify";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import "./CreateCollection.css";
 import { createCollection } from "../../server/collections";
-import { setSlug } from "../../redux/slices/createCollectionSlice";
 import { showError } from "../Utils/Notifications";
 import { getFilterData } from "../../server/bank";
+
+import "./CreateCollection.css";
 
 const CreateCollection = () => {
   const navigate = useNavigate();
@@ -54,7 +53,7 @@ const CreateCollection = () => {
   const handleChangeSubject = (e) => {
     setSubjectId(Number(e.target.value));
   };
-  console.log(filterData);
+
   if (filterData === undefined) {
     return <></>;
   }
@@ -63,7 +62,6 @@ const CreateCollection = () => {
     (exam) => exam?.id === examId
   )[0];
   const subjects = activeExam?.subjects;
-  console.log(activeExam, subjects);
   return (
     <div className="create-collection">
       <h2>Создание подборки задач</h2>

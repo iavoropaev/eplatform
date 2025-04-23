@@ -1,4 +1,3 @@
-import datetime
 import json
 import random
 from collections import Counter
@@ -10,7 +9,6 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from rest_framework.reverse import reverse
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from classes.models import Class
@@ -64,7 +62,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             'task__files').order_by('order')
         tasks = [TaskSerializerForUser(task.task).data for task in links]
         response['tasks'] = tasks
-        print(f"Количество SQL-запросов: {len(connection.queries)}")
         return Response(response)
 
     @action(detail=False, methods=['post'], url_path='create-collection')
@@ -80,7 +77,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать подборку.',
             }, status=400)
@@ -103,8 +99,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
     def update_collection(self, request):
         try:
             cur_user_id = request.user.id
-            print(request.data)
-            print(request.data['tasks'])
             if 'id' in request.data:
                 collection = TaskCollection.objects.select_related('created_by').get(id=request.data['id'])
             elif 'slug' in request.data:
@@ -129,17 +123,14 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             tasks_to_delete = list(TaskCollectionTask.objects.filter(task_collection=collection).values('id'))
             old_task_ids = TaskCollectionTask.objects.filter(task_collection=collection)
             old_task_ids.delete()
-            print(request.data['tasks'])
             task_instances = [
                 TaskCollectionTask(task_collection=collection, task_id=task['id'], order=i)
                 for i, task in enumerate(request.data['tasks'])
             ]
-            print(task_instances)
 
             try:
                 TaskCollectionTask.objects.bulk_create(task_instances)
             except Exception as e:
-                print(e)
                 TaskCollectionTask.objects.bulk_create([TaskCollectionTask(**data) for data in tasks_to_delete])
 
             links = collection.taskcollectiontasks.select_related('task', 'task__author', 'task__source',
@@ -151,7 +142,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
 
             return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обновить подборку.',
             }, status=400)
@@ -198,12 +188,10 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                     links_serializer.save()
                 user_serializer = TaskCollectionGetSerializer(created_collection)
                 queries = connection.queries
-                print(f"Количество запросов: {len(queries)}")
                 return Response(user_serializer.data, status=201)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать подборку.',
             }, status=HTTP_400_BAD_REQUEST)
@@ -221,7 +209,6 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             return Response("deleted")
 
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать подборку.',
             }, status=400)
@@ -255,7 +242,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             max_score = 0
             for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name',
                                                       'number_in_exam__max_score', 'number_in_exam__check_rule'):
-                print('task', task)
                 task_id = task['id']
                 ok_answer_type = task['answer_type']
                 max_task_score = task['number_in_exam__max_score']
@@ -268,7 +254,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 if str(task_id) in user_answers:
                     user_answer = user_answers[str(task_id)]
                     check_res = check_answer(user_answer, ok_answer, max_score=max_task_score, check_rule=check_rule)
-                    print(check_res)
                     score = check_res['score']
                     status = check_res['status']
                     total_score += score
@@ -298,7 +283,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             achievements_names = []
             if collection.is_public:
                 # 100%
-                print(total_score, max_score)
                 if total_score == max_score:
                     achievements_names.append('100%')
                 # Первопроходец
@@ -340,7 +324,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 'answers': answers_summary
             })
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -378,7 +361,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             return Response(data, status=200)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -393,7 +375,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             serializer = TaskCollectionSolveForUserSerializer(solves, many=True)
             data = serializer.data
-            print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response(data, status=200)
         except Exception as e:
             return Response({
@@ -411,7 +392,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             serializer = TaskCollectionSolveForUserSerializer(solves, many=True)
             data = serializer.data
-            print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response(data, status=200)
         except Exception as e:
             return Response({
@@ -447,10 +427,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                     solves = solves.filter(user=user_id)
             solves = TaskCollectionSolveForAllSolSerializer(solves, many=True).data
             response = {'col_info': collection_info, "solves": solves}
-            # print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response(response, status=200)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -471,13 +449,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 cur_class = Class.objects.filter(id=class_id).select_related('created_by').get()
             else:
                 cur_class = None
-
-            # if cur_class and (cur_class.created_by.id != user_id) and (not is_staff):
-            #     return Response("Forbidden", status=406)
-            # if (collection.created_by.id != user_id) and (not is_staff) and (not cur_class):
-            #     return Response("Forbidden", status=406)
-
-            # collection_info = TaskCollectionInfoSerializer(collection).data
 
             solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug, score__gt=0)
             if cur_class:
@@ -519,11 +490,9 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             score_distribution = dict(sorted(score_distribution.items(), key=lambda item: int(item[0])))
 
-            print(f"Количество SQL-запросов: {len(connection.queries)}")
             return Response({'score_distribution': score_distribution, 'percent_distribution': tasks_percent},
                             status=200)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -635,7 +604,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                              'score_60_79_count': score_60_79_count
                              })
         except Exception as e:
-            print(e)
             return Response(status=400)
 
     @action(detail=False, methods=['post'], url_path='delete-solution')

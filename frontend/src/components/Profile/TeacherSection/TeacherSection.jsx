@@ -80,7 +80,6 @@ const TeacherSection = () => {
             onSubmit={async (e) => {
               e.preventDefault();
               const newClass = await createClass({ name: newClassName });
-              console.log(newClass);
               navigate(`/class/${newClass.id}/messages/`);
               setNewClassName("");
             }}

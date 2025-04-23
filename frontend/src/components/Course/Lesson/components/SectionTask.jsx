@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { sendSectionSolution } from "../../../../server/course";
+import { useState } from "react";
 import Task from "../../../Task/Task";
 import { useDispatch } from "react-redux";
-import { clearExamAnswer } from "../../../../redux/slices/examSlice";
 import { deleteSolveStatus } from "../../../../redux/slices/courseSlice";
 
 import "./SectionTask.css";

@@ -8,10 +8,6 @@ const Auth = () => {
     app: process.env.REACT_APP_VKID_APPLICATION_ID, // Идентификатор приложения.
     redirectUrl: process.env.REACT_APP_AUTH_REDIRECT_URL, // Адрес для перехода после авторизации.
   });
-  //   VKID.Config.set({
-  //     app: process.env.REACT_APP_AUTH_VK_ID, // Идентификатор приложения.
-  //     redirectUrl: process.env.REACT_APP_AUTH_REDIRECT, // Адрес для перехода после авторизации.
-  //   });
 
   useEffect(() => {
     async function fetchData() {}

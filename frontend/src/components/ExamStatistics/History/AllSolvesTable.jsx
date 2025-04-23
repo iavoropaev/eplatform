@@ -1,12 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { formatDate, getStrTime } from "../../Utils/dates";
 import "./AllSolvesTable.css";
+
 export const AllSolvesTable = ({ data }) => {
   const { examSlug } = useParams();
-  const navigate = useNavigate();
-
   const allNumbers = data[0]?.answers?.map((ans) => ans.number_in_exam);
-  console.log(data);
+
   return (
     <div className="all-solves">
       <table className="all-solves-table">

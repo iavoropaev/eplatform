@@ -117,5 +117,4 @@ class TaskSerializerForUser(serializers.ModelSerializer):
                   'difficulty_level', 'actuality', 'files', 'solution', 'time_update', 'time_create')
 
     def get_solution(self, obj):
-        print([obj.solution])
         return obj.solution != ''

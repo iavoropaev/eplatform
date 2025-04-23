@@ -1,9 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  createInvitation,
-  deleteInvitation,
-  excludeUserFromClass,
-} from "../../../server/class";
+import { createInvitation, deleteInvitation } from "../../../server/class";
 import { showError, showOK } from "../../Utils/Notifications";
 
 export const ClassStudents = ({
@@ -78,7 +74,6 @@ export const ClassStudents = ({
                 </button>
                 <button
                   onClick={() => {
-                    console.log(inv.id);
                     handleDeleteBut(inv.id, i);
                   }}
                 >

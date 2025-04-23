@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logOut, prepareTask } from "../components/Utils/Server/serverUtils";
+import { logOut } from "../components/Utils/Server/serverUtils";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");

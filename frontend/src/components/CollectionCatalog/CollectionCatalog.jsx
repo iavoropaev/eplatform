@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { getCollections } from "../../server/collections";
 import { useNavigate, useParams } from "react-router-dom";
-import "./CollectionCatalog.css";
 import { SubjectSelect } from "../Utils/SubjectSelect/SubjectSelect";
-import { showError } from "../Utils/Notifications";
-import { getFilterData } from "../../server/bank";
+import "./CollectionCatalog.css";
 
 const CollectionCatalog = () => {
   const navigate = useNavigate();
-  const { examSlug, subjectSlug } = useParams();
+  const { subjectSlug } = useParams();
   const [collections, setCollections] = useState([]);
   const [isLoading, setLoading] = useState(false);
 

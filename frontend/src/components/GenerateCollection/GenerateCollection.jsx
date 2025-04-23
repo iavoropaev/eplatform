@@ -3,11 +3,11 @@ import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
 import { getFilterData } from "../../server/bank";
 import { useEffect, useState } from "react";
-import "./GenerateCollection.css";
 import { GenerateCollSelect } from "./components/GenerateCollSelect";
 import { SubjectSelect } from "../Utils/SubjectSelect/SubjectSelect";
 import { generateCollection } from "../../server/collections";
 import { showError } from "../Utils/Notifications";
+import "./GenerateCollection.css";
 
 const GenerateCollection = () => {
   const navigate = useNavigate();

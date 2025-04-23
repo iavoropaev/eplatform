@@ -1,15 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import "./CreateTaskPage.css";
 import CreateTask from "../../CreateTask/CreateTask";
 import { useEffect, useState } from "react";
 import {
   createTaskOnServer,
   getFilterData,
-  getTaskById,
   getTaskWithAnsById,
 } from "../../../server/bank";
 import { getPreparedFilterData } from "../../Utils/FilterUtils";
+import "./CreateTaskPage.css";
 
 const CreateTaskPage = () => {
   const navigate = useNavigate();
@@ -17,7 +16,6 @@ const CreateTaskPage = () => {
 
   const [countSave, setCountSave] = useState(0);
   const [loadStatus, setLoadStatus] = useState(0); // 0 - loading; 1 - ok, -1- error.
-  const [showSaveText, setShowSaveText] = useState(false);
 
   const [editorContent, setEditorContent] = useState("Начальный");
   const [solution, setSolution] = useState("");
@@ -87,7 +85,6 @@ const CreateTaskPage = () => {
       const data = await getTaskWithAnsById(taskId);
 
       if (data !== undefined) {
-        console.log("data", data);
         setEditorContent(data.content);
         setAnswer(data.answer);
         setAnswerType(data.answer_type);
@@ -95,7 +92,6 @@ const CreateTaskPage = () => {
         const numberId = data.number_in_exam?.id;
         const subjectId = data.number_in_exam?.subject?.id;
         const examId = data.number_in_exam?.subject?.exam?.id;
-        console.log("res", data.bank_authors);
         const bankAuthors = data.bank_authors.map((el) => el.id);
         const taskAuthor = data.author?.id;
         setSelectedTaskAuthor(taskAuthor);
@@ -129,7 +125,6 @@ const CreateTaskPage = () => {
 
     if (taskId && filterData?.exams?.length > 0) {
       fetchData();
-      console.log("Download task");
     } else {
       setDefault();
     }
@@ -212,7 +207,7 @@ const CreateTaskPage = () => {
     setSelectedActuality,
     setFiles,
   };
-  console.log("EC", editorContent);
+
   return (
     <div className="create-task-cont">
       <h2>Добавление задачи</h2>

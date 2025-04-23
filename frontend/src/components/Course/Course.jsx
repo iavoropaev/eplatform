@@ -13,8 +13,8 @@ import {
 } from "../../redux/slices/courseSlice";
 import Lesson from "./Lesson/Lesson";
 import EditLesson from "./EditLesson/EditLesson";
-import "./Course.css";
 import { showError } from "../Utils/Notifications";
+import "./Course.css";
 
 const Course = () => {
   const { courseId, lesson, lessonId } = useParams();
@@ -59,7 +59,6 @@ const Course = () => {
       }
     }
     if (String(currentLesson?.id) !== lessonId && lessonId !== undefined) {
-      console.log(lessonId);
       fetchData();
     }
   }, [dispatch, navigate, lessonId, courseId, currentLesson]);
@@ -71,7 +70,7 @@ const Course = () => {
       dispatch(setCurrentLesson(undefined));
       dispatch(setCourseData({}));
     };
-  }, []);
+  }, [dispatch]);
 
   if (isLoading) {
     return (
@@ -80,7 +79,7 @@ const Course = () => {
       </div>
     );
   }
-  console.log(courseData);
+
   return (
     <div className="course-container">
       <LeftMenu />

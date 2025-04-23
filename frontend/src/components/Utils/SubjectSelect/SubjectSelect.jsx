@@ -34,9 +34,7 @@ export const SubjectSelect = () => {
   const activeExam = filterData?.exams?.filter(
     (exam) => exam?.slug === examSlug
   )[0];
-  const activeSubject = activeExam?.subjects?.filter(
-    (subj) => subj?.slug === subjectSlug
-  )[0];
+
   const subjects = activeExam?.subjects;
 
   if (filterData === undefined) {

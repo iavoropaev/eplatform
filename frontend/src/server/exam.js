@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logOut, prepareTask } from "../components/Utils/Server/serverUtils";
+import { logOut } from "../components/Utils/Server/serverUtils";
 import { showError } from "../components/Utils/Notifications";
 
 const headers = { "Content-Type": "application/json" };

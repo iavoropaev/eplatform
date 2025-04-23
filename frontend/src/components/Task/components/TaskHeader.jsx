@@ -19,8 +19,6 @@ const TaskHeader = ({ taskData, showEditIcon, hideTaskInfo }) => {
         )}
       </span>
       <span className="stat">
-        {/* <span className="header-tag">{"Решило 125 чел."}</span> */}
-        {/* <span className="header-tag">{"45%"}</span> */}
         {hideTaskInfo !== true && (
           <span className="header-tag">{taskData.id}</span>
         )}

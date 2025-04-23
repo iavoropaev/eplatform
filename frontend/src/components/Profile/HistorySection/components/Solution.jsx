@@ -4,7 +4,6 @@ import { formatDate } from "../../../Utils/dates";
 
 export const Solution = ({ solution, handleDelete, hideDelete }) => {
   const [showAnswers, setShowAnswers] = useState(false);
-  console.log(solution);
   return (
     <div className="solution" key={solution.id}>
       <div className="solution-header">

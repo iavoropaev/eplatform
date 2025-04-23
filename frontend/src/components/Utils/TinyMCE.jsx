@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 export const TinyMCE = ({ editorContent, setEditorContent }) => {

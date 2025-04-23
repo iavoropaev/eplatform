@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
-import {
-  getMyAchievements,
-  getSolvesStatisticsBySubject,
-} from "../../../server/user";
+import { getSolvesStatisticsBySubject } from "../../../server/user";
 import { showError } from "../../Utils/Notifications";
-import "./StatisticsSection.css";
 import { SubjectSelect } from "../../Utils/SubjectSelect/SubjectSelect";
 import { useParams } from "react-router-dom";
 import { getSolvesExamStatisticsBySubject } from "../../../server/exam";
+import "./StatisticsSection.css";
 
 export const StatisticsSection = () => {
-  const { examSlug, subjectSlug } = useParams();
+  const { subjectSlug } = useParams();
 
   const [numberStats, setNumberStats] = useState(undefined);
   const [collectionStats, setCollectionStats] = useState(undefined);
@@ -35,8 +32,6 @@ export const StatisticsSection = () => {
     }
     fetchData();
   }, [subjectSlug]);
-
-  console.log(numberStats);
 
   return (
     <div className="stats-section">

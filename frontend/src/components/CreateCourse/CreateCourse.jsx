@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import "./CreateCourse.css";
 import { showError, showOK } from "../Utils/Notifications";
 import { getFilterData } from "../../server/bank";
 import { createCourse } from "../../server/course";
+
+import "./CreateCourse.css";
 
 const CreateCourse = () => {
   const navigate = useNavigate();
@@ -49,7 +49,6 @@ const CreateCourse = () => {
   const handleChangeSubject = (e) => {
     setSubjectId(Number(e.target.value));
   };
-  console.log(filterData);
   if (filterData === undefined) {
     return <></>;
   }

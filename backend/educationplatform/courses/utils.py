@@ -32,7 +32,6 @@ def get_lesson_data_with_solves(cur_lesson_id, cur_user_id):
     return lesson_data
 
 
-
 def create_empty_section(user_id):
     data = {'created_by': user_id, 'content': '...', 'task': None, 'type': 'text', 'video': ""}
     serializer = SectionAllFieldsSerializer(data=data)

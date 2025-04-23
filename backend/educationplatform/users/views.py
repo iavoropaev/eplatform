@@ -84,7 +84,6 @@ def get_tg_invitation(request):
 
         return Response(serializer.data, status=200)
     except Exception as e:
-        print(e)
         return Response({
             'Error': 'Не удалось создать приглашение.',
         }, status=400)
@@ -106,7 +105,6 @@ def activate_tg_invitation(request):
         invitation.delete()
         return Response({'access_token': access_token}, status=200)
     except Exception as e:
-        print(e)
         return Response({
             'Error': 'Не удалось создать приглашение.',
         }, status=400)
@@ -126,7 +124,6 @@ def get_tg_link_status(request):
 
         return Response(status, status=200)
     except Exception as e:
-        print(e)
         return Response({
             'Error': 'Не удалось обработать запрос.',
         }, status=400)
@@ -144,7 +141,6 @@ def delete_tg_link(request):
         user.save()
         return Response('unlinked', status=200)
     except Exception as e:
-        print(e)
         return Response({
             'Error': 'Не удалось обработать запрос.',
         }, status=400)
@@ -166,7 +162,6 @@ class AchievementViewSet(viewsets.ModelViewSet):
             serializer = AchievementSerializer(achievements, many=True)
             return Response(serializer.data, status=200)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось создать подборку.',
             }, status=400)

@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  deleteClass,
-  excludeUserFromClass,
-  getClassbyId,
-} from "../../server/class";
+import { useParams } from "react-router-dom";
+import { excludeUserFromClass, getClassbyId } from "../../server/class";
 import { ClassMessages } from "./Messages/ClassMessages";
 import { ClassStudents } from "./Students/ClassStudents";
-import "./ClassForTeacher.css";
 import { ClassNavigate } from "./Navigate/ClassNavigate";
 import { ClassVariants } from "./Variants/ClassVariants";
 import { showError, showOK } from "../Utils/Notifications";
+import "./ClassForTeacher.css";
 
 const ClassForTeacher = () => {
-  const navigate = useNavigate();
   const { classId, classSection } = useParams();
 
   const [classData, setClassData] = useState(undefined);
@@ -52,8 +47,6 @@ const ClassForTeacher = () => {
   if (!classData) {
     return <></>;
   }
-
-  console.log(classData);
 
   return (
     <div className="teacher-class">

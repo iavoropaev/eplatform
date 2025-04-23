@@ -1,13 +1,12 @@
 import SectionMenu from "./components/SectionMenu";
-import SectionContent from "./components/SectionContent";
 import SectionTask from "./components/SectionTask";
 import { useNavigate, useParams } from "react-router-dom";
 import { sendSectionSolution } from "../../../server/course";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSolveStatus } from "../../../redux/slices/courseSlice";
-import "./Lesson.css";
 import { showError } from "../../Utils/Notifications";
 import HighlightedContent from "../../Utils/HighlightedContent";
+import "./Lesson.css";
 
 const Lesson = () => {
   const navigate = useNavigate();
@@ -62,8 +61,7 @@ const Lesson = () => {
       showError("Решение не отправлено.");
     }
   };
-  console.log(menuStatuses);
-  console.log("s", solveFromServer);
+
   return (
     <div className="lesson-container">
       <div className="lesson">

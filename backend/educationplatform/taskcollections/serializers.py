@@ -18,17 +18,11 @@ class TaskCollectionSerializer(serializers.ModelSerializer):
 
 
 class TaskCollectionGetSerializer(serializers.ModelSerializer):
-    # tasks = TaskSerializerForUser(many=True)
-    # tasks = serializers.SerializerMethodField()
     subject = TaskSubjectNameSerializer()
+
     class Meta:
         model = TaskCollection
         fields = ['id', 'name', 'slug', 'subject', 'is_exam', 'description', 'time_create', 'time_update']
-
-    # def get_tasks(self, collection):
-    #     collection_tasks = collection.taskcollectiontasks.order_by('order')
-    #     tasks = [ct.task for ct in collection_tasks]
-    #     return TaskSerializerForUser(tasks, many=True).data
 
 
 class TaskCollectionCreateSerializer(serializers.ModelSerializer):
@@ -55,7 +49,8 @@ class TaskCollectionSolveForUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskCollectionSolve
-        fields = ['id', 'task_collection', 'score', 'max_score', 'test_score', 'duration', 'answers', 'achievements', 'time_create']
+        fields = ['id', 'task_collection', 'score', 'max_score', 'test_score', 'duration', 'answers', 'achievements',
+                  'time_create']
 
 
 class TaskCollectionSolveForAllSolSerializer(serializers.ModelSerializer):

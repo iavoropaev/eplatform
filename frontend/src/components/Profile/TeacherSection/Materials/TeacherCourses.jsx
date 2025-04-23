@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import Task from "../../../Task/Task";
-import { getMyCollections } from "../../../../server/collections";
+import { useNavigate } from "react-router-dom";
 import { deleteCourse, getMyCourses } from "../../../../server/course";
 import "./Materials.css";
 import { showError } from "../../../Utils/Notifications";
+
 const TeacherCourses = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);

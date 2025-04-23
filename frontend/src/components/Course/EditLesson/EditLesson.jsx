@@ -32,7 +32,7 @@ const EditLesson = () => {
 
   const [addingTaskId, setAddingTaskId] = useState("");
   const [addingSectionId, setAddingSectionId] = useState("");
-  const [isLoading, setLoading] = useState(false);
+
   const [isSaving, setSaving] = useState(false);
 
   const currentLesson = useSelector((state) => state.course.currentLesson);
@@ -45,9 +45,6 @@ const EditLesson = () => {
   const currentSectionData = currentLesson?.sections?.[intSectionIndex];
   const taskData = currentSectionData?.task;
   const content = currentSectionData?.content;
-  const solveFromServer = currentSectionData?.solve;
-  const textForBut =
-    solveFromServer === null ? "Отметить выполненным" : "Выполнено";
 
   const menuStatuses = currentLesson?.sections?.map((section) => {
     return "-";
@@ -165,13 +162,8 @@ const EditLesson = () => {
     setSaving(false);
   };
 
-  if (isLoading) {
-    return <></>;
-  }
-
   return (
     <div className="lesson-container edit-les-cont">
-      {/* <h2>Редактирование</h2> */}
       <div className="lesson">
         <p className="lesson-name">{currentLesson.name}</p>
 

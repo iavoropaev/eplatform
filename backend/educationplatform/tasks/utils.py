@@ -1,4 +1,6 @@
 import re
+
+
 def check_answer(user_answer, true_answer, max_score=1, check_rule='default'):
     try:
         if max_score is None:
@@ -8,15 +10,13 @@ def check_answer(user_answer, true_answer, max_score=1, check_rule='default'):
         ok_sol = {'score': max_score, 'status': 'OK'}
         wa_sol = {'score': 0, 'status': 'WA'}
 
-
         if true_answer['type'] == 'no_answer':
             score = max(0, min(int(user_answer['score']), max_score))
             if score == 0:
                 return wa_sol
             else:
-                status = 'OK' if max_score == score  else 'PA'
+                status = 'OK' if max_score == score else 'PA'
                 return {'score': score, 'status': status}
-
 
         if true_answer['type'] == 'open_answer':
             if user_answer['open_answer'].strip() != '':
@@ -88,7 +88,6 @@ def check_answer(user_answer, true_answer, max_score=1, check_rule='default'):
             else:
                 return wa_sol
 
-
             status = 'WA'
             if count_ok == count_all:
                 status = 'OK'
@@ -101,7 +100,6 @@ def check_answer(user_answer, true_answer, max_score=1, check_rule='default'):
             return {'score': score, 'status': status}
         return wa_sol
     except Exception as e:
-        print(e)
         return {'score': 0, 'status': 'WA'}
 
 

@@ -3,7 +3,6 @@ import json
 import pytz
 
 from django.core.paginator import Paginator
-from django.db import connection
 from django.db.models import Count, Q, OuterRef, Subquery, BooleanField, ExpressionWrapper, FloatField, F, Exists, \
     Value, Case, When, IntegerField
 from django.db.models.functions import Coalesce
@@ -52,7 +51,6 @@ class TaskViewSet(viewsets.ModelViewSet):
                 return Response('Доступ запрещен.', status=status.HTTP_403_FORBIDDEN)
 
             serializer = TaskSerializerForCreate(task, many=False)
-            print(len(connection.queries))
             return Response(serializer.data, status=200)
         except:
             return Response({'Error': 'Не удалось загрузить задачи.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -117,7 +115,6 @@ class TaskViewSet(viewsets.ModelViewSet):
         tasks = tasks[:150]
         serializer = TaskSerializerForUser(tasks, many=True)
         data = serializer.data
-        print('filtered', len(connection.queries))
         return Response({'count': len(data), 'tasks': data})
 
     @extend_schema(description='Get new tasks. Available periods: day, week, month.')
@@ -144,10 +141,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
             serializer = TaskSerializerForUser(tasks, many=True)
             data = serializer.data
-            print('my', len(connection.queries))
             return Response({'count': len(data), 'tasks': data})
         except Exception as e:
-            print(e)
             return Response({'Error': 'Не удалось загрузить задачи.'}, status=400)
 
     @action(detail=False, methods=['get'], url_path='my')
@@ -209,7 +204,6 @@ class TaskViewSet(viewsets.ModelViewSet):
                 )
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
@@ -230,36 +224,9 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Response(update_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-    # @action(detail=False, methods=['post'])
-    # def answer_update_by_fipi_id(self, request, *args, **kwargs):
-    #     data = request.data
-    #     print([data])
-    #
-    #     for id, answer in data:
-    #         task = Task.objects.filter(extra_data__fipi_id=id).first()
-    #         #print(task)
-    #         task_data = {"answer_type":"text", "answer":json.dumps(answer)}
-    #         update_serializer = TaskSerializer(task, data=task_data, partial=True)
-    #         if update_serializer.is_valid():
-    #             updated_instance = update_serializer.save()
-    #             #response_serializer = TaskSerializerForCreate(updated_instance)
-    #             #return Response(response_serializer.data, status=status.HTTP_200_OK)
-    #
-    #     return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    # @action(detail=False, methods=['post'])
-    # def delete_all(self, request, *args, **kwargs):
-    #     Task.objects.all().delete()
-    #     return Response(
-    #         {"message": "All objects have been deleted."},
-    #         status=status.HTTP_204_NO_CONTENT
-    #     )
-
-
 class TaskInfoViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [AllowAny]
+        permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
     @extend_schema(description='Get all task authors.')
@@ -286,13 +253,6 @@ class TaskInfoViewSet(viewsets.ViewSet):
             'd_level': d_levels,
         })
 
-    # @extend_schema(description='Get all task topics.')
-    # @action(detail=False, methods=['get'], url_path='topics')
-    # def task_topic(self, request):
-    #     topics = [{'id': topic.id, 'name': topic.name} for topic in TaskTopic.objects.all()]
-    #     return Response({
-    #         'topics': topics,
-    #     })
 
 
 class TaskSolutionsViewSet(viewsets.ModelViewSet):
@@ -342,14 +302,11 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                                          status=sol_status
                                          )
                 solution.save()
-                print('сохранено')
-            print('my', len(connection.queries))
             return Response({
                 'status': sol_status,
                 'score': score
             })
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать решение.',
                 'status': 'WA'
@@ -369,7 +326,6 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
 
         # Количество правильных решений, уникальных задач
         count_ok_solutions = solutions.filter(is_ok_solution=True).values('task_id').annotate((Count('id'))).count()
-        print('my', len(connection.queries))
         return Response({
             'count': {
                 'all_tasks_count': count_tasks,
@@ -406,7 +362,6 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
 
             return Response(solution, status=200)
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось получить решения.'
             }, status=406)
@@ -435,7 +390,6 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
                     id_status[task.id] = 'PA'
                 elif task.incorrect_solutions > 0:
                     id_status[task.id] = 'WA'
-            print('statuses', len(connection.queries))
             return Response(id_status)
         except:
             return Response({
@@ -456,7 +410,6 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             })
 
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось получить решения.'
             }, status=400)
@@ -530,7 +483,6 @@ class TaskSolutionsViewSet(viewsets.ModelViewSet):
             res.sort(key=lambda x: get_int_number(x['name']))
             return Response(res)
         except Exception as e:
-            print(e)
             return Response(status=400)
 
 
@@ -564,7 +516,6 @@ class FilterForTaskViewSet(viewsets.ModelViewSet):
                 subject['numbers'] = numbers_sorted
                 subject['sources'] = subject['sources'][::-1]
         actualities = [{'id': item.id, 'name': item.name} for item in Actuality.objects.all()]
-        print('my', len(connection.queries))
         return Response({'exams': data, 'actualities': actualities})
 
     @action(detail=False, methods=['post'])
@@ -600,7 +551,6 @@ class NumbersViewSet(viewsets.ModelViewSet):
             permission_classes = [AllowAny]
         else:
             permission_classes = [IsAdminUser]
-            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
 
@@ -609,9 +559,7 @@ class NumbersViewSet(viewsets.ModelViewSet):
 @permission_classes([AllowAny])
 def upload_file(request):
     try:
-        print(request)
         file = request.FILES['file']
-        print(file)
         if file.size > MAX_FILE_SIZE:
             return Response('Максимальный размер файла 50 Мбайт.', status=400)
         user = request.user if request.user.is_authenticated else None
@@ -622,7 +570,6 @@ def upload_file(request):
         serializer = FileSerializer(fp)
         return Response(serializer.data, status=201)
     except Exception as e:
-        print(e)
         return Response({
             'error': 'File did not save.',
         }, status=406)

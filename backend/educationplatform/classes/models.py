@@ -12,8 +12,6 @@ class Class(models.Model):
 
     students = models.ManyToManyField(AUTH_USER_MODEL, blank=True, related_name='student_classes')
 
-    # homeworks = models.ManyToManyField('Module', through='CourseModule', blank=True, related_name='courses')
-
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
 

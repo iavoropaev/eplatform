@@ -11,7 +11,6 @@ class Course(models.Model):
     subject = models.ForeignKey(TaskSubject, on_delete=models.PROTECT, blank=False, null=False)
     is_public = models.BooleanField(default=False)
 
-    users = models.ManyToManyField(AUTH_USER_MODEL, blank=True)
     modules = models.ManyToManyField('Module', through='CourseModule', blank=True, related_name='courses')
 
     time_create = models.DateTimeField(auto_now_add=True)

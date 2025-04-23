@@ -1,4 +1,3 @@
-// import { BiDislike, BiLike } from "react-icons/bi";
 import Answer from "../../Utils/Answer/Answer";
 import { useState } from "react";
 import HighlightedContent from "../../Utils/HighlightedContent";

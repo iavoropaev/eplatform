@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import Task from "../../../Task/Task";
+import { useNavigate } from "react-router-dom";
+
 import {
   deleteCollection,
   getMyCollections,
 } from "../../../../server/collections";
 import "./Materials.css";
 import { showError } from "../../../Utils/Notifications";
+
 const TeacherCollections = () => {
   const navigate = useNavigate();
   const [collections, setCollections] = useState([]);
@@ -16,7 +17,6 @@ const TeacherCollections = () => {
       const res = await getMyCollections();
       if (res) {
         setCollections(res);
-        console.log(res);
       } else {
         showError("Ошибка загрузки.");
       }
@@ -34,7 +34,6 @@ const TeacherCollections = () => {
 
       if (res) {
         const newCol = collections.filter((col) => {
-          console.log(col.id, id);
           return col.id !== id;
         });
 

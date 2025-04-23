@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const Choice = ({ data, setSelect, name, selectedId }) => {
   return (
     <>

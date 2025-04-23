@@ -13,26 +13,15 @@ const BankFilter = ({
 }) => {
   const activeExam = filterData["exams"][selectedFilters["exam"]];
   const activeSubject = activeExam["subjects"][selectedFilters["subject"]];
-  const activeSource = activeSubject["sources"][selectedFilters["source"]];
 
   const subjects = activeExam["subjects"];
   const sources = activeSubject["sources"];
   const numbers = activeSubject["numbers"];
 
-  // const getFirstNumber = (name) => {
-  //   const match = name.match(/\d+/);
-  //   return match ? parseInt(match[0], 10) : 0;
-  // };
-
-  // const numbers = numbersNotSorted?.sort((a, b) => {
-  //   return getFirstNumber(a.name) - getFirstNumber(b.name);
-  // });
-
   const authors = activeSubject["authors"];
   const difficulty_levels = activeExam["dif_levels"];
   const actualities = filterData["actualities"];
 
-  console.log(numbers);
   return (
     <div className="bank-filter">
       <div className="choise-row">

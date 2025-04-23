@@ -29,7 +29,6 @@ const ExamResults = () => {
       const realSolveType = solveType ? solveType : "last";
       const solve = await getExamSolution(slug, realSolveType, attemptId);
       if (solve) {
-        console.log(solve);
         setAttId(solve.id);
         setColName(solve.task_collection.name);
         setExamName(solve.exam);
@@ -90,7 +89,6 @@ const ExamResults = () => {
     );
   }
 
-  console.log("ts", testScore, isLoading);
   return (
     <div className="exam-results">
       <h2>{colName}</h2>

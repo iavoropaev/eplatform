@@ -1,5 +1,3 @@
-import { useParams, useNavigate, NavLink } from "react-router-dom";
-
 import { useEffect, useState } from "react";
 import {
   excludeUserFromClass,
@@ -7,11 +5,11 @@ import {
   getUserMessages,
 } from "../../../server/class";
 import { formatDate } from "../../Utils/dates";
-import "./MessagesSection.css";
 import { showError, showOK } from "../../Utils/Notifications";
 import HighlightedContent from "../../Utils/HighlightedContent";
+import "./MessagesSection.css";
+
 const MessagesSection = () => {
-  const { section } = useParams();
   const [messages, setMessages] = useState([]);
   const [classes, setClasses] = useState([]);
   const [isLoading, setLoading] = useState(true);
