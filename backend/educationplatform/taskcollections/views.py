@@ -240,15 +240,16 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             answers_summary = []
             total_score = 0
             max_score = 0
-            for task in collection.tasks.all().values('id', 'answer', 'answer_type', 'number_in_exam__name',
-                                                      'number_in_exam__max_score', 'number_in_exam__check_rule'):
-                task_id = task['id']
-                ok_answer_type = task['answer_type']
-                max_task_score = task['number_in_exam__max_score']
+            for task_collection_task in collection.taskcollectiontasks.select_related(
+                    'task', 'task__number_in_exam').order_by('order'):
+                task = task_collection_task.task
+                task_id = task.id
+                ok_answer_type = task.answer_type
+                max_task_score = task.number_in_exam.max_score
                 if max_task_score is None:
                     max_task_score = 1
-                check_rule = task['number_in_exam__check_rule']
-                ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task['answer'])}
+                check_rule = task.number_in_exam.check_rule
+                ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task.answer)}
                 score = 0
                 max_score += max_task_score
                 if str(task_id) in user_answers:
@@ -262,7 +263,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                     user_answer = {}
 
                 answers_summary.append({"task_id": task_id,
-                                        "number_in_exam": task['number_in_exam__name'],
+                                        "number_in_exam": task.number_in_exam.name,
                                         "user_answer": user_answer,
                                         "ok_answer": ok_answer,
                                         "score": score,
@@ -450,7 +451,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             else:
                 cur_class = None
 
-            solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug, score__gt=0)
+            solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug,
+                                                                               score__gt=0)
             if cur_class:
                 solves = solves.filter(user__in=cur_class.students.all())
 
