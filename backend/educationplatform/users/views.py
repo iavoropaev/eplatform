@@ -1,9 +1,9 @@
 import requests
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes, action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 
@@ -151,7 +151,10 @@ class AchievementViewSet(viewsets.ModelViewSet):
     serializer_class = AchievementSerializer
 
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        if self.action in ['get_my_achievements']:
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
 
     @action(detail=False, methods=['get'], url_path='get-my-achievements')
