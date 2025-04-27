@@ -6,6 +6,7 @@ export const AllExamResults = ({
   selectedClass,
   allClasses,
   setSelectedClass,
+  testColName,
 }) => {
   const [whatAttempt, setWhatAttempt] = useState("first");
 
@@ -71,7 +72,7 @@ export const AllExamResults = ({
       {filteredSolvesData.length > 0 && (
         <div className="res-table-cont">
           {`Результатов: ${filteredSolvesData.length}.`}
-          <AllSolvesTable data={filteredSolvesData} />
+          <AllSolvesTable data={filteredSolvesData} testColName={testColName} />
         </div>
       )}
       {filteredSolvesData.length === 0 && <h3>Решения не найдены.</h3>}

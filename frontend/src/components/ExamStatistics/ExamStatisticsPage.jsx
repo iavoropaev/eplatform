@@ -11,8 +11,8 @@ export const ExamStatisticsPage = () => {
   const navigate = useNavigate();
   const { examSlug, eSection } = useParams();
 
+  const [collectionData, setCollectionData] = useState(undefined);
   const [solvesData, setSolvesData] = useState([]);
-
   const [allClasses, setAllClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState("-");
 
@@ -27,6 +27,7 @@ export const ExamStatisticsPage = () => {
       const stats = await getStatsForExam(examSlug, selectedClass);
       if (solves && stats) {
         setSolvesData(solves.solves);
+        setCollectionData(solves.col_info);
         setStatsData(stats);
       } else {
         setSolvesData([]);
@@ -49,6 +50,9 @@ export const ExamStatisticsPage = () => {
     }
     fetchData();
   }, []);
+
+  const testColName =
+    collectionData?.subject?.exam?.name === "ЕГЭ" ? "Баллы(100)" : "Оценка";
 
   return (
     <div className="exam-stats-cont">
@@ -79,6 +83,7 @@ export const ExamStatisticsPage = () => {
           selectedClass={selectedClass}
           setSelectedClass={setSelectedClass}
           allClasses={allClasses}
+          testColName={testColName}
         />
       )}
       {!isLoading && eSection === "stats" && (

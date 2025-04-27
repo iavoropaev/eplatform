@@ -416,7 +416,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
             else:
                 cur_class = None
 
-            collection_info = TaskCollectionInfoSerializer(collection).data
+            collection_info = TaskCollectionGetSerializer(collection).data
             solves = TaskCollectionSolve.objects.select_related('user').filter(task_collection__slug=col_slug)
 
             if cur_class:
@@ -458,16 +458,22 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
             tasks_ok = {}
             tasks_all = {}
+            tasks_info = list(collection.taskcollectiontasks.select_related('task__number_in_exam').values(
+                'task_id',
+                'task__number_in_exam__name'
+            ))
+            task_ids = {task['task_id'] for task in tasks_info}
+            task_number_by_id = {task['task_id']: task['task__number_in_exam__name'] for task in tasks_info}
             for user_solve in solves:
                 for i, user_answer in enumerate(user_solve.answers):
-                    name = f"{i}_{user_answer['number_in_exam']}"
-                    if user_answer['status'] == 'OK':
-                        tasks_ok[name] = tasks_ok.get(name, 0) + 1
-                    tasks_all[name] = tasks_all.get(name, 0) + 1
+                    task_id = user_answer['task_id']
+                    if task_id in task_ids:
+                        if user_answer['status'] == 'OK':
+                            tasks_ok[task_id] = tasks_ok.get(task_id, 0) + 1
+                        tasks_all[task_id] = tasks_all.get(task_id, 0) + 1
 
-            tasks_percent = {task_name: round(tasks_ok.get(task_name, 0) / tasks_all[task_name] * 100, 2) for task_name
-                             in
-                             tasks_all}
+            tasks_percent = {task_number_by_id[task_id]: round(tasks_ok.get(task_id, 0) / tasks_all[task_id] * 100, 2)
+                             for task_id in tasks_all}
 
             scale = collection.subject.scale
             is_exam = collection.is_exam

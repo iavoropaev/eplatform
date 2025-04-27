@@ -25,7 +25,7 @@ export const ExamStatistics = ({ statsData }) => {
   const preparedPercentDistribution = Object.keys(percentDistribution)
     .sort((a, b) => Number(a) - Number(b))
     .map((key) => ({
-      score: key.split("_")[1],
+      score: key,
       value: percentDistribution[key],
     }));
 
@@ -66,7 +66,7 @@ export const ExamStatistics = ({ statsData }) => {
 
       <div className="charts">
         <h3>Процент решения задач</h3>
-        {preparedScoreDistribution && (
+        {preparedPercentDistribution && (
           <BarChart
             width={1400}
             height={400}

@@ -254,7 +254,6 @@ class TaskInfoViewSet(viewsets.ViewSet):
         })
 
 
-
 class TaskSolutionsViewSet(viewsets.ModelViewSet):
     queryset = TaskSolutions.objects.all()
     serializer_class = TaskSolutionsSerializer

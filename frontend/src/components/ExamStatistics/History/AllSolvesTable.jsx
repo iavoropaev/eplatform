@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { formatDate, getStrTime } from "../../Utils/dates";
 import "./AllSolvesTable.css";
 
-export const AllSolvesTable = ({ data }) => {
+export const AllSolvesTable = ({ data, testColName }) => {
   const { examSlug } = useParams();
   const allNumbers = data[0]?.answers?.map((ans) => ans.number_in_exam);
 
@@ -13,7 +13,7 @@ export const AllSolvesTable = ({ data }) => {
           <tr>
             <th>Пользователь</th>
             <th>Баллы</th>
-            <th>Баллы(100)</th>
+            <th>{testColName}</th>
             <th>Время</th>
             <th>Дата</th>
             {allNumbers.map((number, i) => (
@@ -26,13 +26,11 @@ export const AllSolvesTable = ({ data }) => {
             <tr key={solution.id}>
               <td
                 className="user-name"
-                onClick={
-                  () =>
-                    window.open(
-                      `/variant/${examSlug}/results/id/${solution.id}/`,
-                      "_blanc"
-                    )
-                  //navigate(`/variant/${examSlug}/results/id/${solution.id}/`)
+                onClick={() =>
+                  window.open(
+                    `/variant/${examSlug}/results/id/${solution.id}/`,
+                    "_blanc"
+                  )
                 }
               >
                 {solution.user.first_name[0]}. {solution.user.last_name}
