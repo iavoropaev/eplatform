@@ -29,3 +29,17 @@
 .exam-container .solutions .task-container {
   margin-top: 20px;
 }
+
+.exam-container .description {
+  background-color: white;
+  width: fit-content;
+  margin: auto;
+  text-align: left;
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  max-width: 70%;
+  white-space: pre-line;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

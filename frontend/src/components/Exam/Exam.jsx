@@ -7,6 +7,7 @@ import {
   addExamAnswer,
   clearExamAnswer,
   clearExamAnswers,
+  setExamDescription,
   setExamName,
   setExamSlug,
   setExamTasks,
@@ -24,6 +25,7 @@ const Exam = () => {
   const answers = useSelector((state) => state.exam.answers);
   const colName = useSelector((state) => state.exam.name);
   const examSlug = useSelector((state) => state.exam.examSlug);
+  const examDescription = useSelector((state) => state.exam.description);
 
   const [startTime, setStartTime] = useState(new Date());
   const [isLoading, setLoading] = useState(false);
@@ -43,6 +45,7 @@ const Exam = () => {
           dispatch(setExamTasks(collection.tasks));
           dispatch(setExamName(collection.name));
           dispatch(setExamSlug(collection.slug));
+          dispatch(setExamDescription(collection.description));
         } else {
           setError(true);
         }
@@ -102,6 +105,9 @@ const Exam = () => {
   return (
     <div className="exam-container">
       <h2 className="exam-title">{colName}</h2>
+      {examDescription && examDescription.length > 10 && (
+        <div className="description">{examDescription}</div>
+      )}
       <p className="count-answers">{`Дано ответов ${countUserAnswers}/${tasks.length}.`}</p>
 
       {tasks.map((task) => {

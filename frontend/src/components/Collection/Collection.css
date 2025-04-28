@@ -31,7 +31,7 @@
   border: 1px solid grey;
   border-radius: 5px;
   max-width: 70%;
-  white-space: "pre-line";
+  white-space: pre-line;
 }
 .loading {
   margin-top: 100px;
