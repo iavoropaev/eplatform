@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from tasks.models import Task
 from tasks.serializers import TaskSerializerForUser
 from tasks.utils import check_answer
-from users.models import Achievement
+from users.models import Achievement, User
 
 
 class TaskCollectionViewSet(viewsets.ModelViewSet):
@@ -220,7 +220,8 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['send_solution', 'get_solution', 'get_my_solutions', 'delete_solution',
-                           'get_all_solutions_for_exam', 'get_exam_statistics', 'solves_statistics_by_subject']:
+                           'get_my_student_solutions', 'get_all_solutions_for_exam', 'get_exam_statistics',
+                           'solves_statistics_by_subject']:
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
@@ -386,7 +387,17 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     def get_my_student_solutions(self, request):
         try:
             user_id = request.user.id
+
             student_id = request.query_params.get('student_id', None)
+            is_student_in_class = Class.objects.filter(
+                created_by=user_id,
+                students=student_id
+            ).exists()
+            if not is_student_in_class and not request.user.is_staff:
+                return Response(
+                    {'Error': 'Запрашиваемый пользователь не является Вашим учеником.'},
+                    status=403
+                )
 
             solves = TaskCollectionSolve.objects.select_related('task_collection').filter(user__id=student_id).order_by(
                 '-time_create')
