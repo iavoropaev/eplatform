@@ -246,7 +246,10 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 task = task_collection_task.task
                 task_id = task.id
                 ok_answer_type = task.answer_type
-                max_task_score = task.number_in_exam.max_score
+                if task.number_in_exam is not None:
+                    max_task_score = task.number_in_exam.max_score
+                else:
+                    max_task_score = 1
                 if max_task_score is None:
                     max_task_score = 1
                 check_rule = task.number_in_exam.check_rule
@@ -326,6 +329,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 'answers': answers_summary
             })
         except Exception as e:
+            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
