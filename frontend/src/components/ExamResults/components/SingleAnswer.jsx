@@ -5,13 +5,15 @@ const SingleAnswer = ({ answer }) => {
       {answer.type === "table" && (
         <table>
           <tbody>
-            {answer?.table?.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row?.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
-                ))}
-              </tr>
-            ))}
+            {Array.isArray(answer?.table) &&
+              answer?.table?.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {Array.isArray(row) &&
+                    row?.map((cell, cellIndex) => (
+                      <td key={cellIndex}>{cell}</td>
+                    ))}
+                </tr>
+              ))}
           </tbody>
         </table>
       )}

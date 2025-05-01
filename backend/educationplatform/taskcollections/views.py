@@ -248,11 +248,14 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 ok_answer_type = task.answer_type
                 if task.number_in_exam is not None:
                     max_task_score = task.number_in_exam.max_score
+                    check_rule = task.number_in_exam.check_rule
+                    number_in_exam_name = task.number_in_exam.name
                 else:
+                    check_rule = None
                     max_task_score = 1
+                    number_in_exam_name = '-'
                 if max_task_score is None:
                     max_task_score = 1
-                check_rule = task.number_in_exam.check_rule
                 ok_answer = {'type': ok_answer_type, ok_answer_type: json.loads(task.answer)}
                 score = 0
                 max_score += max_task_score
@@ -267,7 +270,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                     user_answer = {}
 
                 answers_summary.append({"task_id": task_id,
-                                        "number_in_exam": task.number_in_exam.name,
+                                        "number_in_exam": number_in_exam_name,
                                         "user_answer": user_answer,
                                         "ok_answer": ok_answer,
                                         "score": score,
