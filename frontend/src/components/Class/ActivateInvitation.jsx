@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { activateInvitation } from "../../server/class";
 import { showOK, showError } from "../Utils/Notifications";
+import "./ActivateInvitation.css";
 
 const ActivateInvitation = () => {
   const { token } = useParams();
@@ -16,11 +17,13 @@ const ActivateInvitation = () => {
       showError("Произошла ошибка.");
     }
   };
+
   return (
-    <div>
+    <div className="active-inv-cont">
       <h2>Вступление в класс</h2>
       <button onClick={handleButton}>Активировать приглашение</button>
     </div>
   );
 };
+
 export default ActivateInvitation;

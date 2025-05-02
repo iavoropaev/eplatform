@@ -6,6 +6,9 @@
 .create-collection > * {
   padding-bottom: 10px;
 }
+.create-collection .collection-name {
+  width: 238px;
+}
 .create-collection .discr {
   display: flex;
   flex-direction: column;
@@ -34,7 +37,9 @@
   width: 70%;
   min-width: 300px;
 }
-
+.cc-task .task-swap-cont {
+  width: 100%;
+}
 .create-collection .add-by-id {
   display: flex;
   align-items: center;

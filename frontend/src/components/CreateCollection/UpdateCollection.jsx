@@ -155,6 +155,7 @@ const UpdateCollection = () => {
       <div>
         <span>Название подборки </span>
         <input
+          className="collection-name"
           value={colName}
           onChange={(e) => {
             dispatch(setName(e.target.value));
