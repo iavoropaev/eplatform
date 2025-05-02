@@ -72,15 +72,17 @@ const Bank = () => {
       newData["subject"] = 0;
       newData["source"] = 0;
       newData["numbers"] = [];
+      newData["authors"] = [];
+      newData["dif_levels"] = [];
     }
 
     if (type === "subject") {
       newData["source"] = 0;
       newData["numbers"] = [];
+      newData["authors"] = [];
     }
 
     if (type === "source") {
-      newData["numbers"] = [];
     }
 
     setSelectedFilters(newData);
