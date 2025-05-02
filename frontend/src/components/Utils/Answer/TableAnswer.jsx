@@ -50,17 +50,16 @@ const TableAnswer = ({ answer, setAnswer, disabled }) => {
     const numbers = text.split(/\s+/);
     const updatedTable = [...answer];
     let k = 0;
-    console.log(numbers, i_start, j_start);
+
     for (let i = i_start; i < answer.length; i++) {
       for (let j = j_start; j < answer[i].length; j++) {
         if (k < numbers.length) {
           updatedTable[i][j] = numbers[k];
           k = k + 1;
-          console.log(1);
         }
       }
     }
-    console.log(updatedTable);
+
     setAnswer([...updatedTable]);
   };
 

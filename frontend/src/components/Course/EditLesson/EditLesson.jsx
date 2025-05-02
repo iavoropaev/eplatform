@@ -60,10 +60,10 @@ const EditLesson = () => {
 
   const handleSectionDelete = () => {
     if (sectionsLength > 1) {
-      dispatch(deleteSection(intSectionIndex));
       if (intSectionIndex === sectionsLength - 1) {
         setActiveSectionIndex(intSectionIndex - 1);
       }
+      dispatch(deleteSection(intSectionIndex));
     }
   };
   const handleSectionCreate = async () => {
@@ -259,7 +259,7 @@ const EditLesson = () => {
             ></input>
             <button type="submit">+</button>
           </form>
-          <p className="grey">{`Id текущей секции: ${currentSectionData.id}.`}</p>
+          <p className="grey">{`Id текущей секции: ${currentSectionData?.id}.`}</p>
         </div>
       </div>
     </div>

@@ -42,7 +42,7 @@ const ChoiceAnswer = ({
 
     setAnswer([...newAns]);
   };
-  console.log("ad", answerData);
+
   return (
     <div className="answer-choice">
       {!isCreating &&

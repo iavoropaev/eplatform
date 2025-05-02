@@ -43,7 +43,7 @@ const SortingAnswer = ({
       setAnswerData(ansToAnsData(newAns));
     }
   };
-  console.log("aaa", answer);
+
   return (
     <div className="sorting-answer">
       {!isCreating && (
