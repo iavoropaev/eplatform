@@ -19,7 +19,7 @@ const Collection = () => {
 
   const [solvedStatuses, setSolvedStatuses] = useState({});
   const countOk = Object.values(solvedStatuses).filter(
-    (value) => value === "ok"
+    (value) => value === "OK"
   ).length;
 
   useEffect(() => {
