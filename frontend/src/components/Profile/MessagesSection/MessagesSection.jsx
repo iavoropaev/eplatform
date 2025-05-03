@@ -77,6 +77,11 @@ const MessagesSection = () => {
               </div>
             );
           })}
+          {classes?.length === 0 && (
+            <div className="class-item">
+              <span>Вы не состоите ни в одном классе.</span>
+            </div>
+          )}
         </div>
       </div>
       <div>
