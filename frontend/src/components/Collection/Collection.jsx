@@ -40,6 +40,7 @@ const Collection = () => {
         setColName(collection.name);
         setDescription(collection.description);
       } else {
+        showError("Подборка не найдена.");
         setError(true);
       }
       setLoading(false);
