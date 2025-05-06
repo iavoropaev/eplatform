@@ -7,9 +7,7 @@ export const NotAuthorized = () => {
   return (
     <div className="not-auth">
       <h3>Для доступа к этой странице необходимо авторизоваться на сайте.</h3>
-      <div className={!isAgree ? "disabled-auth" : ""}>
-        <Auth />
-      </div>
+      {isAgree && <Auth />}
 
       <div className="approval-cont">
         <span>

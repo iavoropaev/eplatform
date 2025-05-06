@@ -4,14 +4,8 @@
 }
 .approval-cont {
   margin-top: 10px;
-  /* text-align: left; */
 }
 .approval-cont input {
   transform: scale(1.2);
   margin: 5px;
-}
-.disabled-auth {
-  opacity: 0.5;
-  pointer-events: none;
-  user-select: none;
 }
