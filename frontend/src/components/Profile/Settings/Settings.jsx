@@ -6,6 +6,8 @@ import "./Settings.css";
 
 const Settings = () => {
   const navigate = useNavigate();
+
+  const [isAgree, setAgree] = useState(false);
   const [isLinked, setLinked] = useState(undefined);
   const [invitation, setInvitation] = useState(undefined);
 
@@ -34,6 +36,7 @@ const Settings = () => {
 
   const logOut = () => {
     localStorage.clear();
+    localStorage.setItem("showCookiesWarning", "false");
     navigate("/", { relative: "path" });
     window.location.reload();
   };
@@ -44,19 +47,39 @@ const Settings = () => {
         <h3>Привязка телеграм аккаунта</h3>
         {isLinked === undefined && <p>Загрузка...</p>}
         {isLinked !== undefined && isLinked === false && (
-          <details>
-            <summary onClick={getLink}>Получить ссылку для привязки.</summary>
-            {invitation && (
-              <div>
-                <a href={invitation} target="_blank" rel="noopener noreferrer">
-                  Ссылка для привязки аккаунта (нажмите)
-                </a>
-              </div>
-            )}
-            {!invitation && "Загрузка..."}
+          <div>
+            <div className="approval-cont">
+              <span>
+                Я соглашаюсь с{" "}
+                <a href="/privacy/" target="_blank" rel="noopener noreferrer">
+                  политикой конфиденциальности
+                </a>{" "}
+                и разрешаю обрабатывать мои персональные данные{" "}
+                <input
+                  type="checkbox"
+                  value={isAgree}
+                  onChange={(e) => setAgree(e.target.checked)}
+                ></input>
+              </span>{" "}
+            </div>
+            <details className={!isAgree ? "disabled-auth" : ""}>
+              <summary onClick={getLink}>Получить ссылку для привязки.</summary>
+              {invitation && (
+                <div>
+                  <a
+                    href={invitation}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ссылка для привязки аккаунта (нажмите)
+                  </a>
+                </div>
+              )}
+              {!invitation && "Загрузка..."}
 
-            <p className="warning">Никому не передавайте данную ссылку!!!</p>
-          </details>
+              <p className="warning">Никому не передавайте данную ссылку!!!</p>
+            </details>
+          </div>
         )}
         {isLinked !== undefined && isLinked === true && (
           <div>

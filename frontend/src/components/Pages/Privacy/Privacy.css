@@ -1,0 +1,27 @@
+.privacy-cont {
+  padding: 0px 100px 50px 100px;
+  text-align: left;
+}
+
+.privacy-cont h3 {
+  text-align: left;
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+.privacy-cont .li {
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.privacy-cont table,
+.privacy-cont table td,
+.privacy-cont table tr {
+  border: 1px solid grey;
+}
+.privacy-cont table td {
+  padding: 30px;
+}
+.privacy-cont table th {
+  background-color: transparent;
+}

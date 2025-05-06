@@ -1,0 +1,10 @@
+.cookies-warning {
+  text-align: left;
+}
+.cookies-warning p {
+  margin-bottom: 10px;
+}
+.cookies-warning a {
+  color: #4ea8de;
+  text-decoration: underline;
+}

@@ -5,10 +5,19 @@ import { adminRoutes, authRoutes, publicRoutes } from "./routes";
 import { ToastContainer } from "react-toastify";
 
 import "./App.css";
+import { showCookiesWarning } from "./components/Utils/Notifications";
+import { useEffect } from "react";
 
 function App() {
   const isAuth = JSON.parse(localStorage.getItem("isAuth"));
   const isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
+
+  useEffect(() => {
+    if (localStorage.getItem("showCookiesWarning") !== "false") {
+      showCookiesWarning();
+      localStorage.setItem("showCookiesWarning", "false");
+    }
+  }, []);
 
   return (
     <BrowserRouter>

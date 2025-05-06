@@ -12,3 +12,9 @@
 .settings-section .logout button {
   margin-top: 5px;
 }
+
+.settings-section .disabled-auth {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}

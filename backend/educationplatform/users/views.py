@@ -33,7 +33,7 @@ def auth_by_vk(request):
                                   data={'v': VK_APP_VERSION,
                                         'access_token': VK_APP_TOKEN,
                                         'user_ids': user_id,
-                                        'fields': 'photo_50,sex,home_town,screen_name,bdate,domain',
+                                        'fields': 'photo_50,screen_name,domain',
                                         'lang': 'ru'}).json()['response'][0]
 
         try:
@@ -46,10 +46,7 @@ def auth_by_vk(request):
             user.first_name = user_info.get('first_name', '')
             user.last_name = user_info.get('last_name', '')
             user.photo = user_info.get('photo_50', '')
-            user.sex = user_info.get('sex', '')
             user.vk_domain = user_info.get('domain', '')
-            user.home_town = user_info.get('home_town', '')
-            user.birthday = user_info.get('bdate', '')
             user.save()
 
         refresh = RefreshToken.for_user(user)
@@ -59,7 +56,6 @@ def auth_by_vk(request):
             'first_name': user_info.get('first_name', ''),
             'last_name': user_info.get('last_name', ''),
             'photo_50': user_info.get('photo_50', ''),
-            'sex': user_info.get('sex', ''),
             'is_admin': user.is_staff
         })
     except:

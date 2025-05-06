@@ -21,8 +21,10 @@ import CreateCourse from "./components/CreateCourse/CreateCourse";
 import { ExamStatisticsPage } from "./components/ExamStatistics/ExamStatisticsPage";
 import { NotAuthorized } from "./components/Utils/NotAuthorized";
 import CourseCatalog from "./components/CourseCatalog/CourseCatalog";
+import { Privacy } from "./components/Pages/Privacy/Privacy";
 
 export const publicRoutes = [
+  { path: "privacy", Component: Privacy },
   { path: "bank", Component: BankPage },
   { path: "variants", Component: Variants },
 
