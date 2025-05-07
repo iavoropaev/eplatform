@@ -124,6 +124,12 @@ const courseSlice = createSlice({
         },
       };
     },
+    changeLessonName: (state, action) => {
+      return {
+        ...state,
+        currentLesson: { ...state.currentLesson, name: action.payload },
+      };
+    },
   },
 });
 
@@ -137,5 +143,6 @@ export const changeSectionTask = courseSlice.actions.changeSectionTask;
 export const addSection = courseSlice.actions.addSection;
 export const deleteSection = courseSlice.actions.deleteSection;
 export const swapTwoSections = courseSlice.actions.swapTwoSections;
+export const changeLessonName = courseSlice.actions.changeLessonName;
 
 export default courseSlice.reducer;

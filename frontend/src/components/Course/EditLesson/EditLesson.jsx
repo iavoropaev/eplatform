@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   addSection,
+  changeLessonName,
   changeSectionContent,
   changeSectionTask,
   deleteSection,
@@ -211,9 +212,17 @@ const EditLesson = () => {
           <button onClick={goOutFromEditing}>Вернуться</button>
         </div>
 
+        <div className="change-lesson-name-cont">
+          <p>Название урока</p>
+          <input
+            value={currentLesson.name}
+            onChange={(e) => {
+              dispatch(changeLessonName(e.target.value));
+            }}
+          ></input>
+        </div>
         <div className="content-cont">
           <p>Теория</p>
-          {/* {<textarea value={content} onChange={handleContentChange}></textarea>} */}
           <TinyMCE
             editorContent={content}
             setEditorContent={handleContentChange}
