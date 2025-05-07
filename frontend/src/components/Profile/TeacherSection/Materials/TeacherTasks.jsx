@@ -22,13 +22,15 @@ const TeacherTasks = () => {
     }
     fetchData();
   }, []);
+
   const goToLk = () => {
     navigate("./../");
   };
+
   return (
     <div className="teacher-materials">
       <h2> Мои задачи</h2>
-      {countAllTasks && <p>{`Количество: ${countAllTasks}.`}</p>}
+      {countAllTasks !== undefined && <p>{`Количество: ${countAllTasks}.`}</p>}
       <button onClick={goToLk} className="return-but">
         В личный кабинет
       </button>
