@@ -86,20 +86,8 @@ class DifficultyLevel(models.Model):
         verbose_name_plural = "Сложности задач"
 
 
-# class TaskTopic(models.Model):
-#     name = models.CharField(max_length=100)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name = "Тема задачи"
-#         verbose_name_plural = "Темы задач"
-
-
 class TaskNumberInExam(models.Model):
     name = models.CharField(max_length=100)
-    #slug = models.SlugField(max_length=100, blank=False, null=False)
 
     check_rule = models.CharField(max_length=100, default='default')
     max_score = models.IntegerField(blank=False, null=False, default=1)

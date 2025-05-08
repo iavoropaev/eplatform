@@ -60,7 +60,6 @@ class ClassesViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='get-student-messages')
     def get_student_messages(self, request):
-        cur_user_id = request.user.id
         classes_id = list(request.user.student_classes.values_list('id', flat=True))
         messages = Message.objects.select_related('mes_class').filter(mes_class_id__in=classes_id).order_by(
             '-created_at')
@@ -93,7 +92,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             cur_class = Class.objects.get(id=cur_class_id)
             if is_admin or (cur_class.created_by.id == cur_user_id):
                 cur_class.delete()
-                return Response('deleted', 200)
+                return Response({'message': 'deleted'}, 200)
             else:
                 return Response(status=403)
 
@@ -116,7 +115,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             if is_admin or (cur_class.created_by.id == cur_user_id) or (cur_user_id == excluded_user_id):
                 excluded_user = User.objects.get(id=excluded_user_id)
                 cur_class.students.remove(excluded_user)
-                return Response('Excluded', 200)
+                return Response({'message': 'Excluded'}, 200)
             else:
                 return Response(status=403)
 
@@ -159,7 +158,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
                 return Response({'Error': 'Доступ запрещён.'}, status=406)
             invitation.delete()
 
-            return Response("ok")
+            return Response({'message': 'ok'})
         except Exception as e:
             return Response(status=400)
 
@@ -174,7 +173,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             if class_.students.filter(id=cur_user_id).exists():
                 return Response({'Error': 'Вы уже добавлены в класс.'}, status=400)
             class_.students.add(request.user)
-            return Response("ok")
+            return Response({'message': 'ok'})
 
         except Exception as e:
             return Response({
@@ -221,7 +220,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             if cur_user_id != author:
                 return Response({'Error': 'Доступ запрещён.'}, status=406)
             message.delete()
-            return Response('deleted')
+            return Response(Response({'message': 'deleted'}))
         except Exception as e:
             return Response({
                 'Error': 'Не удалось создать приглашение.',

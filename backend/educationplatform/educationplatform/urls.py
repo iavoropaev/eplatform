@@ -37,7 +37,6 @@ urlpatterns = [
                   path('api/v1/users/', include('users.urls')),
                   path('api/v1/tasks-info/', include('tasks.urls')),
 
-
                   path('api/v1/upload-file/', upload_file),
 
                   path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),

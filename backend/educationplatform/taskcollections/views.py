@@ -2,7 +2,6 @@ import json
 import random
 from collections import Counter
 
-from django.db import connection
 from django.db.models import Q, Max, Sum, Avg
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
@@ -22,7 +21,7 @@ from rest_framework.response import Response
 from tasks.models import Task
 from tasks.serializers import TaskSerializerForUser
 from tasks.utils import check_answer
-from users.models import Achievement, User
+from users.models import Achievement
 
 
 class TaskCollectionViewSet(viewsets.ModelViewSet):
@@ -187,7 +186,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
                 if links_serializer.is_valid():
                     links_serializer.save()
                 user_serializer = TaskCollectionGetSerializer(created_collection)
-                queries = connection.queries
+
                 return Response(user_serializer.data, status=201)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -206,7 +205,7 @@ class TaskCollectionViewSet(viewsets.ModelViewSet):
             if cur_coll.created_by.id != cur_user_id:
                 return Response(status=406)
             cur_coll.delete()
-            return Response("deleted")
+            return Response({'message': 'deleted'})
 
         except Exception as e:
             return Response({
@@ -332,7 +331,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 'answers': answers_summary
             })
         except Exception as e:
-            print(e)
             return Response({
                 'Error': 'Не удалось обработать запрос.',
             }, status=400)
@@ -455,9 +453,6 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='get-exam-statistics')
     def get_exam_statistics(self, request):
         try:
-            user_id = request.user.id
-            is_staff = request.user.is_staff
-
             col_slug = request.query_params.get('col_slug', None)
             class_id = request.query_params.get('class_id', None)
             if class_id == '-':

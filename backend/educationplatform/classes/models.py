@@ -1,7 +1,6 @@
 import uuid
 
 from django.db import models
-
 from educationplatform.settings import AUTH_USER_MODEL
 
 

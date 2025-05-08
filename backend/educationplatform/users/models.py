@@ -3,8 +3,6 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from educationplatform.settings import AUTH_USER_MODEL
-
 
 class User(AbstractUser):
     photo = models.CharField(null=True, blank=True)
@@ -13,6 +11,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return str(self.vk_domain)
+
 
 class TgInvitation(models.Model):
     inv_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
@@ -37,4 +36,3 @@ class Achievement(models.Model):
     class Meta:
         verbose_name = "Достижение"
         verbose_name_plural = "Достижения"
-

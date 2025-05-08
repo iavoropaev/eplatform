@@ -1,16 +1,15 @@
 import json
 
-from django.db import connection
 from rest_framework import status
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_404_NOT_FOUND
 
 from courses.models import Course, Section, SectionSolve, Module, Lesson, CourseModule, ModuleLesson, LessonSection
-from courses.serializers import CourseSerializer, SectionSolveSerializer, ModuleSerializer, LessonSerializer, \
+from courses.serializers import CourseSerializer, SectionSolveSerializer, ModuleSerializer, \
     LessonOnlyNameSerializer, CourseModuleSerializer, ModuleAllFieldsSerializer, ModuleLessonSerializer, \
     LessonAllFieldsSerializer, SectionAllFieldsSerializer, LessonSectionSerializer, SectionSerializer, \
     CourseCreateSerializer, CourseInfoSerializer
@@ -92,7 +91,6 @@ class CoursesViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='get-section')
     def get_section(self, request):
         try:
-            cur_user_id = request.user.id
             cur_section_id = request.GET.get('section_id')
             section = Section.objects.all().get(id=cur_section_id)
             serializer = SectionSerializer(section)
@@ -386,6 +384,6 @@ class EditCourseViewSet(viewsets.ModelViewSet):
             if cur_course.created_by.id != cur_user_id:
                 return Response(status=406)
             cur_course.delete()
-            return Response("deleted")
+            return Response({'message': 'deleted'})
         except Exception as e:
             return Response(status=400)

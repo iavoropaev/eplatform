@@ -155,17 +155,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        ['rest_framework_simplejwt.authentication.JWTAuthentication',
-         #'rest_framework.authentication.SessionAuthentication',  # Erase
-         #'rest_framework.authentication.BasicAuthentication'  # Erase
-         ]
+        ['rest_framework_simplejwt.authentication.JWTAuthentication']
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
-    # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    # "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=100),
     "ROTATE_REFRESH_TOKENS": False,

@@ -165,14 +165,11 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def upload_tasks(self, request):
-        """
-        Upload multiple tasks at once.
-        """
         tasks_data = request.data.get('tasks', [])
         user_id = request.user.id
         if not isinstance(tasks_data, list):
             return Response(
-                {"error": "Expected a list of tasks."},
+                {"Error": "Ожидался список задач."},
                 status=status.HTTP_400_BAD_REQUEST
             )
         for task in tasks_data:
@@ -181,7 +178,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {"message": f"{len(tasks_data)} tasks have been created."},
+                {"message": f"{len(tasks_data)} задач было добавлено."},
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -570,5 +567,5 @@ def upload_file(request):
         return Response(serializer.data, status=201)
     except Exception as e:
         return Response({
-            'error': 'File did not save.',
+            'Error': 'File did not save.',
         }, status=406)

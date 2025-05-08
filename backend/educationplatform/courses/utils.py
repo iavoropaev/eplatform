@@ -1,7 +1,7 @@
 from django.db.models import Prefetch
 
-from courses.models import Lesson, SectionSolve, Section, LessonSection
-from courses.serializers import LessonSerializer, SectionSolveSerializer, SectionSerializer, SectionAllFieldsSerializer
+from courses.models import Lesson, SectionSolve, LessonSection
+from courses.serializers import LessonSerializer, SectionSolveSerializer, SectionAllFieldsSerializer
 
 
 def get_lesson_data_with_solves(cur_lesson_id, cur_user_id):
