@@ -22,6 +22,10 @@ const ActivateInvitation = () => {
     <div className="active-inv-cont">
       <h2>Вступление в класс</h2>
       <button onClick={handleButton}>Активировать приглашение</button>
+      <p>
+        После вступления в класс, автор класса сможет просматривать все Ваши
+        результаты решения подборок задач.
+      </p>
     </div>
   );
 };
