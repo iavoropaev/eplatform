@@ -118,6 +118,8 @@ const UpdateCourse = () => {
     if (module && !courseData.modules.some((el) => el.id === module.id)) {
       const newModules = [...courseData.modules, module];
       setCourseData({ ...courseData, modules: newModules });
+    } else if (module && courseData.modules.some((el) => el.id === module.id)) {
+      showError("Данный модуль уже содержится в курсе.");
     }
   };
 
