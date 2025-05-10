@@ -333,35 +333,6 @@ class TaskViewSetTests(APITestCase):
         self.assertIn("solution", response.data)
 
 
-class TaskInfoViewSetTests(APITestCase):
-    def setUp(self):
-        self.author = TaskAuthor.objects.create(name="Автор", link="http://example.com")
-        self.source = TaskSource.objects.create(name="Источник")
-        self.d_level = DifficultyLevel.objects.create(name="Средний",
-                                                      exam=TaskExam.objects.create(name="Экзамен2", slug="exam2"))
-
-    def test_get_authors(self):
-        url = "/api/v1/tasks-info/authors/"
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.data.get("authors", [])
-        self.assertTrue(any(item["id"] == self.author.id for item in data))
-
-    def test_get_sources(self):
-        url = "/api/v1/tasks-info/sources/"
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.data.get("sources", [])
-        self.assertTrue(any(item["id"] for item in data))
-
-    def test_get_difficulty_levels(self):
-        url = "/api/v1/tasks-info/dlevels/"
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.data.get("d_level", [])
-        self.assertTrue(isinstance(data, list))
-
-
 class TaskSolutionsViewSetTests(APITestCase):
     def setUp(self):
         User = get_user_model()

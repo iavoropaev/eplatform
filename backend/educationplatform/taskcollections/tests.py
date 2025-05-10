@@ -149,7 +149,7 @@ class TestTaskCollectionViewSet(APITestCase):
         }
         response = self.client.post(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "deleted")
+        self.assertEqual(response.data, {'message': 'deleted'})
         with self.assertRaises(TaskCollection.DoesNotExist):
             TaskCollection.objects.get(id=self.collection.id)
 
@@ -270,7 +270,7 @@ class TestTaskCollectionSolveViewSet(APITestCase):
         }
         response = self.client.post(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "deleted")
+        self.assertEqual(response.data, {'message': 'deleted'})
 
         with self.assertRaises(TaskCollectionSolve.DoesNotExist):
             TaskCollectionSolve.objects.get(id=solve.id)

@@ -263,6 +263,6 @@ class EditCourseViewSetTests(APITestCase):
         payload = {"course_id": self.course.id}
         response = self.client.post(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "deleted")
+        self.assertEqual(response.data, {'message': 'deleted'})
         with self.assertRaises(Course.DoesNotExist):
             Course.objects.get(id=self.course.id)

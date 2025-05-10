@@ -92,7 +92,7 @@ class ClassesViewSetTests(APITestCase):
         payload = {"class_id": self.cls.id}
         response = self.client.post(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "deleted")
+        self.assertEqual(response.data, {'message': 'deleted'})
 
         with self.assertRaises(Class.DoesNotExist):
             Class.objects.get(id=self.cls.id)
@@ -107,7 +107,7 @@ class ClassesViewSetTests(APITestCase):
         }
         response = self.client.post(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "Excluded")
+        self.assertEqual(response.data, {'message': 'Excluded'})
         self.assertFalse(self.cls.students.filter(id=self.student.id).exists())
 
     def test_create_invitation(self):
@@ -126,7 +126,7 @@ class ClassesViewSetTests(APITestCase):
         payload = {"invitation_id": self.invitation.id}
         response = self.client.post(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "ok")
+        self.assertEqual(response.data, {'message': 'ok'})
 
         with self.assertRaises(Invitation.DoesNotExist):
             Invitation.objects.get(id=self.invitation.id)
@@ -157,6 +157,6 @@ class ClassesViewSetTests(APITestCase):
         payload = {"message_id": self.message.id}
         response = self.client.post(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, "deleted")
+        self.assertEqual(response.data, {'message': 'deleted'})
         with self.assertRaises(Message.DoesNotExist):
             Message.objects.get(id=self.message.id)

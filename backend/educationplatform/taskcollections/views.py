@@ -640,7 +640,7 @@ class TaskCollectionSolveViewSet(viewsets.ModelViewSet):
                 return Response({
                     'Error': 'Не удалось обработать запрос.',
                 }, status=406)
-            return Response('deleted', status=200)
+            return Response({'message': 'deleted'}, status=200)
         except Exception as e:
             return Response({
                 'Error': 'Не удалось обработать запрос.',
