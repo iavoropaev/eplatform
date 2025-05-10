@@ -220,7 +220,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
             if cur_user_id != author:
                 return Response({'Error': 'Доступ запрещён.'}, status=406)
             message.delete()
-            return Response(Response({'message': 'deleted'}))
+            return Response({'message': 'deleted'})
         except Exception as e:
             return Response({
                 'Error': 'Не удалось удалить сообщение.',
