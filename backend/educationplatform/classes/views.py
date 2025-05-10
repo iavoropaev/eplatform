@@ -207,7 +207,7 @@ class ClassesViewSet(viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({
-                'Error': 'Не удалось создать приглашение.',
+                'Error': 'Не удалось отправить сообщение.',
             }, status=400)
 
     @action(detail=False, methods=['post'], url_path='delete-message')
@@ -223,5 +223,5 @@ class ClassesViewSet(viewsets.ModelViewSet):
             return Response(Response({'message': 'deleted'}))
         except Exception as e:
             return Response({
-                'Error': 'Не удалось создать приглашение.',
+                'Error': 'Не удалось удалить сообщение.',
             }, status=400)
