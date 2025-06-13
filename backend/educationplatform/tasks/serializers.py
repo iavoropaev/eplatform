@@ -12,13 +12,6 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TaskSerializerForCreate(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        exclude = ('created_by',)
-        depth = 3
-
-
 class TaskSolutionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskSolutions
@@ -118,3 +111,19 @@ class TaskSerializerForUser(serializers.ModelSerializer):
 
     def get_solution(self, obj):
         return obj.solution != ''
+
+
+class TaskSerializerForCreate(serializers.ModelSerializer):
+    author = TaskAuthorSerializer()
+    number_in_exam = TaskNumberInExamSerializer()
+    source = TaskSourceSerializer()
+    actuality = TaskActualitySerializer()
+    difficulty_level = TaskDifficultyLevelSerializer()
+    files = FileSerializer(many=True)
+
+    class Meta:
+        model = Task
+        fields = ('id', 'content', 'number_in_exam', 'author', 'source', 'answer_type', 'answer_data',
+                  'difficulty_level', 'actuality', 'files', 'solution', 'time_update', 'time_create',
+                  'answer', 'bank_authors'
+                  )

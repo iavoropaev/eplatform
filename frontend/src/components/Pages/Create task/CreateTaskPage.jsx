@@ -9,6 +9,7 @@ import {
 } from "../../../server/bank";
 import { getPreparedFilterData } from "../../Utils/FilterUtils";
 import "./CreateTaskPage.css";
+import LoadFromKompEGE from "../../CreateTask/components/LoadFromKompEGE";
 
 const CreateTaskPage = () => {
   const navigate = useNavigate();
@@ -228,7 +229,9 @@ const CreateTaskPage = () => {
         handleSaveButton={saveTaskOnServer}
         loadStatus={loadStatus}
       />
-      {/* {showSaveText && "Сохранено"} */}
+
+      {<LoadFromKompEGE taskData={taskData} />}
+
       {taskId && (
         <div className="container">
           <div>

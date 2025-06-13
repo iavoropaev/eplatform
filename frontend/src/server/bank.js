@@ -1,5 +1,6 @@
 import axios from "axios";
 import { logOut, prepareTask } from "../components/Utils/Server/serverUtils";
+import { showError } from "../components/Utils/Notifications";
 
 const headers = { "Content-Type": "application/json" };
 const jwt_a = localStorage.getItem("jwt_a");
@@ -233,6 +234,42 @@ export const getTaskSolution = async (taskId) => {
     if (error.status === 401) {
       logOut();
     }
+    return undefined;
+  }
+};
+
+export const getTaskFromKompEGE = async (taskId) => {
+  try {
+    const res = await axios.get(`https://kompege.ru/api/v1/task/${taskId}/`, {
+      headers: headers,
+    });
+
+    if (res.status === 200) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    showError("Не удалось загрузить.");
+    return undefined;
+  }
+};
+
+export const saveFileByUrl = async (url) => {
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_URL + "upload-file-by-url/",
+      { url: url },
+      {
+        headers: headers,
+      }
+    );
+
+    if (res.status === 201) {
+      return res.data;
+    }
+    return undefined;
+  } catch (error) {
+    showError("Не удалось загрузить.");
     return undefined;
   }
 };

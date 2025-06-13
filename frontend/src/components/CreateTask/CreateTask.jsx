@@ -83,6 +83,8 @@ const CreateTask = ({ taskData, handleSaveButton, loadStatus }) => {
     return <h2>Загрузка...</h2>;
   }
 
+  console.log(taskData);
+
   return (
     <div className="create-task">
       <div className="save-button">

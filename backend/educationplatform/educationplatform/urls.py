@@ -10,7 +10,7 @@ from classes.views import ClassesViewSet
 from courses.views import CoursesViewSet, EditCourseViewSet
 from taskcollections.views import TaskCollectionViewSet, TaskCollectionSolveViewSet
 from tasks.views import TaskViewSet, upload_file, TaskInfoViewSet, FilterForTaskViewSet, NumbersViewSet, \
-    TaskSolutionsViewSet
+    TaskSolutionsViewSet, upload_file_by_url
 from users.views import AchievementViewSet
 
 router = routers.SimpleRouter()
@@ -38,6 +38,7 @@ urlpatterns = [
                   path('api/v1/tasks-info/', include('tasks.urls')),
 
                   path('api/v1/upload-file/', upload_file),
+                  path('api/v1/upload-file-by-url/', upload_file_by_url),
 
                   path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
                   path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),

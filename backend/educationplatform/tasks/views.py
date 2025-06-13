@@ -1,6 +1,10 @@
 import datetime
 import json
+import os
+
 import pytz
+import requests
+from django.core.files.base import ContentFile
 
 from django.core.paginator import Paginator
 from django.db.models import Count, Q, OuterRef, Subquery, BooleanField, ExpressionWrapper, FloatField, F, Exists, \
@@ -52,7 +56,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
             serializer = TaskSerializerForCreate(task, many=False)
             return Response(serializer.data, status=200)
-        except:
+        except Exception as e:
+            print(e)
             return Response({'Error': 'Не удалось загрузить задачи.'}, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(description='''Get tasks filtered by authors, sources, topics, create time. Ordering by create time. 
@@ -569,3 +574,37 @@ def upload_file(request):
         return Response({
             'Error': 'File did not save.',
         }, status=406)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def upload_file_by_url(request):
+    try:
+        url = request.data.get('url')
+        if url:
+            r = requests.get(url, timeout=10)
+            r.raise_for_status()
+            filename = os.path.basename(url.split('?', 1)[0]) or 'file'
+            file_obj = ContentFile(r.content, name=filename)
+        else:
+            return Response({'error': 'Нужно передать url.'}, status=400)
+
+        if file_obj.size > MAX_FILE_SIZE:
+            return Response({'error': 'Максимальный размер файла 50 Мбайт.'}, status=400)
+
+        user = request.user
+        fp = UploadFiles(
+            file=file_obj,
+            created_by=user,
+            location='---',
+            name=file_obj.name
+        )
+        fp.save()
+
+        fp.location = f'{DOMAIN}{fp.file.url}'
+        fp.save()
+        serializer = FileSerializer(fp)
+        return Response(serializer.data, status=201)
+
+    except Exception:
+        return Response({'error': 'File did not save.'}, status=406)
