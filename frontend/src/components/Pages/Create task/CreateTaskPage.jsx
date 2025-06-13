@@ -12,6 +12,7 @@ import "./CreateTaskPage.css";
 import LoadFromKompEGE from "../../CreateTask/components/LoadFromKompEGE";
 
 const CreateTaskPage = () => {
+  const isAdmin = JSON.parse(localStorage.getItem("isAdmin"));
   const navigate = useNavigate();
   const { taskId } = useParams();
 
@@ -230,7 +231,7 @@ const CreateTaskPage = () => {
         loadStatus={loadStatus}
       />
 
-      {<LoadFromKompEGE taskData={taskData} />}
+      {isAdmin && <LoadFromKompEGE taskData={taskData} />}
 
       {taskId && (
         <div className="container">

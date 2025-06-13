@@ -601,7 +601,7 @@ def upload_file_by_url(request):
         )
         fp.save()
 
-        fp.location = f'{DOMAIN}{fp.file.url}'
+        fp.location = f'{DOMAIN}media/{fp.file}'
         fp.save()
         serializer = FileSerializer(fp)
         return Response(serializer.data, status=201)
