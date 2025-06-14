@@ -164,10 +164,7 @@ div.task-container > .EXIST .answer {
 .task-container .files-cont {
   display: flex;
   flex-wrap: wrap;
-  gap: 0px 8px;
-  margin-top: 10px;
-  margin-left: 15px;
-  margin-bottom: 10px;
+  gap: 0px 5px;
 }
 
 .task-container .files-list {
@@ -180,9 +177,10 @@ div.task-container > .EXIST .answer {
 }
 .task-container .files-list a {
   color: grey;
+  text-decoration: none;
 }
 .task-container .files-list a:hover {
-  color: black;
+  text-decoration: underline;
 }
 
 .task-container .sol-cont {
@@ -190,6 +188,30 @@ div.task-container > .EXIST .answer {
   border: 1px solid grey;
   border-radius: 5px;
   background-color: white;
+}
+
+.task-container .task-body .files-author-cont {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid grey;
+}
+
+.task-container .task-body .author {
+  text-align: right;
+}
+
+.task-container .task-body .author a {
+  color: grey;
+  text-decoration: None;
+}
+.task-container .task-body .author a:hover {
+  text-decoration: underline;
 }
 @media (max-width: 600px) {
   .task {

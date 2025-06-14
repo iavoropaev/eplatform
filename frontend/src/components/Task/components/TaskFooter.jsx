@@ -163,7 +163,7 @@ const TaskFooter = ({
             )}
           </span>
         )}
-
+        {/* 
         {taskData?.author?.link ? (
           <a
             target="_blank"
@@ -179,7 +179,7 @@ const TaskFooter = ({
               ? taskData?.author?.name
               : ""}
           </span>
-        )}
+        )} */}
       </div>
 
       {!hideSolutionSection && taskData.solution && (

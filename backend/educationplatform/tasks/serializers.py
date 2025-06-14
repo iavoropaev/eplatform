@@ -120,6 +120,7 @@ class TaskSerializerForCreate(serializers.ModelSerializer):
     actuality = TaskActualitySerializer()
     difficulty_level = TaskDifficultyLevelSerializer()
     files = FileSerializer(many=True)
+    bank_authors = TaskBankAuthorSerializer(many=True)
 
     class Meta:
         model = Task

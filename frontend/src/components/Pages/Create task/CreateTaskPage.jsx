@@ -23,15 +23,15 @@ const CreateTaskPage = () => {
   const [solution, setSolution] = useState("");
   const [answer, setAnswer] = useState("");
   const [answerType, setAnswerType] = useState("text");
-  const [answerData, setAnswerData] = useState(["Опция 1"]);
+  const [answerData, setAnswerData] = useState([]);
 
-  const [selectedExam, setSelectedExam] = useState(-1);
-  const [selectedSubject, setSelectedSubject] = useState(-1);
+  const [selectedExam, setSelectedExam] = useState(2);
+  const [selectedSubject, setSelectedSubject] = useState(1);
   const [selectedNumber, setSelectedNumber] = useState(-1);
   const [selectedBanks, setSelectedBanks] = useState([]);
-  const [selectedDifLevel, setSelectedDifLevel] = useState(-1);
+  const [selectedDifLevel, setSelectedDifLevel] = useState(2);
   const [selectedTaskAuthor, setSelectedTaskAuthor] = useState(-1);
-  const [selectedActuality, setSelectedActuality] = useState(-1);
+  const [selectedActuality, setSelectedActuality] = useState(1);
   const [files, setFiles] = useState([]);
   const [filterData, setFilterData] = useState([]);
 
@@ -59,15 +59,15 @@ const CreateTaskPage = () => {
     setEditorContent("Начальный");
     setAnswer("");
     setAnswerType("text");
-    setAnswerData(["Опция 1"]);
+    setAnswerData([]);
     setSelectedBanks([]);
 
     setSelectedNumber(-1);
-    setSelectedExam(-1);
-    setSelectedSubject(-1);
-    setSelectedDifLevel(-1);
+    setSelectedExam(2);
+    setSelectedSubject(1);
+    setSelectedDifLevel(2);
     setSelectedTaskAuthor(-1);
-    setSelectedActuality(-1);
+    setSelectedActuality(1);
     setFiles([]);
     setSolution("");
   };
